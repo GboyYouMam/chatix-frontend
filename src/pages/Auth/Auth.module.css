@@ -1,0 +1,205 @@
+/*first bg-variant*/
+/*.layout {*/
+/*    min-height: 100vh;*/
+/*    background: radial-gradient(*/
+/*            circle at 50% 50%,*/
+/*            var(--surface) 0%,*/
+/*            var(--bg) 60%,*/
+/*            #050505 100%*/
+/*    );*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
+
+/*second one*/
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--bg);
+
+    background-image:
+            radial-gradient(circle at 0% 0%, rgba(250, 77, 152, 0.15) 0%, transparent 40%),
+
+            radial-gradient(circle at 100% 100%, rgba(250, 77, 152, 0.25) 0%, transparent 60%),
+
+            radial-gradient(circle at 50% 120%, rgba(250, 77, 152, 0.2) 0%, transparent 50%),
+
+            radial-gradient(circle at 100% 0%, rgba(250, 77, 152, 0.1) 0%, transparent 30%);
+
+    background-attachment: fixed;
+    background-size: 150% 150%;
+    animation: neonPulse 10s ease infinite;
+}
+
+@keyframes neonPulse {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 3rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.headerImage {
+    width: 5rem;
+    height: 5rem;
+}
+
+.logo {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3rem;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: 4px;
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+}
+
+.card {
+    background-color: var(--surface);
+    border-radius: 12px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.authImage {
+    height: 40rem;
+    max-width: 350px;
+}
+
+.title {
+    font-family: 'Times New Roman', Times, serif;
+    color: var(--primary);
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-family: 'Times New Roman', Times, serif;
+    color: var(--primary);
+    font-size: 1.25rem;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0 0 2rem 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.input::placeholder {
+    color: var(--muted);
+}
+
+.input:focus {
+    border-color: var(--text);
+}
+
+.inputError {
+    border-color: #ff4444;
+}
+
+.inputError:focus {
+    border-color: #ff4444;
+}
+
+.errorText {
+    color: #ff4444;
+    font-size: 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.submitBtn {
+    background-color: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 1rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.submitBtn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+    background-color: var(--border);
+    color: var(--muted);
+    cursor: not-allowed;
+}
+
+.footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.mutedText {
+    color: var(--muted);
+}
+
+.link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
