@@ -5,6 +5,15 @@ import clsx from 'clsx';
 import styles from './Auth.module.css';
 import firstImageAuth from '../../assets/firstImageAuth.png';
 import secondImageAuth from '../../assets/secondImageAuth.png';
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const registerSchema = z.object({
+    username: z.string().min(3).max(25).nonempty('username is missing lmao'),
+    password: z.string().min(8).max(255).nonempty('password is missing dum a$$'),
+});
+
+type RegisterValues = z.infer<typeof registerSchema>;
 
 export const Register = () => {
 
@@ -13,11 +22,12 @@ export const Register = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+    } = useForm<RegisterValues>({
+        resolver: zodResolver(registerSchema),
         defaultValues: { username: '', password: '' },
     });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: RegisterValues) => {
         signup(data);
     };
 

@@ -1,5 +1,5 @@
-import { api } from './client.ts';
-import { type AuthResponse, type User } from '../types';
+import { api } from '../client.ts';
+import { type AuthResponse, type User } from './types.ts';
 
 export const authService = {
     login: async (credentials: Record<'username' | 'password', string>): Promise<AuthResponse> => {
