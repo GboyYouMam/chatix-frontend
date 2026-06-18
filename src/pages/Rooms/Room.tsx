@@ -2,8 +2,9 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import styles from './Rooms.module.css';
 import bannerPng from '../../assets/banner.png';
+import { useNavigate} from "react-router-dom";
+import {useAuthStore} from "../../store/authStore.ts";
 
-// Мокові дані 1-в-1 як на твоєму скріні
 const MOCK_ROOMS = [
     {
         id: '1',
@@ -66,10 +67,19 @@ const MOCK_ROOMS = [
 export const Rooms = () => {
     const [roomType, setRoomType] = useState<'public' | 'private'>('public');
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
+
+    const { user } = useAuthStore();
+    const handleGoToMyProfile = () => {
+        if (user && user.username) {
+            navigate(`/profile/${user.username}`);
+        } else {
+            navigate('/login');
+        }
+    };
 
     return (
         <div className={styles.layout}>
-            {/* HEADER */}
             <header className={styles.header}>
                 <div className={styles.toggleContainer}>
                     <button
@@ -88,8 +98,11 @@ export const Rooms = () => {
 
                 <h1 className={styles.logo}>CHATIX</h1>
 
-                <button className={styles.profileBtn} aria-label="Profile">
-                    {/* SVG іконка профілю як на макеті */}
+                <button
+                    className={styles.profileBtn}
+                    aria-label="Profile"
+                    onClick={() => handleGoToMyProfile()}
+                >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -97,8 +110,6 @@ export const Rooms = () => {
                 </button>
             </header>
 
-            {/* BANNER */}
-            {/* Заміни src на шлях до своєї картинки (наприклад, імпортуй її з assets) */}
             <img
                 src={bannerPng}
                 alt="Chatix Banner"
