@@ -1,75 +1,33 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '../../store/authStore';
+import { roomApi } from '../../api/rooms/rooms.service';
+import { CreateRoomModal } from '../../components/CreateRoomModal.tsx';
 import clsx from 'clsx';
 import styles from './Rooms.module.css';
 import bannerPng from '../../assets/banner.png';
 
-// Мокові дані 1-в-1 як на твоєму скріні
-const MOCK_ROOMS = [
-    {
-        id: '1',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '2',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '3',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '4',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '5',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '6',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-    {
-        id: '7',
-        title: 'Title',
-        topic: 'topic',
-        description: 'description larping etc just filling it for test-design lmao',
-        createdAt: '12/12/2000 12:12',
-        updatedAt: '12/12/2000 12:12',
-    },
-];
-
 export const Rooms = () => {
+    const navigate = useNavigate();
+    const { user } = useAuthStore();
+
     const [roomType, setRoomType] = useState<'public' | 'private'>('public');
     const [searchQuery, setSearchQuery] = useState('');
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+    const { data: rooms, isLoading, refetch } = useQuery({
+        queryKey: ['rooms', roomType],
+        queryFn: () => roomApi.getRooms(roomType),
+    });
+
+    const filteredRooms = rooms?.filter((room: any) =>
+        room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
     return (
         <div className={styles.layout}>
-            {/* HEADER */}
             <header className={styles.header}>
                 <div className={styles.toggleContainer}>
                     <button
@@ -88,8 +46,11 @@ export const Rooms = () => {
 
                 <h1 className={styles.logo}>CHATIX</h1>
 
-                <button className={styles.profileBtn} aria-label="Profile">
-                    {/* SVG іконка профілю як на макеті */}
+                <button
+                    className={styles.profileBtn}
+                    aria-label="Profile"
+                    onClick={() => user?.username && navigate(`/profile/${user.username}`)}
+                >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -97,49 +58,79 @@ export const Rooms = () => {
                 </button>
             </header>
 
-            {/* BANNER */}
-            {/* Заміни src на шлях до своєї картинки (наприклад, імпортуй її з assets) */}
             <img
                 src={bannerPng}
                 alt="Chatix Banner"
                 className={styles.banner}
             />
 
-            {/* MAIN CONTENT */}
             <main className={styles.mainContent}>
                 <h2 className={styles.subtitle}>if u in debt or just a chud ts for you</h2>
 
-                <div className={styles.searchWrapper}>
-                    <input
-                        type="text"
-                        className={styles.searchInput}
-                        placeholder="find your place"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <span className={styles.searchLmao}>lmao</span>
-                    <button className={styles.searchBtn}>search</button>
+                <div className={styles.actionContainer}>
+                    <button className={styles.addBtn} onClick={() => setIsCreateModalOpen(true)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="#fa4d98" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                             className="lucide lucide-plus-icon lucide-plus">
+                            <path d="M5 12h14"/>
+                            <path d="M12 5v14"/>
+                        </svg>
+                    </button>
+                    <div className={styles.searchWrapper}>
+                        <input
+                            type="text"
+                            className={styles.searchInput}
+                            placeholder="find your place"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <span className={styles.searchLmao}>lmao</span>
+                        <button className={styles.searchBtn}>search</button>
+                    </div>
                 </div>
 
                 <div className={styles.grid}>
-                    {MOCK_ROOMS.map((room) => (
-                        <div key={room.id} className={styles.card}>
-                            <div className={styles.cardHeader}>
-                                <span className={styles.cardDate}>created at: {room.createdAt}</span>
-                            </div>
-
-                            <h3 className={styles.cardTitle}>{room.title}</h3>
-                            <p className={styles.cardTopic}>{room.topic}</p>
-                            <p className={styles.cardDesc}>{room.description}</p>
-
-                            <div className={styles.cardFooter}>
-                                <a className={styles.cardCta}>join this convo and mog them all</a>
-                                <span className={styles.cardDate}>updated at: {room.updatedAt}</span>
-                            </div>
+                    {isLoading ? (
+                        <div style={{ color: 'var(--primary)', textAlign: 'center', gridColumn: '1 / -1', padding: '2rem' }}>
+                            Loading rooms...
                         </div>
-                    ))}
+                    ) : filteredRooms.length === 0 ? (
+                        <div style={{ color: 'var(--muted)', textAlign: 'center', gridColumn: '1 / -1', padding: '2rem' }}>
+                            No rooms found, buuuut u can fix that, create first one
+                        </div>
+                    ) : (
+                        filteredRooms.map((room: any) => (
+                            <div key={room.id} className={styles.card}>
+                                <div className={styles.cardHeader}>
+                                    <span className={styles.cardDate}>
+                                        created at: {new Date(room.createdAt).toLocaleDateString('uk-UA')}
+                                    </span>
+                                </div>
+
+                                <h3 className={styles.cardTitle}>{room.title}</h3>
+                                <p className={styles.cardTopic}>{room.topic || 'no topic'}</p>
+                                <p className={styles.cardDesc}>{room.description}</p>
+
+                                <div className={styles.cardFooter}>
+                                    <a
+                                        className={styles.cardCta}
+                                        onClick={() => navigate(`/room/${room.id}`)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        join this convo and mog them all
+                                    </a>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </main>
+
+            <CreateRoomModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                onSuccess={() => refetch()}
+            />
         </div>
     );
 };
