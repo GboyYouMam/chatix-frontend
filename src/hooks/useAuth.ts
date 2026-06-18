@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { authService } from '../api/auth.service.ts';
+import { authService } from '../api/auth/auth.service.ts';
 import { useAuthStore } from '../store/authStore';
 import { AxiosError } from 'axios';
 
@@ -19,7 +19,7 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
-                toast.success(`Welcome back, ${user.username}! 🚀`);
+                toast.success(`welcome back bum ${user.username}!`);
                 navigate('/chat');
             } catch (err) {
                 logoutStore();
@@ -39,7 +39,7 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
-                toast.success('Ascension complete! Profile created. ⚔️');
+                toast.success('Ascension complete! Profile created');
                 navigate('/chat');
             } catch (err) {
                 logoutStore();

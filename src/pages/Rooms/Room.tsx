@@ -7,6 +7,8 @@ import { CreateRoomModal } from '../../components/CreateRoomModal.tsx';
 import clsx from 'clsx';
 import styles from './Rooms.module.css';
 import bannerPng from '../../assets/banner.png';
+import { useNavigate} from "react-router-dom";
+import {useAuthStore} from "../../store/authStore.ts";
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -25,6 +27,16 @@ export const Rooms = () => {
         room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
+    const navigate = useNavigate();
+
+    const { user } = useAuthStore();
+    const handleGoToMyProfile = () => {
+        if (user && user.username) {
+            navigate(`/profile/${user.username}`);
+        } else {
+            navigate('/login');
+        }
+    };
 
     return (
         <div className={styles.layout}>
@@ -49,7 +61,7 @@ export const Rooms = () => {
                 <button
                     className={styles.profileBtn}
                     aria-label="Profile"
-                    onClick={() => user?.username && navigate(`/profile/${user.username}`)}
+                    onClick={() => handleGoToMyProfile()}
                 >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>

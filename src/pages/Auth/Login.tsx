@@ -6,6 +6,15 @@ import styles from './Auth.module.css';
 import thirdImageAuth from '../../assets/thirdImageAuth.png';
 import fourthImageAuth from '../../assets/fourthImageAuth.png';
 import headerImage from '../../assets/headerImage.png';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const loginSchema = z.object({
+    username: z.string().min(1).max(25).nonempty('username is missing are we deadass?'),
+    password: z.string().min(1).max(255).nonempty('password is missing how do u expect to log in???'),
+})
+
+type LoginValues = z.infer<typeof loginSchema>;
 
 export const Login = () => {
     const { login, isLoggingIn } = useAuth();
@@ -13,11 +22,12 @@ export const Login = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+    } = useForm<LoginValues>({
+        resolver: zodResolver(loginSchema),
         defaultValues: { username: '', password: '' },
     });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: LoginValues) => {
         login(data);
     };
 
@@ -53,7 +63,7 @@ export const Login = () => {
                             />
                             {errors.username && (
                                 <span className={styles.errorText}>
-                                    {errors.username.message as string}
+                                    {errors.username?.message}
                                 </span>
                             )}
                         </div>
@@ -68,7 +78,7 @@ export const Login = () => {
                             />
                             {errors.password && (
                                 <span className={styles.errorText}>
-                                    {errors.password.message as string}
+                                    {errors.password?.message}
                                 </span>
                             )}
                         </div>
