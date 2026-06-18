@@ -5,7 +5,6 @@
     flex-direction: column;
 }
 
-/* --- HEADER --- */
 .header {
     position: sticky;
     top: 0;
@@ -44,7 +43,7 @@
 }
 
 .logo {
-    font-family: 'Times New Roman', Times, serif; /* Або інший Serif шрифт з твого дизайну */
+    font-family: 'Times New Roman', Times, serif;
     font-size: 3rem;
     color: var(--text);
     margin: 0;
@@ -66,7 +65,6 @@
     transform: scale(1.1);
 }
 
-/* --- BANNER --- */
 .banner {
     width: 100%;
     height: 400px;
@@ -74,7 +72,6 @@
     display: block;
 }
 
-/* --- MAIN CONTENT --- */
 .mainContent {
     flex: 1;
     max-width: 1400px;
@@ -95,16 +92,40 @@
     letter-spacing: 1px;
 }
 
-/* --- SEARCH BLOCK --- */
+.actionContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 4rem;
+}
+
+.addBtn {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.addBtn:hover {
+    transform: scale(1.5);
+}
+
 .searchWrapper {
     display: flex;
     align-items: center;
     background-color: var(--surface);
     border-radius: 8px;
     padding: 0.5rem 0.5rem 0.5rem 1.5rem;
-    width: 100%;
+    flex: 1;
     max-width: 600px;
-    margin-bottom: 4rem;
 }
 
 .searchInput {
@@ -141,7 +162,6 @@
     opacity: 0.9;
 }
 
-/* --- ROOM GRID --- */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -149,7 +169,6 @@
     width: 100%;
 }
 
-/* --- ROOM CARD --- */
 .card {
     background-color: var(--surface);
     border-radius: 12px;
