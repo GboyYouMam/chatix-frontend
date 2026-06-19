@@ -5,11 +5,22 @@ import { roomApi } from '../api/rooms/rooms.service.ts';
 import toast from 'react-hot-toast';
 import styles from './CreateRoomModal.module.css';
 
+// 1. ОНОВЛЕНА СХЕМА З РОЗУМНОЮ ВАЛІДАЦІЄЮ
 const createRoomScheme = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
     topic: z.string().max(255).optional(),
     description: z.string().optional(),
+    password: z.string().optional(),
     publicity: z.enum(['public', 'private']),
+}).superRefine((data, ctx) => {
+    // Якщо рума приватна, пароль стає обов'язковим (мінімум 6 символів)
+    if (data.publicity === 'private' && (!data.password || data.password.length < 6)) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Password must be at least 6 chars for restricted areas",
+            path: ["password"]
+        });
+    }
 });
 
 type CreateRoomValues = z.infer<typeof createRoomScheme>;
@@ -25,6 +36,7 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors, isSubmitting }
     } = useForm<CreateRoomValues>({
         resolver: zodResolver(createRoomScheme),
@@ -36,11 +48,18 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
         },
     });
 
+    const currentPublicity = watch('publicity');
+
     if (!isOpen) return null;
 
     const onSubmit = async (data: CreateRoomValues) => {
         try {
-            await roomApi.createRoom(data);
+            const payload = { ...data };
+            if (payload.publicity === 'public') {
+                delete payload.password;
+            }
+
+            await roomApi.createRoom(payload);
             toast.success('Room created. Ready to mog.');
             reset();
             onSuccess();
@@ -84,6 +103,18 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
                             <span className={styles.radioText}>Private</span>
                         </label>
                     </div>
+
+                    {currentPublicity === 'private' && (
+                        <div className={styles.inputGroup}>
+                            <label>Override Key (Password) *</label>
+                            <input
+                                type="password"
+                                {...register('password')}
+                                placeholder="Min 6 chars..."
+                            />
+                            {errors.password && <span className={styles.error}>{errors.password.message}</span>}
+                        </div>
+                    )}
 
                     <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                         {isSubmitting ? 'Creating...' : 'Create This Shi'}

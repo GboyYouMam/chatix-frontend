@@ -126,3 +126,37 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.dangerZone {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed #ff2a2a;
+    display: flex;
+    justify-content: center;
+}
+
+.deleteBtn {
+    width: 100%;
+    background: transparent;
+    color: #ff2a2a;
+    border: 1px solid #ff2a2a;
+    padding: 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.deleteBtn:hover {
+    background: rgba(255, 42, 42, 0.1);
+    box-shadow: 0 0 10px rgba(255, 42, 42, 0.5);
+    color: #fff;
+}
+
+.deleteBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

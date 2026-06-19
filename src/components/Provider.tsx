@@ -12,7 +12,8 @@ export const Provider = ({ children }: { children: ReactNode }) => {
                 position="top-right"
                 toastOptions={{
                     duration: 3000,
-                    style: { background: '#181818', color: '#c40064' }
+                    style: { background: '#181818', color: '#c40064' },
+                    position: 'bottom-right',
                 }}
             />
         </QueryClientProvider>
