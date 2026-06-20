@@ -1,10 +1,5 @@
 import { api } from "../client.ts";
-export interface CreateRoomReq {
-    title: string;
-    topic?: string;
-    description?: string;
-    publicity?: string;
-}
+import type {CreateRoomDTO} from "./types.ts";
 
 export const roomApi = {
     getRooms: async (publicity?: 'public' | 'private') => {
@@ -17,12 +12,12 @@ export const roomApi = {
         return response.data;
     },
 
-    createRoom: async (data: CreateRoomReq) => {
+    createRoom: async (data: CreateRoomDTO) => {
         const response = await api.post('/rooms', data);
         return response.data;
     },
 
-    updateRoom: async (roomId: string, data: Partial<CreateRoomReq>) => {
+    updateRoom: async (roomId: string, data: Partial<CreateRoomDTO>) => {
         const response = await api.patch(`/rooms/${roomId}`, data);
         return response.data;
     },
@@ -30,6 +25,11 @@ export const roomApi = {
     deleteRoom: async (roomId: string) => {
         const response = await api.delete(`/rooms/${roomId}`);
         return response.data;
+    },
+
+    findRoomByName: async (roomName: string) => {
+        const repsonse = await api.get(`/rooms/by-name/${roomName}`);
+        return repsonse;
     }
 }
 

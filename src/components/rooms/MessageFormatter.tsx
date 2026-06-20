@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../pages/Rooms/Room.module.css';
+import styles from '../../pages/Rooms/Room.module.css';
 
 export const MessageFormatter = ({ text, allMessages }: { text: string, allMessages: any[] }) => {
     const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);

@@ -14,6 +14,14 @@ export interface User {
     yapCooldown?: string;
 }
 
+export interface UserData {
+    id?: string;
+    username: string;
+    isMogged?: boolean;
+    is_mogged?: boolean;
+    forcedTitle?: string;
+}
+
 export interface AuthResponse {
     access_token: string;
 }

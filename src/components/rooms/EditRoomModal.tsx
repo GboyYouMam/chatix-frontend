@@ -1,16 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom'; // ДОДАЛИ ІМПОРТ
-import { roomApi } from '../api/rooms/rooms.service.ts';
-import toast from 'react-hot-toast';
 import styles from './CreateRoomModal.module.css';
+import {useRooms} from "../../hooks/useRooms.ts";
 
 const updateRoomSchema = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
     topic: z.string().max(255).optional(),
     description: z.string().optional(),
-    publicity: z.enum(['public', 'private']),
 });
 
 type updateRoomValues = z.infer<typeof updateRoomSchema>;
@@ -24,12 +21,11 @@ interface updateRoomModalProps {
         title: string;
         topic?: string;
         description?: string;
-        publicity: 'public' | 'private';
     };
 }
 
 export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialData }: updateRoomModalProps) => {
-    const navigate = useNavigate();
+    const { updateRoom, deleteRoom } = useRooms();
 
     const {
         register,
@@ -42,34 +38,31 @@ export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialDat
             title: initialData?.title || '',
             topic: initialData?.topic || '',
             description: initialData?.description || '',
-            publicity: initialData?.publicity || 'public',
         },
     });
 
-    const onSubmit = async (data: updateRoomValues) => {
-        try {
-            await roomApi.updateRoom(roomId, data);
-            toast.success('Room updated successfully');
-            reset();
-            onSuccess();
-            onClose();
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'nah something went wrong.');
-        }
+    const onSubmit = (data: updateRoomValues) => {
+        updateRoom.mutate(
+            { roomId, data },
+            {
+                onSuccess: () => {
+                    reset();
+                    onSuccess();
+                    onClose();
+                }
+            }
+        );
     }
 
-    const handleDeleteRoom = async () => {
+    const handleDeleteRoom = () => {
         const isSure = window.confirm("Are u sure u want to NUKE this room? This action is irreversible.");
         if (!isSure) return;
 
-        try {
-            await roomApi.deleteRoom(roomId);
-            toast.success('Room ERASED by KILLSQUAD.');
-            onClose();
-            navigate('/rooms');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Failed to nuke room.');
-        }
+        deleteRoom.mutate({ roomId }, {
+            onSuccess: () => {
+                onClose();
+            }
+        });
     }
 
     if (!isOpen) return null;
@@ -96,17 +89,6 @@ export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialDat
                     <div className={styles.inputGroup}>
                         <label>Description</label>
                         <textarea {...register('description')} rows={3} placeholder="Lore goes here..." />
-                    </div>
-
-                    <div className={styles.radioGroup}>
-                        <label className={styles.radioLabel}>
-                            <input type="radio" value="public" {...register('publicity')} />
-                            <span className={styles.radioText}>Public</span>
-                        </label>
-                        <label className={styles.radioLabel}>
-                            <input type="radio" value="private" {...register('publicity')} />
-                            <span className={styles.radioText}>Private</span>
-                        </label>
                     </div>
 
                     <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>

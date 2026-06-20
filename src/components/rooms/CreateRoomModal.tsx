@@ -1,11 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { roomApi } from '../api/rooms/rooms.service.ts';
-import toast from 'react-hot-toast';
 import styles from './CreateRoomModal.module.css';
+import {PasswordInput} from "./PasswordInput.tsx";
+import {useRooms} from "../../hooks/useRooms.ts";
 
-// 1. ОНОВЛЕНА СХЕМА З РОЗУМНОЮ ВАЛІДАЦІЄЮ
 const createRoomScheme = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
     topic: z.string().max(255).optional(),
@@ -13,7 +12,6 @@ const createRoomScheme = z.object({
     password: z.string().optional(),
     publicity: z.enum(['public', 'private']),
 }).superRefine((data, ctx) => {
-    // Якщо рума приватна, пароль стає обов'язковим (мінімум 6 символів)
     if (data.publicity === 'private' && (!data.password || data.password.length < 6)) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -23,7 +21,8 @@ const createRoomScheme = z.object({
     }
 });
 
-type CreateRoomValues = z.infer<typeof createRoomScheme>;
+export type CreateRoomValues = z.infer<typeof createRoomScheme>;
+
 
 interface CreateRoomModalProps {
     isOpen: boolean;
@@ -32,11 +31,13 @@ interface CreateRoomModalProps {
 }
 
 export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalProps) => {
+    const { createRoom } = useRooms();
+
     const {
         register,
         handleSubmit,
         reset,
-        watch,
+        control,
         formState: { errors, isSubmitting }
     } = useForm<CreateRoomValues>({
         resolver: zodResolver(createRoomScheme),
@@ -48,25 +49,22 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
         },
     });
 
-    const currentPublicity = watch('publicity');
-
     if (!isOpen) return null;
 
-    const onSubmit = async (data: CreateRoomValues) => {
-        try {
-            const payload = { ...data };
-            if (payload.publicity === 'public') {
-                delete payload.password;
-            }
+    const onSubmit = (data: CreateRoomValues) => {
+        const payload = { ...data };
 
-            await roomApi.createRoom(payload);
-            toast.success('Room created. Ready to mog.');
-            reset();
-            onSuccess();
-            onClose();
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'nah something went wrong.');
+        if (payload.publicity === 'public') {
+            delete payload.password;
         }
+
+        createRoom.mutate(payload, {
+            onSuccess: () => {
+                reset();
+                onSuccess();
+                onClose();
+            }
+        });
     };
 
     return (
@@ -104,17 +102,7 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
                         </label>
                     </div>
 
-                    {currentPublicity === 'private' && (
-                        <div className={styles.inputGroup}>
-                            <label>Override Key (Password) *</label>
-                            <input
-                                type="password"
-                                {...register('password')}
-                                placeholder="Min 6 chars..."
-                            />
-                            {errors.password && <span className={styles.error}>{errors.password.message}</span>}
-                        </div>
-                    )}
+                    <PasswordInput control={control} register={register} errors={errors} />
 
                     <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                         {isSubmitting ? 'Creating...' : 'Create This Shi'}
