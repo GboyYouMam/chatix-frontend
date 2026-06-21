@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 import { Login } from './pages/Auth/Login';
 import { Register } from './pages/Auth/Register';
@@ -9,25 +9,26 @@ import { ProtectedRoute } from "./components/ProtectedRouter.tsx";
 import { Room } from "./pages/Rooms/Room.tsx";
 import { JoinRoom } from "./pages/Rooms/JoinRoom.tsx";
 
+const router = createBrowserRouter([
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/profile/:username", element: <Profile /> },
+    { path: "/rooms", element: <Rooms /> },
+
+    {
+        element: <ProtectedRoute />,
+        children: [
+            { path: "/room/:id", element: <Room /> },
+            { path: "/room/:id/join", element: <JoinRoom /> },
+            { path: "/settings", element: <EditProfile /> },
+        ]
+    },
+
+    { path: "*", element: <Navigate to="/rooms" replace /> }
+]);
+
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile/:username" element={<Profile />} />
-                <Route path="/rooms" element={<Rooms />} />
-
-                <Route element={<ProtectedRoute />}>
-                    <Route path="/room/:id" element={<Room/>}/>
-                    <Route path="/room/:id/join" element={<JoinRoom/>}/>
-                    <Route path="/settings" element={<EditProfile />} />
-                </Route>
-
-                <Route path="*" element={<Navigate to="/rooms" replace />} />
-            </Routes>
-        </BrowserRouter>
-    );
+    return <RouterProvider router={router} />;
 }
 
 export default App;
