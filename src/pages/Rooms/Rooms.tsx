@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
+import type { RoomDetails } from '../../api/rooms/types.ts';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
 import clsx from 'clsx';
 import styles from './Rooms.module.css';
@@ -24,7 +25,7 @@ export const Rooms = () => {
         queryFn: () => roomApi.getRooms(roomType),
     });
 
-    const filteredRooms = rooms?.filter((room: any) =>
+    const filteredRooms = rooms?.filter((room: RoomDetails) =>
         room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
@@ -59,7 +60,7 @@ export const Rooms = () => {
             );
         }
 
-        return filteredRooms.map((room: any) => (
+        return filteredRooms.map((room: RoomDetails) => (
             <RoomCard key={room.id} room={room} />
         ));
     };

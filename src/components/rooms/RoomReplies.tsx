@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { MessageFormatter } from './MessageFormatter.tsx';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from "../../api/messages/types.ts";
+import {useRef} from "react";
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -11,6 +12,19 @@ interface RoomRepliesProps {
 
 export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps) => {
     const navigate = useNavigate();
+
+    const messageRefs = useRef(new Map<string, HTMLDivElement>());
+
+    const handleScrollToQuote = (shortId: string) => {
+        const node = messageRefs.current.get(shortId);
+        if (node) {
+            node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            node.classList.add(styles.highlighted);
+            setTimeout(() => node.classList.remove(styles.highlighted), 2000);
+        } else {
+            toast.error("Message not found in this thread, we lost it xddd");
+        }
+    };
 
     const handleCopyIdToReply = async (shortId: string) => {
         try {
@@ -27,8 +41,21 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
 
     return (
         <div className={styles.replies}>
-            {messages?.map((msg: any) => (
-                <div key={msg.id} id={`post-${msg.id?.slice(-6)}`} className={styles.replyBlock}>
+            {messages?.map((msg: any) => {
+                const shortId = msg.id?.slice(-6);
+
+                return (
+                    <div
+                        key={msg.id}
+                        ref={(node) => {
+                            if (node && shortId) {
+                                messageRefs.current.set(shortId, node);
+                            } else if (shortId) {
+                                messageRefs.current.delete(shortId);
+                            }
+                        }}
+                        className={styles.replyBlock}
+                    >
                     <div className={styles.postMeta}>
                         <span
                             className={styles.username}
@@ -57,7 +84,11 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                     </div>
 
                     <div className={styles.postBody}>
-                        <MessageFormatter text={msg.cipherText || ''} allMessages={messages || []} />
+                        <MessageFormatter
+                            text={msg.cipherText || ''}
+                            allMessages={messages || []}
+                            onQuoteClick={handleScrollToQuote}
+                        />
                     </div>
 
                     {msg.ipAddress && (
@@ -65,8 +96,9 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                             [HOST: {msg.ipAddress}]
                         </div>
                     )}
-                </div>
-            ))}
+                    </div>
+                );
+            })}
         </div>
     );
 };

@@ -10,7 +10,7 @@ const updateRoomSchema = z.object({
     description: z.string().optional(),
 });
 
-type updateRoomValues = z.infer<typeof updateRoomSchema>;
+type UpdateRoomValues = z.infer<typeof updateRoomSchema>;
 
 interface updateRoomModalProps {
     isOpen: boolean;
@@ -32,7 +32,7 @@ export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialDat
         handleSubmit,
         reset,
         formState: { errors, isSubmitting }
-    } = useForm<updateRoomValues>({
+    } = useForm<UpdateRoomValues>({
         resolver: zodResolver(updateRoomSchema),
         values: {
             title: initialData?.title || '',
@@ -41,7 +41,7 @@ export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialDat
         },
     });
 
-    const onSubmit = (data: updateRoomValues) => {
+    const onSubmit = (data: UpdateRoomValues) => {
         updateRoom.mutate(
             { roomId, data },
             {

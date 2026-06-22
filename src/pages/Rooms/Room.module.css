@@ -211,44 +211,6 @@
     color: #4da6fa;
 }
 
-/*for quoting*/
-.quoteLink {
-    color: var(--primary, #fa4d98);
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    position: relative;
-}
-
-.quoteLink:hover {
-    color: #fff;
-    background: #fa4d98;
-}
-
-.quotePopup {
-    position: absolute;
-    bottom: 120%;
-    left: 0;
-    width: 300px;
-    background: #1a1a1a;
-    border: 1px solid #fa4d98;
-    padding: 0.8rem;
-    border-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    z-index: 100;
-    color: #e0e0e0;
-    font-size: 0.9rem;
-    pointer-events: none;
-}
-
-.popupMeta {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 0.4rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.2rem;
-}
-
 .highlighted {
     animation: flash 2s ease-out;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Socket } from 'socket.io-client';
 import styles from '../../pages/Rooms/Room.module.css';
+import { RoomSocketEvent } from "../../hooks/useRoomSocket.ts";
 
 interface RoomReplyFormProps {
     roomId: string;
@@ -16,7 +17,7 @@ export const RoomReplyForm = ({ roomId, authorId, socket }: RoomReplyFormProps) 
         if (!newMessage.trim() || !socket || !authorId) return;
 
         try {
-            socket.emit('sendMessage', {
+            socket.emit(RoomSocketEvent.sendMessage, {
                 roomId,
                 authorId,
                 text: newMessage
