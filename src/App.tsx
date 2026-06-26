@@ -8,6 +8,7 @@ import { EditProfile } from './pages/Profile/EditProfile.tsx';
 import { ProtectedRoute } from "./components/ProtectedRouter.tsx";
 import { Room } from "./pages/Rooms/Room.tsx";
 import { JoinRoom } from "./pages/Rooms/JoinRoom.tsx";
+import { AdminPanel } from './pages/Admin/AdminPanel.tsx';
 
 const router = createBrowserRouter([
     { path: "/login", element: <Login /> },
@@ -22,6 +23,12 @@ const router = createBrowserRouter([
             { path: "/room/:id/join", element: <JoinRoom /> },
             { path: "/settings", element: <EditProfile /> },
         ]
+    },
+    {
+        element: <ProtectedRoute requireAdmin />,
+        children: [
+            { path: "/admin", element: <AdminPanel /> },
+        ],
     },
 
     { path: "*", element: <Navigate to="/rooms" replace /> }

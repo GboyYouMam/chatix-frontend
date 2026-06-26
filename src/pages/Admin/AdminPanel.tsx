@@ -1,133 +1,290 @@
-import { useState, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AdminActionsPanel } from '../../components/admin/panel/AdminActionsPanel.tsx';
+import { AdminAuditFeed } from '../../components/admin/AdminAuditFeed.tsx';
+import { AdminDetailsPanel } from '../../components/admin/panel/AdminDetailsPanel.tsx';
+import { AdminPanelSidebar } from '../../components/admin/AdminPanelSidebar.tsx';
+import type { AdminTabKey, TabConfig } from '../../components/admin/adminPanelTypes.ts';
+import { addDuration } from '../../components/admin/adminPanelUtils.ts';
 import { useAdmin } from '../../hooks/useAdmin';
 import { useAdminSocket } from '../../hooks/useAdminSocket';
 import styles from './AdminPanel.module.css';
 
-type Tab = 'USERS' | 'MESSAGES' | 'ROOMS';
+const TABS: TabConfig[] = [
+    { key: 'users', label: 'USERS' },
+    { key: 'rooms', label: 'ROOMS' },
+    { key: 'messages', label: 'MESSAGES' },
+    { key: 'audit-logs', label: 'AUDIT' },
+];
 
 export const AdminPanel = () => {
-    const [activeTab, setActiveTab] = useState<Tab>('USERS');
-    const [selectedEntity, setSelectedEntity] = useState<any | null>(null);
+    const [activeTab, setActiveTab] = useState<AdminTabKey>('users');
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [warningsPage, setWarningsPage] = useState(1);
 
-    const { users, rooms, messages, isLoading, vaporizeUser, updateModifiers, updateRoomStatus, deleteMessage } = useAdmin();
-    const { logs } = useAdminSocket();
+    const { logs: liveLogs } = useAdminSocket();
+    const {
+        users,
+        rooms,
+        messages,
+        auditLogs,
+        pagination,
+        warnings,
+        warningsPagination,
+        isLoading,
+        isFetching,
+        warningsLoading,
+        vaporizeUser,
+        updateModifiers,
+        quarantineRoom,
+        unquarantineRoom,
+        setRoomStatus,
+        deleteMessage,
+        addWarning,
+        revokeWarning,
+    } = useAdmin({
+        activeTab,
+        page,
+        search,
+        selectedUserId: activeTab === 'users' ? selectedId : null,
+        warningsPage,
+        warningsSearch: '',
+    });
 
-    const logsEndRef = useRef<HTMLDivElement>(null);
+    const currentItems = useMemo(() => {
+        switch (activeTab) {
+            case 'users':
+                return users;
+            case 'rooms':
+                return rooms;
+            case 'messages':
+                return messages;
+            case 'audit-logs':
+                return auditLogs;
+        }
+    }, [activeTab, auditLogs, messages, rooms, users]);
+
+    const selectedUser = useMemo(() => {
+        return activeTab === 'users'
+            ? users.find((user) => user.id === selectedId) ?? null
+            : null;
+    }, [activeTab, selectedId, users]);
+    const selectedRoom = useMemo(() => {
+        return activeTab === 'rooms'
+            ? rooms.find((room) => room.id === selectedId) ?? null
+            : null;
+    }, [activeTab, rooms, selectedId]);
+    const selectedMessage = useMemo(() => {
+        return activeTab === 'messages'
+            ? messages.find((message) => message.id === selectedId) ?? null
+            : null;
+    }, [activeTab, messages, selectedId]);
+    const selectedLog = useMemo(() => {
+        return activeTab === 'audit-logs'
+            ? auditLogs.find((log) => log.id === selectedId) ?? null
+            : null;
+    }, [activeTab, auditLogs, selectedId]);
+
+    const selectedEntity = selectedUser ?? selectedRoom ?? selectedMessage ?? selectedLog;
+
+    const terminalLogs = useMemo(() => {
+        const seen = new Set<string>();
+        return [...liveLogs, ...auditLogs].filter((log) => {
+            if (seen.has(log.id)) return false;
+            seen.add(log.id);
+            return true;
+        });
+    }, [auditLogs, liveLogs]);
+
     useEffect(() => {
-        logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [logs]);
+        setSelectedId(null);
+        setPage(1);
+    }, [activeTab]);
 
-    const getCurrentList = () => {
-        if (activeTab === 'USERS') return users || [];
-        if (activeTab === 'ROOMS') return rooms || [];
-        if (activeTab === 'MESSAGES') return messages || [];
-        return [];
-    };
+    useEffect(() => {
+        setWarningsPage(1);
+    }, [selectedUser?.id]);
 
-    const currentList = getCurrentList();
+    const handleApplySearch = useCallback((nextSearch: string) => {
+        setPage(1);
+        setSelectedId(null);
+        setSearch(nextSearch.trim());
+    }, []);
 
-    const handleVaporize = () => {
-        if (!selectedEntity || selectedEntity.type !== 'users') return;
-        if (window.confirm('VAPORIZE THIS SOUL?')) vaporizeUser.mutate(selectedEntity.id);
-    };
+    const handlePageChange = useCallback((nextPage: number) => {
+        setSelectedId(null);
+        setPage(nextPage);
+    }, []);
 
-    const handleRoomStatus = (status: 'active' | 'checkout' | 'banned' | 'quarantined') => {
-        if (!selectedEntity || selectedEntity.type !== 'rooms') return;
-        updateRoomStatus.mutate({ roomId: selectedEntity.id, status });
-    };
+    const userActions = useMemo(() => ({
+        adjustDebt: (amount: number) => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { debt: (selectedUser.debt ?? 0) + amount },
+            });
+        },
+        addWarning: (reason: string) => {
+            if (!selectedUser || reason.trim().length < 3) return;
+            addWarning.mutate({ userId: selectedUser.id, reason: reason.trim() });
+        },
+        farmAura: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { aura: (selectedUser.aura ?? 0) + 1 },
+            });
+        },
+        payDebt: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { debt: Math.max((selectedUser.debt ?? 0) - 1, 0) },
+            });
+        },
+        revokeWarning: (warningId: string) => {
+            if (!selectedUser) return;
+            revokeWarning.mutate({ userId: selectedUser.id, warningId });
+        },
+        setBanDuration: (amount: number, unit: 'minutes' | 'hours' | 'days') => {
+            if (!selectedUser || !Number.isFinite(amount) || amount <= 0) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { bannedUntil: addDuration(amount, unit) },
+            });
+        },
+        setCooldownDuration: (amount: number, unit: 'minutes' | 'hours' | 'days') => {
+            if (!selectedUser || !Number.isFinite(amount) || amount <= 0) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { yapCooldown: addDuration(amount, unit) },
+            });
+        },
+        toggleAdminGlaze: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: {
+                    adminGlazeMode: !(selectedUser.adminGlazeMode ?? selectedUser.admin_glaze_mode ?? false),
+                },
+            });
+        },
+        toggleClown: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { isClown: !selectedUser.isClown },
+            });
+        },
+        toggleMogged: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { isMogged: !selectedUser.isMogged },
+            });
+        },
+        toggleProfileEditing: () => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: {
+                    canChangeProfile: !(selectedUser.canChangeProfile ?? selectedUser.can_change_profile ?? false),
+                },
+            });
+        },
+        updateForcedTitle: (value: string) => {
+            if (!selectedUser) return;
+            updateModifiers.mutate({
+                userId: selectedUser.id,
+                data: { forcedTitle: value.trim() || null },
+            });
+        },
+        vaporize: () => {
+            if (!selectedUser) return;
+            if (window.confirm(`Vaporize ${selectedUser.username}?`)) {
+                vaporizeUser.mutate(selectedUser.id);
+            }
+        },
+    }), [addWarning, revokeWarning, selectedUser, updateModifiers, vaporizeUser]);
 
-    const handleDeleteMessage = () => {
-        if (!selectedEntity || selectedEntity.type !== 'messages') return;
-        if (window.confirm('ERASE MESSAGE?')) deleteMessage.mutate(selectedEntity.id);
-    };
+    const roomActions = useMemo(() => ({
+        moveToStatus: (status: 'active' | 'checkout' | 'banned' | 'quarantined') => {
+            if (!selectedRoom) return;
+            setRoomStatus.mutate({ roomId: selectedRoom.id, status });
+        },
+        quarantine: (reason: string) => {
+            if (!selectedRoom || reason.trim().length < 3) return;
+            quarantineRoom.mutate({
+                roomId: selectedRoom.id,
+                reason: reason.trim(),
+            });
+        },
+        unquarantine: () => {
+            if (!selectedRoom) return;
+            unquarantineRoom.mutate(selectedRoom.id);
+        },
+    }), [quarantineRoom, selectedRoom, setRoomStatus, unquarantineRoom]);
 
-    if (isLoading) return <div className={styles.adminLayout} style={{padding: '2rem'}}>INITIALIZING KILLSQUAD TERMINAL...</div>;
+    const deleteSelectedMessage = useCallback(() => {
+        if (!selectedMessage) return;
+        if (window.confirm('Delete this message?')) {
+            deleteMessage.mutate(selectedMessage.id);
+        }
+    }, [deleteMessage, selectedMessage]);
+
+    const actionHandlers = useMemo(() => ({
+        deleteMessage: deleteSelectedMessage,
+        room: roomActions,
+        user: userActions,
+    }), [deleteSelectedMessage, roomActions, userActions]);
+
+    const actionSelection = useMemo(() => ({
+        log: selectedLog,
+        message: selectedMessage,
+        room: selectedRoom,
+        user: selectedUser,
+    }), [selectedLog, selectedMessage, selectedRoom, selectedUser]);
+
+    const warningsState = useMemo(() => ({
+        items: warnings,
+        isLoading: warningsLoading,
+        page: warningsPage,
+        pagination: warningsPagination,
+        onPageChange: setWarningsPage,
+    }), [warnings, warningsLoading, warningsPage, warningsPagination]);
+
+    if (isLoading && currentItems.length === 0) {
+        return <div className={styles.adminLayout}>Loading admin panel...</div>;
+    }
 
     return (
         <div className={styles.adminLayout}>
-            <aside className={styles.sidebar}>
-                <button className={activeTab === 'USERS' ? styles.activeTab : ''} onClick={() => { setActiveTab('USERS'); setSelectedEntity(null); }}>USERS</button>
-                <button className={activeTab === 'MESSAGES' ? styles.activeTab : ''} onClick={() => { setActiveTab('MESSAGES'); setSelectedEntity(null); }}>MESSAGES</button>
-                <button className={activeTab === 'ROOMS' ? styles.activeTab : ''} onClick={() => { setActiveTab('ROOMS'); setSelectedEntity(null); }}>ROOMS</button>
-
-                <div className={styles.entityList}>
-                    {currentList.map((entity: any) => (
-                        <div
-                            key={entity.id}
-                            className={selectedEntity?.id === entity.id ? styles.selectedItem : styles.listItem}
-                            onClick={() => setSelectedEntity({ ...entity, type: activeTab.toLowerCase() })}
-                        >
-                            {activeTab === 'USERS' && `[AURA: ${entity.aura}] ${entity.username}`}
-                            {activeTab === 'ROOMS' && `[${entity.status.toUpperCase()}] ${entity.title}`}
-                            {activeTab === 'MESSAGES' && `[${entity.author?.username || 'Anon'}] ${entity.cipherText?.slice(0, 20)}...`}
-                        </div>
-                    ))}
-                </div>
-            </aside>
+            <AdminPanelSidebar
+                activeTab={activeTab}
+                currentItems={currentItems}
+                isFetching={isFetching}
+                pagination={pagination}
+                selectedId={selectedId}
+                tabs={TABS}
+                onActiveTabChange={setActiveTab}
+                onApplySearch={handleApplySearch}
+                onPageChange={handlePageChange}
+                onSelect={setSelectedId}
+            />
 
             <main className={styles.mainContent}>
-                <div className={styles.logsPanel}>
-                    <h3 className={styles.panelTitle}>KILLSQUAD TERMINAL LOGS</h3>
-                    <div className={styles.logsContainer}>
-                        <span>[SYS] Admin terminal initialized... Waiting for events.</span>
-                        {[...logs].reverse().map((log) => (
-                            <div key={log.id} style={{ borderBottom: '1px dashed #333', paddingBottom: '4px' }}>
-                                <span style={{ color: '#888' }}>[{new Date(log.timestamp).toLocaleTimeString()}] </span>
-                                <span style={{ color: '#ffb000', fontWeight: 'bold' }}>{log.action} </span>
-                                <span style={{ color: '#fff' }}>TARGET: {log.target} </span>
-                                <span style={{ color: '#00ff00' }}>{log.details}</span>
-                            </div>
-                        ))}
-                        <div ref={logsEndRef} />
-                    </div>
-                </div>
+                <AdminAuditFeed logs={terminalLogs} />
 
-                <div className={styles.bottomSection}>
-                    <div className={styles.detailsPanel}>
-                        <h3 className={styles.panelTitle}>TARGET DETAILS</h3>
-                        {selectedEntity ? (
-                            <pre className={styles.jsonDump}>
-                                {JSON.stringify(selectedEntity, null, 2)}
-                            </pre>
-                        ) : (
-                            <p className={styles.placeholderText}>NO TARGET SELECTED</p>
-                        )}
-                    </div>
+                <section className={styles.bottomSection}>
+                    <AdminDetailsPanel selectedEntity={selectedEntity} />
 
-                    <div className={styles.actionsPanel}>
-                        <h3 className={styles.panelTitle}>EXECUTIVE ACTIONS</h3>
-
-                        {!selectedEntity && <p className={styles.placeholderText}>SELECT TARGET TO UNLOCK ACTIONS</p>}
-
-                        {selectedEntity?.type === 'users' && (
-                            <>
-                                <button className={styles.actionBtnWarning} onClick={() => updateModifiers.mutate({ userId: selectedEntity.id, data: { isClown: true } })}>
-                                    MARK AS CLOWN
-                                </button>
-                                <button className={styles.actionBtnWarning} onClick={() => updateModifiers.mutate({ userId: selectedEntity.id, data: { debt: selectedEntity.debt + 100 } })}>
-                                    ADD DEBT (+100)
-                                </button>
-                                <button className={styles.actionBtnDanger} onClick={handleVaporize}>
-                                    ☢️ VAPORIZE USER
-                                </button>
-                            </>
-                        )}
-
-                        {selectedEntity?.type === 'rooms' && (
-                            <>
-                                <button className={styles.actionBtnSafe} onClick={() => handleRoomStatus('active')}>SET ACTIVE</button>
-                                <button className={styles.actionBtnWarning} onClick={() => handleRoomStatus('quarantined')}>QUARANTINE</button>
-                                <button className={styles.actionBtnDanger} onClick={() => handleRoomStatus('banned')}>BAN ROOM</button>
-                            </>
-                        )}
-
-                        {selectedEntity?.type === 'messages' && (
-                            <button className={styles.actionBtnDanger} onClick={handleDeleteMessage}>
-                                🗑️ ERASE MESSAGE
-                            </button>
-                        )}
-                    </div>
-                </div>
+                    <AdminActionsPanel
+                        handlers={actionHandlers}
+                        selection={actionSelection}
+                        warnings={warningsState}
+                    />
+                </section>
             </main>
         </div>
     );

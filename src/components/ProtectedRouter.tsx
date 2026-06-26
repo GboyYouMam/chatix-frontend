@@ -1,11 +1,20 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 
-export const ProtectedRoute = () => {
+interface ProtectedRouteProps {
+    requireAdmin?: boolean;
+}
+
+export const ProtectedRoute = ({ requireAdmin = false }: ProtectedRouteProps) => {
     const token = useAuthStore((state) => state.token);
+    const user = useAuthStore((state) => state.user);
 
     if (!token) {
         return <Navigate to="/login" replace />;
+    }
+
+    if (requireAdmin && user?.role !== 'admin') {
+        return <Navigate to="/rooms" replace />;
     }
 
     return <Outlet />;

@@ -7,6 +7,17 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "../../store/authStore.ts";
 import { api } from "../../api/client.ts";
 import farmEffectGif from "../../assets/auraFarmingGif.gif"
+import payingDebtGif from "../../assets/payingDebtGif.gif"
+import type { User } from "../../api/auth/types.ts";
+
+interface ProfileData extends User {
+    created_at: string;
+    admin_glaze_mode?: boolean;
+    is_clown?: boolean;
+    isMogged?: boolean;
+}
+
+type EffectMode = 'aura' | 'debt' | null;
 
 export const Profile = () => {
     const navigate = useNavigate();
@@ -15,37 +26,66 @@ export const Profile = () => {
 
     const { user: currentUser } = useAuthStore();
 
-    const [profileData, setProfileData] = useState<any>(null);
+    const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const isMyProfile = currentUser?.username === username;
 
-    const [showGif, setShowGif] = useState(false);
+    const [activeEffect, setActiveEffect] = useState<EffectMode>(null);
 
     const handleFarmAura = async () => {
-        setShowGif(true);
+        setActiveEffect('aura');
 
-        setProfileData((prev: any) => ({
+        setProfileData((prev) => prev ? ({
             ...prev,
             aura: Number(prev.aura) + 1
-        }));
+        }) : prev);
 
         try {
             const response = await api.post('/users/farm-aura');
-            setProfileData((prev: any) => ({
+            setProfileData((prev) => prev ? ({
                 ...prev,
                 aura: response.data.aura
-            }));
+            }) : prev);
         } catch (error) {
             console.error('Failed to farm aura:', error);
-            setProfileData((prev: any) => ({
+            setProfileData((prev) => prev ? ({
                 ...prev,
                 aura: Number(prev.aura) - 1
-            }));
+            }) : prev);
         }
 
         setTimeout(() => {
-            setShowGif(false);
+            setActiveEffect(null);
+        }, 1200);
+    };
+
+    const handlePayDebt = async () => {
+        if (!profileData || profileData.debt <= 0) return;
+
+        setActiveEffect('debt');
+
+        setProfileData((prev) => prev ? ({
+            ...prev,
+            debt: Math.max(Number(prev.debt) - 1, 0),
+        }) : prev);
+
+        try {
+            const response = await api.post('/users/pay-debt');
+            setProfileData((prev) => prev ? ({
+                ...prev,
+                debt: typeof response.data?.debt === 'number' ? response.data.debt : prev.debt,
+            }) : prev);
+        } catch (error) {
+            console.error('Failed to pay debt:', error);
+            setProfileData((prev) => prev ? ({
+                ...prev,
+                debt: Number(prev.debt) + 1,
+            }) : prev);
+        }
+
+        setTimeout(() => {
+            setActiveEffect(null);
         }, 1200);
     };
 
@@ -87,10 +127,16 @@ export const Profile = () => {
 
     return (
         <div className={styles.layout}>
-            {showGif && (
+            {activeEffect && (
                 <div className={styles.gifOverlay}>
-                    <img src={farmEffectGif} alt="Aura Level Up" className={styles.farmGif} />
-                    <div className={styles.auraText}>AURA +1</div>
+                    <img
+                        src={activeEffect === 'aura' ? farmEffectGif : payingDebtGif}
+                        alt={activeEffect === 'aura' ? "Aura Level Up" : "Debt Paid"}
+                        className={styles.farmGif}
+                    />
+                    <div className={styles.auraText}>
+                        {activeEffect === 'aura' ? 'AURA +1' : 'DEBT -1'}
+                    </div>
                 </div>
             )}
             <div className={styles.topActions}>
@@ -113,7 +159,11 @@ export const Profile = () => {
 
                 <aside className={styles.sideCol}>
                     {isMyProfile ? (
-                            <button className={styles.actionBtn}>
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => handlePayDebt()}
+                                disabled={activeEffect !== null || profileData.debt <= 0}
+                            >
                                 pay debt
                             </button>
                         )
@@ -195,7 +245,11 @@ export const Profile = () => {
 
                 <aside className={styles.sideCol}>
                     {isMyProfile ? (
-                            <button className={styles.actionBtn} onClick={() => handleFarmAura()} disabled={showGif}>
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => handleFarmAura()}
+                                disabled={activeEffect !== null}
+                            >
                                 farm aura
                             </button>
                     ) :

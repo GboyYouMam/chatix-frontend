@@ -1,39 +1,44 @@
-import { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
-
-export interface AdminLog {
-    id: string;
-    timestamp: string;
-    action: string;
-    target: string;
-    details: string;
-}
+import { useEffect, useRef, useState } from 'react';
+import { io, type Socket } from 'socket.io-client';
+import type { AdminAuditLog } from '../api/admin/types.ts';
+import { useAuthStore } from '../store/authStore';
 
 export const useAdminSocket = () => {
-    const [socket, setSocket] = useState<Socket | null>(null);
-    const [logs, setLogs] = useState<AdminLog[]>([]);
+    const token = useAuthStore((state) => state.token);
+    const socketRef = useRef<Socket | null>(null);
+    const [logs, setLogs] = useState<AdminAuditLog[]>([]);
 
     useEffect(() => {
-        const newSocket = io(import.meta.env.VITE_API_URL);
-        setSocket(newSocket);
+        if (!token) {
+            setLogs([]);
+            socketRef.current?.disconnect();
+            socketRef.current = null;
+            return;
+        }
 
-        newSocket.emit('joinAdminLogs');
+        const socket = io(import.meta.env.VITE_API_URL, {
+            auth: {
+                token: `Bearer ${token}`,
+            },
+        });
 
-        newSocket.on('newAdminLog', (log: AdminLog) => {
+        socketRef.current = socket;
+        socket.emit('joinAdminLogs');
+
+        socket.on('newAdminLog', (log: AdminAuditLog) => {
             setLogs((prevLogs) => {
-                const updatedLogs = [log, ...prevLogs];
-                return updatedLogs.slice(0, 100);
+                const deduped = prevLogs.filter((entry) => entry.id !== log.id);
+                return [log, ...deduped].slice(0, 100);
             });
         });
 
-        newSocket.on('logJoined', (data: string) => {
-            console.log(data);
-        });
-
         return () => {
-            newSocket.disconnect();
+            socket.disconnect();
+            if (socketRef.current === socket) {
+                socketRef.current = null;
+            }
         };
-    }, []);
+    }, [token]);
 
-    return { logs, socket };
+    return { logs };
 };
