@@ -12,6 +12,9 @@ export interface User {
     canChangeProfile: boolean;
     bannedUntil?: string;
     yapCooldown?: string;
+    upper_banner_url?: string | null;
+    left_banner_url?: string | null;
+    right_banner_url?: string | null;
 }
 
 export interface UserData {

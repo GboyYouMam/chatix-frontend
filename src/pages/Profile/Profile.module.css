@@ -6,59 +6,6 @@
     padding: 4rem 3rem;
 }
 
-.topActions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3.5rem;
-    max-width: 1600px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-}
-
-.backBtn {
-    background-color: #18181b;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.8rem 1.5rem;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
-}
-
-.backBtn:hover {
-    opacity: 0.9;
-}
-
-.backBtn:active {
-    transform: scale(0.98);
-}
-
-.editBtn {
-    background-color: var(--primary);
-    color: var(--bg);
-    border: none;
-    border-radius: 8px;
-    padding: 0.8rem 1.5rem;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
-}
-
-.editBtn:hover {
-    opacity: 0.9;
-}
-
-.editBtn:active {
-    transform: scale(0.98);
-}
-
 .gridContainer {
     display: grid;
     grid-template-columns: 280px 1fr 280px;
@@ -66,41 +13,6 @@
     max-width: 1600px;
     margin: 0 auto;
     width: 100%;
-}
-.sideCol {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.actionBtn {
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-    font-family: inherit;
-}
-
-.actionBtn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
-.verticalBanner {
-    border-radius: 8px;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
-    color: var(--muted);
-    font-size: 0.9rem;
-    min-height: 500px;
 }
 
 .mainCol {
@@ -120,181 +32,42 @@
     text-align: center;
     color: var(--muted);
     font-size: 0.9rem;
+    overflow: hidden;
 }
 
-.profileCard {
-    display: flex;
-    background-color: var(--surface);
-    border-radius: 12px;
-    padding: 3rem;
-    gap: 3rem;
-    align-items: flex-start;
-}
-
-.avatarBox {
-    width: 180px;
-    height: 180px;
-    background-color: var(--bg);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    flex-shrink: 0;
-}
-
-.userInfo {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
-.username {
-    font-family: 'Times New Roman', Times, serif;
-    color: var(--text);
-    font-size: 3rem;
-    margin: 0 0 0.5rem 0;
-    letter-spacing: 2px;
-}
-
-.vibe {
-    color: var(--muted);
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-.statsCol {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1rem;
-    min-width: 220px;
-}
-
-.date {
-    font-family: 'Courier New', Courier, monospace;
-    color: var(--muted);
-    font-size: 0.85rem;
-}
-
-.featuresBox {
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.2rem;
+.bannerImage {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    height: 100%;
+    object-fit: fill;
+    display: block;
 }
 
-.featureItem {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    color: var(--text);
-}
-
-.primaryText {
+.statusBox {
+    text-align: center;
+    margin-top: 10rem;
     color: var(--primary);
+    font-size: 2rem;
+}
+
+.backBtn {
+    background-color: #18181b;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
     font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s, transform 0.1s;
+    margin: 2rem auto;
+    display: block;
 }
 
-.errorText {
-    color: #bb0303;
-    font-weight: bold;
+.backBtn:hover {
+    opacity: 0.9;
 }
 
-.descriptionBox {
-    background-color: var(--surface);
-    border-radius: 12px;
-    padding: 2rem;
-    min-height: 200px;
-}
-
-.descTitle {
-    font-family: 'Times New Roman', Times, serif;
-    color: var(--primary);
-    margin: 0 0 1rem 0;
-    font-size: 1.5rem;
-}
-
-.descriptionBox p {
-    color: var(--text);
-    line-height: 1.6;
-    margin: 0;
-}
-
-{/*gif part*/}
-.gifOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    z-index: 9999;
-    pointer-events: none;
-}
-
-.farmGif {
-    width: 350px;
-    height: auto;
-    animation: popIn 0.3s ease-out;
-}
-
-.auraText {
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    font-size: 5rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    animation:
-            popIn 0.3s ease-out,
-            rainbow 0.2s infinite linear,
-            shake 0.1s infinite;
-}
-
-@keyframes popIn {
-    0% {
-        transform: scale(0.5);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes rainbow {
-    0% { color: #ff0000; text-shadow: 0 0 20px #ff0000; }
-    17% { color: #ff7f00; text-shadow: 0 0 20px #ff7f00; }
-    33% { color: #ffff00; text-shadow: 0 0 20px #ffff00; }
-    50% { color: #00ff00; text-shadow: 0 0 20px #00ff00; }
-    67% { color: #0000ff; text-shadow: 0 0 20px #0000ff; }
-    83% { color: #4b0082; text-shadow: 0 0 20px #4b0082; }
-    100% { color: #8b00ff; text-shadow: 0 0 20px #8b00ff; }
-}
-
-@keyframes shake {
-    0% { transform: translate(2px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+.backBtn:active {
+    transform: scale(0.98);
 }

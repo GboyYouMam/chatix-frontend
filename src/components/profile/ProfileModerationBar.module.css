@@ -1,0 +1,76 @@
+.moderationBar {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.moderationSummary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.moderationItem {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.86rem;
+}
+
+.moderationLabel {
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+}
+
+.moderationValue {
+    color: var(--text);
+    font-weight: bold;
+}
+
+.divider {
+    width: 1px;
+    height: 1.1rem;
+    background-color: var(--border);
+}
+
+.warningText {
+    color: #ffb347;
+    font-weight: bold;
+}
+
+.mutedText {
+    color: var(--muted);
+}
+
+.errorText {
+    color: #bb0303;
+    font-weight: bold;
+}
+
+.warningReasonsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.warningList {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--text);
+}
+
+.warningReason {
+    line-height: 1.45;
+}
