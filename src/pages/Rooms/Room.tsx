@@ -1,148 +1,88 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
 import { roomApi } from '../../api/rooms/rooms.service';
-import { CreateRoomModal } from '../../components/CreateRoomModal.tsx';
-import clsx from 'clsx';
-import styles from './Rooms.module.css';
-import bannerPng from '../../assets/banner.png';
-import { useNavigate} from "react-router-dom";
-import {useAuthStore} from "../../store/authStore.ts";
+import { messagesApi } from '../../api/messages/messages.service.ts';
 
-export const Rooms = () => {
+import styles from './Room.module.css';
+
+import {UpdateRoomModal} from "../../components/rooms/EditRoomModal.tsx";
+import { RoomOpPost } from '../../components/rooms/RoomOpPost';
+import { RoomReplies } from '../../components/rooms/RoomReplies';
+import { RoomReplyForm } from '../../components/rooms/RoomReplyForm';
+
+import {useRoomSocket} from "../../hooks/useRoomSocket.ts";
+
+export const Room = () => {
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { user } = useAuthStore();
 
-    const [roomType, setRoomType] = useState<'public' | 'private'>('public');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const { socket } = useRoomSocket(id);
 
-    const { data: rooms, isLoading, refetch } = useQuery({
-        queryKey: ['rooms', roomType],
-        queryFn: () => roomApi.getRooms(roomType),
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const { data: room, isLoading: roomLoading, refetch: refetchRoom } = useQuery({
+        queryKey: ['room', id],
+        queryFn: () => roomApi.getRoomDetailed(id!),
+        enabled: !!id,
     });
 
-    const filteredRooms = rooms?.filter((room: any) =>
-        room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
-    const navigate = useNavigate();
+    const { data: messages, isLoading: messagesLoading } = useQuery({
+        queryKey: ['messages', id],
+        queryFn: () => messagesApi.getHistory(id!),
+        enabled: !!id,
+    });
 
-    const { user } = useAuthStore();
-    const handleGoToMyProfile = () => {
-        if (user && user.username) {
-            navigate(`/profile/${user.username}`);
-        } else {
-            navigate('/login');
-        }
-    };
+    if (roomLoading || messagesLoading) return <div className={styles.loading}>Loading thread...</div>;
+    if (!room) return <div className={styles.error}>Room 404. It got nuked or never existed.</div>;
+
+    const isRoomCreator = user?.id === room.creator.id || user?.username === room.creator.username;
 
     return (
         <div className={styles.layout}>
             <header className={styles.header}>
-                <div className={styles.toggleContainer}>
-                    <button
-                        className={clsx(styles.toggleBtn, roomType === 'public' && styles.activeToggle)}
-                        onClick={() => setRoomType('public')}
-                    >
-                        Public
+                <div className={styles.headerLeft}>
+                    <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                        {'<< back to lobby'}
                     </button>
-                    <button
-                        className={clsx(styles.toggleBtn, roomType === 'private' && styles.activeToggle)}
-                        onClick={() => setRoomType('private')}
-                    >
-                        Private
-                    </button>
+                    <h1 className={styles.boardTitle}>/{room.publicity}/ — {room.title}</h1>
                 </div>
 
-                <h1 className={styles.logo}>CHATIX</h1>
-
-                <button
-                    className={styles.profileBtn}
-                    aria-label="Profile"
-                    onClick={() => handleGoToMyProfile()}
-                >
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </button>
-            </header>
-
-            <img
-                src={bannerPng}
-                alt="Chatix Banner"
-                className={styles.banner}
-            />
-
-            <main className={styles.mainContent}>
-                <h2 className={styles.subtitle}>if u in debt or just a chud ts for you</h2>
-
-                <div className={styles.actionContainer}>
-                    <button className={styles.addBtn} onClick={() => setIsCreateModalOpen(true)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="#fa4d98" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                             className="lucide lucide-plus-icon lucide-plus">
-                            <path d="M5 12h14"/>
-                            <path d="M12 5v14"/>
+                {isRoomCreator && (
+                    <button
+                        className={styles.editRoomBtn}
+                        onClick={() => setIsEditModalOpen(true)}
+                        title="Edit Room"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fa4d98" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen-icon lucide-pen">
+                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                         </svg>
                     </button>
-                    <div className={styles.searchWrapper}>
-                        <input
-                            type="text"
-                            className={styles.searchInput}
-                            placeholder="find your place"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <span className={styles.searchLmao}>lmao</span>
-                        <button className={styles.searchBtn}>search</button>
-                    </div>
-                </div>
+                )}
+            </header>
 
-                <div className={styles.grid}>
-                    {isLoading ? (
-                        <div style={{ color: 'var(--primary)', textAlign: 'center', gridColumn: '1 / -1', padding: '2rem' }}>
-                            Loading rooms...
-                        </div>
-                    ) : filteredRooms.length === 0 ? (
-                        <div style={{ color: 'var(--muted)', textAlign: 'center', gridColumn: '1 / -1', padding: '2rem' }}>
-                            No rooms found, buuuut u can fix that, create first one
-                        </div>
-                    ) : (
-                        filteredRooms.map((room: any) => (
-                            <div key={room.id} className={styles.card}>
-                                <div className={styles.cardHeader}>
-                                    <span className={styles.cardDate}>
-                                        created at: {new Date(room.createdAt).toLocaleDateString('uk-UA')}
-                                    </span>
-                                </div>
-
-                                <h3 className={styles.cardTitle}>{room.title}</h3>
-                                <p className={styles.cardTopic}>{room.topic || 'no topic'}</p>
-                                <p className={styles.cardDesc}>{room.description}</p>
-
-                                <div className={styles.cardFooter}>
-                                    <a
-                                        className={styles.cardCta}
-                                        onClick={() => navigate(`/room/${room.id}`)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        join this convo and mog them all
-                                    </a>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+            <main className={styles.threadContainer}>
+                <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
+                <RoomReplies messages={messages || []} roomCreatorUsername={room.creator.username} />
             </main>
 
-            <CreateRoomModal
-                isOpen={isCreateModalOpen}
-                onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => refetch()}
-            />
+            <RoomReplyForm roomId={id!} authorId={user?.id} socket={socket} />
+
+            {isEditModalOpen && (
+                <UpdateRoomModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSuccess={() => refetchRoom()}
+                    roomId={room.id}
+                    initialData={{
+                        title: room.title,
+                        topic: room.topic,
+                        description: room.description,
+                    }}
+                />
+            )}
         </div>
     );
 };

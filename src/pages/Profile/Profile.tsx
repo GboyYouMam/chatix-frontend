@@ -147,7 +147,7 @@ export const Profile = () => {
                                     style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }}
                                 />
                             ) : (
-                                'ur future pfp'
+                                'no pfp here'
                             )}
                         </div>
 
@@ -178,6 +178,10 @@ export const Profile = () => {
                                 <div className={styles.featureItem}>
                                     <span>ADMIN GLAZE:</span>
                                     <span>{profileData.admin_glaze_mode ? 'ON' : 'OFF'}</span>
+                                </div>
+                                <div className={styles.featureItem}>
+                                    <span>MOGGED:</span>
+                                    <span>{profileData.isMogged ? 'YEP' : 'LTN'}</span>
                                 </div>
                             </div>
                         </div>
