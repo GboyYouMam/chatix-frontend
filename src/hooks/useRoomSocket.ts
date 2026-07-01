@@ -6,46 +6,52 @@ import { useAuthStore } from '../store/authStore';
 export const RoomSocketEvent = {
     sendMessage: 'sendMessage',
     newMessage: 'newMessage',
-    joinRoom: 'joinRoom'
+    joinRoom: 'joinRoom',
+    leaveRoom: 'leaveRoom'
 } as const;
 
 export const useRoomSocket = (roomId: string | undefined) => {
     const queryClient = useQueryClient();
     const { user, token } = useAuthStore();
-    const [socket, setSocket] = useState<Socket | null>(null);
+
+    const [socket] = useState<Socket>(() => io(import.meta.env.VITE_API_URL, {
+        auth: {
+            token: `Bearer ${token}`
+        }
+    }));
 
     useEffect(() => {
         if (!roomId) return;
 
-        const newSocket = io(import.meta.env.VITE_API_URL, {
-            auth: {
-                token: `Bearer ${token}`
-            }
-        });
-        setSocket(newSocket);
+        socket.emit(RoomSocketEvent.joinRoom, roomId);
 
-        newSocket.emit(RoomSocketEvent.joinRoom, roomId);
-
-        newSocket.on(RoomSocketEvent.newMessage, (msg) => {
+        const handleNewMessage = (msg: any) => {
             queryClient.setQueryData(['messages', roomId], (oldData: any[]) => {
                 if (!oldData) return [msg];
                 if (oldData.some(m => m.id === msg.id)) return oldData;
 
                 const fixedMsg = { ...msg };
                 if (!fixedMsg.author && fixedMsg.authorId === user?.id) {
-                    fixedMsg.author = {
-                        username: user?.username
-                    }
+                    fixedMsg.author = { username: user?.username };
                 }
 
                 return [...oldData, fixedMsg];
             });
-        });
+        };
+
+        socket.on(RoomSocketEvent.newMessage, handleNewMessage);
 
         return () => {
-            newSocket.disconnect();
+            socket.off(RoomSocketEvent.newMessage, handleNewMessage);
+            socket.emit(RoomSocketEvent.leaveRoom, roomId);
         };
-    }, [roomId, queryClient, user]);
+    }, [roomId, queryClient, user, socket]);
+
+    useEffect(() => {
+        return () => {
+            socket.disconnect();
+        };
+    }, [socket]);
 
     return { socket };
 };

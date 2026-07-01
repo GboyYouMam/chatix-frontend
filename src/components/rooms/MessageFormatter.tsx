@@ -8,42 +8,6 @@ interface MessageFormatterProps {
     onQuoteClick: (shortId: string) => void;
 }
 
-interface QuotePartProps {
-    part: string;
-    shortId: string;
-    quotedMsg?: MessageData;
-    isHovered: boolean;
-    onQuoteClick: (shortId: string) => void;
-    onHoverChange: (shortId: string | null) => void;
-}
-
-const QuotePart = ({
-    part,
-    shortId,
-    quotedMsg,
-    isHovered,
-    onQuoteClick,
-    onHoverChange,
-}: QuotePartProps) => {
-    return (
-        <span
-            className={styles.quoteLink}
-            onClick={() => onQuoteClick(shortId)}
-            onMouseEnter={() => onHoverChange(shortId)}
-            onMouseLeave={() => onHoverChange(null)}
-        >
-            {part}
-
-            {isHovered && quotedMsg && (
-                <div className={styles.quotePopup}>
-                    <div className={styles.popupMeta}>в„–{shortId} {quotedMsg.author?.username}</div>
-                    <div className={styles.popupText}>{quotedMsg.cipherText}</div>
-                </div>
-            )}
-        </span>
-    );
-};
-
 export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFormatterProps) => {
     const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
 
@@ -57,17 +21,26 @@ export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFor
             {parts.map((part, i) => {
                 if (part.startsWith('>>')) {
                     const shortId = part.slice(2);
+                    const quotedMsg = messagesByShortId.get(shortId);
+                    const isHovered = hoveredPostId === shortId;
 
                     return (
-                        <QuotePart
+                        <span
                             key={i}
-                            part={part}
-                            shortId={shortId}
-                            quotedMsg={messagesByShortId.get(shortId)}
-                            isHovered={hoveredPostId === shortId}
-                            onQuoteClick={onQuoteClick}
-                            onHoverChange={setHoveredPostId}
-                        />
+                            className={styles.quoteLink}
+                            onClick={() => onQuoteClick(shortId)}
+                            onMouseEnter={() => setHoveredPostId(shortId)}
+                            onMouseLeave={() => setHoveredPostId(null)}
+                        >
+                            {part}
+
+                            {isHovered && quotedMsg && (
+                                <div className={styles.quotePopup}>
+                                    <div className={styles.popupMeta}>{shortId} {quotedMsg.author?.username}</div>
+                                    <div className={styles.popupText}>{quotedMsg.cipherText}</div>
+                                </div>
+                            )}
+                        </span>
                     );
                 }
 

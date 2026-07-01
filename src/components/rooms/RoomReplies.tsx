@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { MessageFormatter } from './MessageFormatter.tsx';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from "../../api/messages/types.ts";
-import {useRef} from "react";
+import { useMemo, useRef } from "react";
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -14,6 +14,14 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
     const navigate = useNavigate();
 
     const messageRefs = useRef(new Map<string, HTMLDivElement>());
+    const formattedDatesById = useMemo(() => {
+        return new Map(
+            messages.map((message) => [
+                message.id,
+                message.createdAt ? new Date(message.createdAt).toLocaleString('uk-UA') : 'Just now',
+            ]),
+        );
+    }, [messages]);
 
     const handleScrollToQuote = (shortId: string) => {
         const node = messageRefs.current.get(shortId);
@@ -41,7 +49,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
 
     return (
         <div className={styles.replies}>
-            {messages?.map((msg: any) => {
+            {messages?.map((msg: MessageData) => {
                 const shortId = msg.id?.slice(-6);
 
                 return (
@@ -56,7 +64,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                         }}
                         className={styles.replyBlock}
                     >
-                    <div className={styles.postMeta}>
+                        <div className={styles.postMeta}>
                         <span
                             className={styles.username}
                             onClick={() => msg.author?.username ? navigate(`/profile/${msg.author.username}`) : null}
@@ -75,27 +83,27 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                 <span className={styles.forcedTitle}> [{msg.author.forcedTitle}]</span>
                             )}
                         </span>
-                        <span className={styles.date}>
-                            {msg.createdAt ? new Date(msg.createdAt).toLocaleString('uk-UA') : 'Just now'}
+                            <span className={styles.date}>
+                            {formattedDatesById.get(msg.id) ?? 'Just now'}
                         </span>
-                        <span className={styles.postId} onClick={() => handleCopyIdToReply(msg.id?.slice(-6))}>
+                            <span className={styles.postId} onClick={() => handleCopyIdToReply(msg.id?.slice(-6))}>
                             №{msg.id?.slice(-6) || 'ERROR'}
                         </span>
-                    </div>
-
-                    <div className={styles.postBody}>
-                        <MessageFormatter
-                            text={msg.cipherText || ''}
-                            allMessages={messages || []}
-                            onQuoteClick={handleScrollToQuote}
-                        />
-                    </div>
-
-                    {msg.ipAddress && (
-                        <div className={styles.ipAddress}>
-                            [HOST: {msg.ipAddress}]
                         </div>
-                    )}
+
+                        <div className={styles.postBody}>
+                            <MessageFormatter
+                                text={msg.cipherText || ''}
+                                allMessages={messages || []}
+                                onQuoteClick={handleScrollToQuote}
+                            />
+                        </div>
+
+                        {msg.ipAddress && (
+                            <div className={styles.ipAddress}>
+                                [HOST: {msg.ipAddress}]
+                            </div>
+                        )}
                     </div>
                 );
             })}

@@ -54,13 +54,13 @@ const router = createBrowserRouter([
                     return { Component: EditProfile };
                 }
             },
-            {
-                path: "/admin",
-                lazy: async () => {
-                    const { AdminPanel } = await import('./pages/Admin/AdminPanel.tsx');
-                    return { Component: AdminPanel };
-                }
-            },
+            // {
+            //     path: "/admin",
+            //     lazy: async () => {
+            //         const { AdminPanel } = await import('./pages/Admin/AdminPanel.tsx');
+            //         return { Component: AdminPanel };
+            //     }
+            // },
         ]
     },
 
