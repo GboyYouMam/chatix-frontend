@@ -35,50 +35,11 @@ export interface AuditFeedProps {
     logs: AdminAuditLog[];
 }
 
-export interface DetailsPanelProps {
-    selectedEntity: AdminEntity | null;
-}
-
-export interface UserActionHandlers {
-    adjustDebt: (amount: number) => void;
-    addWarning: (reason: string) => void;
-    farmAura: () => void;
-    payDebt: () => void;
-    revokeWarning: (warningId: string) => void;
-    setBanDuration: (amount: number, unit: DurationUnit) => void;
-    setCooldownDuration: (amount: number, unit: DurationUnit) => void;
-    toggleAdminGlaze: () => void;
-    toggleClown: () => void;
-    toggleMogged: () => void;
-    toggleProfileEditing: () => void;
-    updateForcedTitle: (value: string) => void;
-    vaporize: () => void;
-}
-
-export interface UserActionsProps {
-    selectedUser: AdminUser;
-    warnings: AdminWarning[];
-    warningsLoading: boolean;
-    warningsPage: number;
-    warningsPagination: PaginationMeta;
-    onPageChange: (page: number) => void;
-    actions: UserActionHandlers;
-}
-
 export type DurationUnit = 'minutes' | 'hours' | 'days';
 
 export interface UserQuickActionsProps {
     selectedUser: AdminUser;
-    actions: Pick<
-        UserActionHandlers,
-        | 'adjustDebt'
-        | 'farmAura'
-        | 'payDebt'
-        | 'toggleAdminGlaze'
-        | 'toggleClown'
-        | 'toggleMogged'
-        | 'toggleProfileEditing'
-    >;
+    onUpdateModifiers: (data: UpdateModifiersPayload) => void;
 }
 
 export interface ForcedTitleControlProps {
@@ -124,11 +85,4 @@ export interface MessageActionsProps {
 
 export interface LogActionsProps {
     selectedLog: AdminAuditLog;
-}
-
-export interface UserMutationActions {
-    updateModifiers: (data: UpdateModifiersPayload) => void;
-    addWarning: (reason: string) => void;
-    revokeWarning: (warningId: string) => void;
-    vaporize: () => void;
 }

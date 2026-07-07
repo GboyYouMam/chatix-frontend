@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
-import type { AdminAuditLog } from '../api/admin/types.ts';
-import { useAuthStore } from '../store/authStore';
+import type { AdminAuditLog } from '../../api/admin/types.ts';
+import { useAuthStore } from '../../store/authStore.ts';
 
 export const useAdminSocket = () => {
     const token = useAuthStore((state) => state.token);
@@ -10,7 +10,6 @@ export const useAdminSocket = () => {
 
     useEffect(() => {
         if (!token) {
-            setLogs([]);
             socketRef.current?.disconnect();
             socketRef.current = null;
             return;
@@ -40,5 +39,5 @@ export const useAdminSocket = () => {
         };
     }, [token]);
 
-    return { logs };
+    return { logs: token ? logs : [] };
 };

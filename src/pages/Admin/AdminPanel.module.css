@@ -7,6 +7,134 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
+.adminPageShell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #0b0f16;
+    color: #ebedf3;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.dashboardHeader,
+.listPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.dashboardGrid,
+.messageModerationLayout {
+    display: grid;
+    gap: 1rem;
+}
+
+.dashboardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.messageModerationLayout {
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    min-height: 0;
+    flex: 1;
+}
+
+.listPanel,
+.profileCard {
+    min-height: 0;
+    border: 1px solid #1d2636;
+    border-radius: 8px;
+    background: #111823;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.listPanel {
+    min-height: 520px;
+}
+
+.profileCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(320px, 0.8fr);
+    align-items: center;
+}
+
+.profileAvatar,
+.profileAvatarFallback {
+    width: 84px;
+    height: 84px;
+    border-radius: 8px;
+    border: 1px solid #2b3446;
+    background: #0c121b;
+}
+
+.profileAvatar {
+    object-fit: cover;
+}
+
+.profileAvatarFallback {
+    display: grid;
+    place-items: center;
+    color: #4da6fa;
+    font-size: 2rem;
+}
+
+.profileSummary {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.statGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.statCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.85rem;
+    border: 1px solid #1d2636;
+    border-radius: 6px;
+    background: #0c121b;
+    min-width: 0;
+}
+
+.statCard strong {
+    overflow-wrap: anywhere;
+}
+
+.roomDescription {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #cad3e2;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.messageBody {
+    margin: 0;
+    min-height: 140px;
+    max-height: 360px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 0.9rem;
+    border: 1px solid #1b2432;
+    border-radius: 6px;
+    background: #0b1018;
+    color: #8cc5ff;
+    font: inherit;
+}
+
 .sidebar {
     min-height: 100vh;
     display: flex;
@@ -439,6 +567,12 @@ button:disabled {
         grid-template-columns: 1fr;
     }
 
+    .dashboardGrid,
+    .messageModerationLayout,
+    .profileCard {
+        grid-template-columns: 1fr;
+    }
+
     .sidebar {
         min-height: auto;
         border-right: 0;
@@ -455,13 +589,18 @@ button:disabled {
 }
 
 @media (max-width: 760px) {
+    .adminPageShell {
+        padding: 1rem;
+    }
+
     .mainContent {
         padding: 1rem;
     }
 
     .tabRow,
     .statusGrid,
-    .bottomSection {
+    .bottomSection,
+    .statGrid {
         grid-template-columns: 1fr;
     }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../../../pages/Admin/AdminPanel.module.css';
 import type { RoomActionsProps } from '../adminPanelTypes.ts';
 
@@ -6,11 +6,20 @@ export const AdminRoomActions = ({
     selectedRoom,
     actions,
 }: RoomActionsProps) => {
-    const [quarantineReason, setQuarantineReason] = useState('');
+    return (
+        <AdminRoomActionForm
+            key={selectedRoom.id}
+            selectedRoom={selectedRoom}
+            actions={actions}
+        />
+    );
+};
 
-    useEffect(() => {
-        setQuarantineReason(selectedRoom.quarantineReason ?? '');
-    }, [selectedRoom.id, selectedRoom.quarantineReason]);
+const AdminRoomActionForm = ({
+    selectedRoom,
+    actions,
+}: RoomActionsProps) => {
+    const [quarantineReason, setQuarantineReason] = useState(selectedRoom.quarantineReason ?? '');
 
     return (
         <div className={styles.actionGroup}>

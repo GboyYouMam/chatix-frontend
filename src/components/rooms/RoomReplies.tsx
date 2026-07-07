@@ -27,7 +27,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
 
     return (
         <div className={styles.replies}>
-            {messages?.map((msg: any) => (
+            {messages?.map((msg: MessageData) => (
                 <div key={msg.id} id={`post-${msg.id?.slice(-6)}`} className={styles.replyBlock}>
                     <div className={styles.postMeta}>
                         <span

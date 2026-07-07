@@ -7,7 +7,7 @@ import styles from './Rooms.module.css';
 import bannerPng from '../../assets/banner.png';
 import { useNavigate} from "react-router-dom";
 import {useAuthStore} from "../../store/authStore.ts";
-import {useRooms} from "../../hooks/useRooms.ts";
+import {useRooms} from "../../hooks/rooms/useRooms.ts";
 import {RoomCard} from "../../components/rooms/RoomCard.tsx";
 
 export const Rooms = () => {

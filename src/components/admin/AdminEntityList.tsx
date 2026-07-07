@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import styles from '../../pages/Admin/AdminPanel.module.css';
 import type { AdminEntity, AdminTabKey } from './adminPanelTypes.ts';
 import { getEntityLabel } from './adminPanelUtils.ts';
@@ -21,15 +21,13 @@ const AdminEntityListItem = memo(({
     isSelected: boolean;
     onSelect: (id: string) => void;
 }) => {
-    const label = useMemo(() => getEntityLabel(activeTab, entity), [activeTab, entity]);
-
     return (
         <button
             className={isSelected ? styles.selectedItem : styles.listItem}
             type="button"
             onClick={() => onSelect(entity.id)}
         >
-            <span className={styles.itemLabel}>{label}</span>
+            <span className={styles.itemLabel}>{getEntityLabel(activeTab, entity)}</span>
         </button>
     );
 });
