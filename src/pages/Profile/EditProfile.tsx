@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/authStore';
 import { api } from '../../api/client';
 import styles from './EditProfile.module.css';
 import toast from "react-hot-toast";
+import { PATH } from '../../utils/pathList.ts';
 
 export const EditProfile = () => {
     const navigate = useNavigate();
@@ -59,7 +60,7 @@ export const EditProfile = () => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            navigate(`/profile/${user?.username}`);
+            navigate(user?.username ? PATH.authAndUser.href.profile(user.username) : PATH.rooms.rooms);
             toast.success('profile visuals ascended');
         } catch (error) {
             console.error('Failed to update profile:', error);
@@ -71,7 +72,7 @@ export const EditProfile = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate(PATH.authAndUser.login);
     };
 
     return (

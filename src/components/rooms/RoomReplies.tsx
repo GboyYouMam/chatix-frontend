@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { MessageFormatter } from './MessageFormatter.tsx';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from "../../api/messages/types.ts";
+import { PATH } from '../../utils/pathList.ts';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -32,7 +33,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                     <div className={styles.postMeta}>
                         <span
                             className={styles.username}
-                            onClick={() => msg.author?.username ? navigate(`/profile/${msg.author.username}`) : null}
+                            onClick={() => msg.author?.username ? navigate(PATH.authAndUser.href.profile(msg.author.username)) : null}
                         >
                             {msg.author?.username || 'Anon'}
 

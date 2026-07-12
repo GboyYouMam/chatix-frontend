@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../../pages/Rooms/Rooms.module.css';
 import type {RoomDetails} from "../../api/rooms/types.ts";
+import { PATH } from '../../utils/pathList.ts';
 
 interface RoomCardProps {
     room: RoomDetails;
@@ -29,7 +30,7 @@ export const RoomCard = ({ room }: RoomCardProps) => {
             <div className={styles.cardFooter}>
                 <a
                     className={styles.cardCta}
-                    onClick={() => navigate(`/room/${room.id}`)}
+                    onClick={() => navigate(PATH.rooms.href.room(room.id))}
                     style={{ cursor: 'pointer' }}
                 >
                     join this convo and mog them all

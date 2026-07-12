@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { authService } from '../api/auth/auth.service.ts';
 import { useAuthStore } from '../store/authStore';
 import { AxiosError } from 'axios';
+import { PATH } from '../utils/pathList.ts';
 
 export const useAuth = () => {
     const setAuth = useAuthStore((state) => state.setAuth);
@@ -20,7 +21,7 @@ export const useAuth = () => {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
                 toast.success(`welcome back bum ${user.username}!`);
-                navigate('/chat');
+                navigate(PATH.rooms.rooms);
             } catch (err) {
                 logoutStore();
                 toast.error('Failed to parse your profile profile.');
@@ -40,7 +41,7 @@ export const useAuth = () => {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
                 toast.success('Ascension complete! Profile created');
-                navigate('/chat');
+                navigate(PATH.rooms.rooms);
             } catch (err) {
                 logoutStore();
                 toast.error('Registration passed, but profile failed to load.');
@@ -57,7 +58,7 @@ export const useAuth = () => {
         logoutStore();
         queryClient.clear();
         toast.success('Logged out. See ya, chud.');
-        navigate('/login');
+        navigate(PATH.authAndUser.login);
     };
 
     return {

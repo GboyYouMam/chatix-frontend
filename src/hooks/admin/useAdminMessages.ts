@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { api } from '../../api/client.ts';
 import type { AdminMessage } from '../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -8,6 +7,7 @@ import {
     getPaginated,
     type AdminListOptions,
 } from '../../utils/adminQueryUtils.ts';
+import {adminApi} from "../../api/admin/admin.service.ts";
 
 export const useAdminMessages = ({
     page,
@@ -28,7 +28,7 @@ export const useAdminMessages = ({
     const invalidateAuditLogs = () => queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
 
     const deleteMessage = useMutation({
-        mutationFn: (messageId: string) => api.delete(`/admin/messages/${messageId}`),
+        mutationFn: (messageId: string) => adminApi.deleteMessage(messageId),
         onSuccess: async () => {
             toast.success('Message deleted.');
             await Promise.all([invalidateMessages(), invalidateAuditLogs()]);

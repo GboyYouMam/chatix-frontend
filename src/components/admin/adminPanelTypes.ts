@@ -9,7 +9,14 @@ import type {
     UpdateModifiersPayload,
 } from '../../api/admin/types.ts';
 
-export type AdminTabKey = 'users' | 'rooms' | 'messages' | 'audit-logs';
+export const ADMIN_TAB_KEYS = {
+    USERS: 'users',
+    ROOMS: 'rooms',
+    MESSAGES: 'messages',
+    AUDIT_LOGS: 'audit-logs',
+} as const;
+
+export type AdminTabKey = typeof ADMIN_TAB_KEYS[keyof typeof ADMIN_TAB_KEYS];
 
 export interface TabConfig {
     key: AdminTabKey;

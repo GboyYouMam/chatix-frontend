@@ -13,6 +13,7 @@ import { ProfileCard } from "../../components/profile/ProfileCard.tsx";
 import { ProfileModerationBar } from "../../components/profile/ProfileModerationBar.tsx";
 import { ProfileDescription } from "../../components/profile/ProfileDescription.tsx";
 import { ProfileCommentsSection } from "../../components/profile/ProfileCommentsSection.tsx";
+import { PATH } from "../../utils/pathList.ts";
 
 type EffectMode = 'aura' | 'debt' | null;
 
@@ -145,7 +146,7 @@ export const Profile = () => {
                 <div className={styles.statusBox}>
                     Chud not found
                 </div>
-                <button className={styles.backBtn} onClick={() => navigate('/rooms')}>
+                <button className={styles.backBtn} onClick={() => navigate(PATH.rooms.rooms)}>
                     &lt;- go back
                 </button>
             </div>

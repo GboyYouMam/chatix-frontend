@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { RoomDetails } from "../../api/rooms/types.ts";
+import { PATH } from '../../utils/pathList.ts';
 
 interface RoomOpPostProps {
     room: RoomDetails;
@@ -12,7 +13,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
     const navigate = useNavigate();
 
     const handleCopyInviteLink = async () => {
-        const inviteUrl = `${window.location.origin}/room/${room.id}/join`;
+        const inviteUrl = `${window.location.origin}${PATH.rooms.href.joinRoom(room.id)}`;
         try {
             await navigator.clipboard.writeText(inviteUrl);
             toast.success('Invite link copied. Send it to your bums.');
@@ -27,7 +28,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
                 <span className={styles.subject}>{room.topic || 'No topic'}</span>
                 <span
                     className={styles.username}
-                    onClick={() => navigate(`/profile/${room.creator.username}`)}
+                    onClick={() => navigate(PATH.authAndUser.href.profile(room.creator.username))}
                 >
                     {room.creator.username}
                 </span>

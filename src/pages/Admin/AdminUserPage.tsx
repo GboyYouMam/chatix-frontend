@@ -6,10 +6,12 @@ import { AdminForcedTitleControl } from '../../components/admin/control/AdminFor
 import { AdminTimeModifierControl } from '../../components/admin/control/AdminTimeModifierControl.tsx';
 import type { DurationUnit } from '../../components/admin/adminPanelTypes.ts';
 import { addDuration, formatDate, getWarnCount } from '../../components/admin/adminPanelUtils.ts';
-import { useAdminUser, useAdminUsers } from '../../hooks/admin/useAdminUsers.ts';
+import { useAdminUser } from '../../hooks/admin/useAdminUser.ts';
+import { useAdminUsers } from '../../hooks/admin/useAdminUsers.ts';
 import { useAdminWarnings } from '../../hooks/admin/useAdminWarnings.ts';
 import type { UpdateModifiersPayload } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
+import { PATH } from '../../utils/pathList.ts';
 
 export const AdminUserPage = () => {
     const { userId } = useParams();
@@ -65,7 +67,7 @@ export const AdminUserPage = () => {
         if (!user) return;
         if (window.confirm(`Vaporize ${user.username}?`)) {
             vaporizeUser.mutate(user.id, {
-                onSuccess: () => navigate('/admin'),
+                onSuccess: () => navigate(PATH.admin.adminDashboard),
             });
         }
     };
@@ -77,7 +79,7 @@ export const AdminUserPage = () => {
     if (isError || !user) {
         return (
             <div className={styles.adminPageShell}>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate('/admin')}>
+                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
                     Back to Dashboard
                 </button>
                 <p className={styles.placeholderText}>User was not found.</p>
@@ -92,7 +94,7 @@ export const AdminUserPage = () => {
                     <span className={styles.eyebrow}>User control</span>
                     <h1 className={styles.sidebarTitle}>{user.username}</h1>
                 </div>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate('/admin')}>
+                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
                     Back to Dashboard
                 </button>
             </header>

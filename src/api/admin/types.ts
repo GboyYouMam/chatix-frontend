@@ -3,7 +3,7 @@ import type { MessageData } from '../messages/types.ts';
 import type { RoomDetails } from '../rooms/types.ts';
 
 export const AdminRoomStatus = {active: "active", checkout: "checkout", banned: "banned", quarantined: "quarantined" } as const;
-export type AdminRoomStatus = keyof typeof[keyof AdminRoomStatus]
+export type AdminRoomStatus = (typeof AdminRoomStatus)[keyof typeof AdminRoomStatus]
 
 export interface PaginationMeta {
     page: number;

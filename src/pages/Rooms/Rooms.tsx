@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useMemo, useState} from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
@@ -9,6 +9,8 @@ import { useNavigate} from "react-router-dom";
 import {useAuthStore} from "../../store/authStore.ts";
 import {useRooms} from "../../hooks/rooms/useRooms.ts";
 import {RoomCard} from "../../components/rooms/RoomCard.tsx";
+import { type RoomDetails } from "../../api/rooms/types.ts";
+import { PATH } from "../../utils/pathList.ts";
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -24,16 +26,18 @@ export const Rooms = () => {
         queryFn: () => roomApi.getRooms(roomType),
     });
 
-    const filteredRooms = rooms?.filter((room: any) =>
-        room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
+    const filteredRooms = useMemo(() => {
+        return rooms?.filter((room: RoomDetails) =>
+            room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
+        ) || [];
+    }, [rooms, searchQuery]);
 
     const handleGoToMyProfile = () => {
         if (user && user.username) {
-            navigate(`/profile/${user.username}`);
+            navigate(PATH.authAndUser.href.profile(user.username));
         } else {
-            navigate('/login');
+            navigate(PATH.authAndUser.login);
         }
     };
 
@@ -59,7 +63,7 @@ export const Rooms = () => {
             );
         }
 
-        return filteredRooms.map((room: any) => (
+        return filteredRooms.map((room: RoomDetails) => (
             <RoomCard key={room.id} room={room} />
         ));
     };

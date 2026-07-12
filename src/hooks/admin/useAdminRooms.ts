@@ -8,6 +8,7 @@ import {
     getPaginated,
     type AdminListOptions,
 } from '../../utils/adminQueryUtils.ts';
+import {roomApi} from "../../api/rooms/rooms.service.ts";
 
 export const useAdminRooms = ({
     page,
@@ -29,7 +30,7 @@ export const useAdminRooms = ({
 
     const quarantineRoom = useMutation({
         mutationFn: ({ roomId, reason }: { roomId: string; reason: string }) =>
-            api.patch(`/admin/rooms/${roomId}/quarantine`, { reason }),
+            roomApi.qurantineRoom(roomId, reason),
         onSuccess: async () => {
             toast.success('Room quarantined.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);
@@ -38,7 +39,7 @@ export const useAdminRooms = ({
     });
 
     const unquarantineRoom = useMutation({
-        mutationFn: (roomId: string) => api.patch(`/admin/rooms/${roomId}/unquarantine`),
+        mutationFn: (roomId: string) => roomApi.unquarantineRoom(roomId),
         onSuccess: async () => {
             toast.success('Room unquarantined.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);
@@ -48,7 +49,7 @@ export const useAdminRooms = ({
 
     const setRoomStatus = useMutation({
         mutationFn: ({ roomId, status }: { roomId: string; status: AdminRoomStatus }) =>
-            api.patch(`/rooms/${roomId}/status`, { status }),
+            roomApi.patchRoomStatus(roomId, status),
         onSuccess: async () => {
             toast.success('Room status updated.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);

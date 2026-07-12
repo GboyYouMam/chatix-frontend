@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useMemo, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminAuditFeed } from '../../components/admin/AdminAuditFeed.tsx';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
@@ -11,6 +11,7 @@ import { useAdminSocket } from '../../hooks/admin/useAdminSocket.ts';
 import { useAdminUsers } from '../../hooks/admin/useAdminUsers.ts';
 import type { PaginationMeta } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
+import { PATH } from '../../utils/pathList.ts';
 
 interface AdminDashboardListProps {
     title: string;
@@ -69,12 +70,15 @@ export const AdminDashboard = () => {
     const roomsState = useAdminRooms({ page: roomsPage, search: roomsSearch });
     const { auditLogs } = useAdminAuditLogs({ page: 1, limit: 25, search: '' });
 
-    const seenLogIds = new Set<string>();
-    const terminalLogs = [...liveLogs, ...auditLogs].filter((log) => {
-        if (seenLogIds.has(log.id)) return false;
-        seenLogIds.add(log.id);
-        return true;
-    });
+    const terminalLogs = useMemo(() => {
+        const seenLogIds = new Set<string>();
+
+        return [...liveLogs, ...auditLogs].filter((log) => {
+            if (seenLogIds.has(log.id)) return false;
+            seenLogIds.add(log.id);
+            return true;
+        });
+    }, [liveLogs, auditLogs]);
 
     const applyUsersSearch = (nextSearch: string) => {
         setUsersPage(1);
@@ -96,7 +100,7 @@ export const AdminDashboard = () => {
                 <button
                     className={styles.actionBtnSafe}
                     type="button"
-                    onClick={() => navigate('/admin/messages')}
+                    onClick={() => navigate(PATH.admin.adminMessagePanel)}
                 >
                     Open messages
                 </button>
@@ -113,7 +117,7 @@ export const AdminDashboard = () => {
                     pagination={usersState.pagination}
                     onApplySearch={applyUsersSearch}
                     onPageChange={setUsersPage}
-                    onSelect={(id) => navigate(`/admin/users/${id}`)}
+                    onSelect={(id) => navigate(PATH.admin.href.userPanel(id))}
                 />
 
                 <AdminDashboardList
@@ -124,7 +128,7 @@ export const AdminDashboard = () => {
                     pagination={roomsState.pagination}
                     onApplySearch={applyRoomsSearch}
                     onPageChange={setRoomsPage}
-                    onSelect={(id) => navigate(`/admin/rooms/${id}`)}
+                    onSelect={(id) => navigate(PATH.admin.href.roomPanel(id))}
                 />
             </div>
         </div>

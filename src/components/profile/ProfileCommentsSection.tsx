@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import styles from './ProfileCommentsSection.module.css';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileComment } from '../../api/users/types.ts';
+import { PATH } from '../../utils/pathList.ts';
 
 interface ProfileCommentsSectionProps {
     profileUsername: string;
@@ -49,7 +50,7 @@ export const ProfileCommentsSection = ({
 
     const handleAuthorClick = (commentAuthorUsername?: string) => {
         if (!commentAuthorUsername) return;
-        navigate(`/profile/${commentAuthorUsername}`);
+        navigate(PATH.authAndUser.href.profile(commentAuthorUsername));
     };
 
     return (

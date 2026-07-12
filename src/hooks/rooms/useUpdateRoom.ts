@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { roomApi } from '../../api/rooms/rooms.service.ts';
 import toast from 'react-hot-toast';
 import type { UpdateRoomDTO } from "../../api/rooms/types.ts";
+import { PATH } from '../../utils/pathList.ts';
 
 export const useUpdateRoom = () => {
     const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ export const useUpdateRoom = () => {
         onSuccess: () => {
             toast.success('Room ERASED by KILLSQUAD.');
             queryClient.invalidateQueries({ queryKey: ['rooms'] });
-            navigate('/rooms');
+            navigate(PATH.rooms.rooms);
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || 'Failed to nuke room.');

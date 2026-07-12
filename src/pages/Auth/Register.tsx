@@ -7,6 +7,7 @@ import firstImageAuth from '../../assets/firstImageAuth.png';
 import secondImageAuth from '../../assets/secondImageAuth.png';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PATH } from '../../utils/pathList.ts';
 
 const registerSchema = z.object({
     username: z.string().min(3).max(25).nonempty('username is missing lmao'),
@@ -101,7 +102,7 @@ export const Register = () => {
 
                     <div className={styles.footer}>
                         <span className={styles.mutedText}>already exist?</span>
-                        <Link to="/login" className={styles.link}>
+                        <Link to={PATH.authAndUser.login} className={styles.link}>
                             log in
                         </Link>
                     </div>

@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { api } from '../../api/client.ts';
 import type { AdminWarning } from '../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -8,6 +7,7 @@ import {
     getPaginated,
     type AdminWarningListOptions,
 } from '../../utils/adminQueryUtils.ts';
+import {adminApi} from "../../api/admin/admin.service.ts";
 
 export const useAdminWarnings = ({
     selectedUserId,
@@ -32,7 +32,7 @@ export const useAdminWarnings = ({
 
     const addWarning = useMutation({
         mutationFn: ({ userId, reason }: { userId: string; reason: string }) =>
-            api.post(`/admin/users/${userId}/warnings`, { reason }),
+            adminApi.addWarning(userId, reason),
         onSuccess: async (_, variables) => {
             toast.success('Warning added.');
             await Promise.all([
@@ -46,7 +46,7 @@ export const useAdminWarnings = ({
 
     const revokeWarning = useMutation({
         mutationFn: ({ userId, warningId }: { userId: string; warningId: string }) =>
-            api.delete(`/admin/users/${userId}/warnings/${warningId}`),
+            adminApi.revokeWarning(userId, warningId),
         onSuccess: async (_, variables) => {
             toast.success('Warning revoked.');
             await Promise.all([

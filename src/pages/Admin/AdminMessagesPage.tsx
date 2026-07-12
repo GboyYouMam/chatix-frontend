@@ -6,6 +6,7 @@ import { AdminSidebarSearch } from '../../components/admin/AdminSidebarSearch.ts
 import { AdminMessageActions } from '../../components/admin/actions/AdminMessageActions.tsx';
 import { useAdminMessages } from '../../hooks/admin/useAdminMessages.ts';
 import styles from './AdminPanel.module.css';
+import { PATH } from '../../utils/pathList.ts';
 
 export const AdminMessagesPage = () => {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ export const AdminMessagesPage = () => {
                     <span className={styles.eyebrow}>Moderation</span>
                     <h1 className={styles.sidebarTitle}>Messages</h1>
                 </div>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate('/admin')}>
+                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
                     Back to Dashboard
                 </button>
             </header>

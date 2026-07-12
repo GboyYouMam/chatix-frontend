@@ -1,5 +1,6 @@
 import { api } from "../client.ts";
 import type {CreateRoomDTO} from "./types.ts";
+import type {AdminRoomStatus} from "../admin/types.ts";
 
 export const roomApi = {
     getRooms: async (publicity?: 'public' | 'private') => {
@@ -30,6 +31,24 @@ export const roomApi = {
     findRoomByName: async (roomName: string) => {
         const repsonse = await api.get(`/rooms/by-name/${roomName}`);
         return repsonse;
-    }
+    },
+
+    qurantineRoom: async (roomId: string, reason: string) => {
+        const response = await api.patch(`/admin/rooms/${roomId}/quarantine`, { reason });
+        return response;
+    },
+    unquarantineRoom: async (roomId: string) => {
+        const response = await api.patch(`/admin/rooms/${roomId}/unquarantine`);
+        return response;
+    },
+    patchRoomStatus: async (roomId: string, status: AdminRoomStatus) => {
+        const response = await api.patch(`/rooms/${roomId}/status`, { status });
+        return response.data;
+    },
+    joinRoom: async (roomId: string, password: string) => {
+        const response = await api.patch(`/rooms/${roomId}/join`, { password });
+        return response;
+    },
+
 }
 
