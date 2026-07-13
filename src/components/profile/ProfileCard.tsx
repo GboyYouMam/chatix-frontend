@@ -14,11 +14,7 @@ export const ProfileCard = ({ profileData }: ProfileCardProps) => {
         <div className={styles.profileCard}>
             <div className={styles.avatarBox}>
                 {profileData.pfp_url ? (
-                    <img
-                        src={profileData.pfp_url}
-                        alt="avatar"
-                        className={styles.avatarImage}
-                    />
+                    <img src={profileData.pfp_url} alt="avatar" className={styles.avatarImage} />
                 ) : (
                     'no pfp here'
                 )}

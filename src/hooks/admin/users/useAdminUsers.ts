@@ -1,20 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import type { AdminUser, UpdateModifiersPayload } from '../../api/admin/types.ts';
+import type { AdminUser, UpdateModifiersPayload } from '../../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
     getErrorMessage,
     getPaginated,
     type AdminListOptions,
-} from '../../utils/adminQueryUtils.ts';
-import {adminApi} from "../../api/admin/admin.service.ts";
+} from '../../../utils/adminQueryUtils.ts';
+import { adminApi } from '../../../api/admin/admin.service.ts';
 
-export const useAdminUsers = ({
-    page,
-    limit = 25,
-    search,
-    enabled = true,
-}: AdminListOptions) => {
+export const useAdminUsers = ({ page, limit = 25, search, enabled = true }: AdminListOptions) => {
     const queryClient = useQueryClient();
     const listParams = { page, limit, search };
 
@@ -25,7 +20,8 @@ export const useAdminUsers = ({
     });
 
     const invalidateUsers = () => queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
-    const invalidateAuditLogs = () => queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
+    const invalidateAuditLogs = () =>
+        queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
     const invalidateWarnings = (userId?: string | null) =>
         queryClient.invalidateQueries({ queryKey: ['admin', 'warnings', userId] });
 
@@ -43,7 +39,11 @@ export const useAdminUsers = ({
             adminApi.updateModifier(userId, data),
         onSuccess: async (_, variables) => {
             toast.success('User modifiers updated.');
-            await Promise.all([invalidateUsers(), invalidateAuditLogs(), invalidateWarnings(variables.userId)]);
+            await Promise.all([
+                invalidateUsers(),
+                invalidateAuditLogs(),
+                invalidateWarnings(variables.userId),
+            ]);
         },
         onError: (error) => toast.error(getErrorMessage(error, 'Failed to update user')),
     });

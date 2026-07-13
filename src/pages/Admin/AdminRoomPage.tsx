@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { AdminRoomActions } from '../../components/admin/actions/AdminRoomActions.tsx';
 import { formatDate } from '../../components/admin/adminPanelUtils.ts';
-import { useAdminRoom, useAdminRooms } from '../../hooks/admin/useAdminRooms.ts';
+import { useAdminRoom } from '../../hooks/admin/rooms/useAdminRoom.ts';
+import { useAdminRooms } from '../../hooks/admin/rooms/useAdminRooms.ts';
 import type { AdminRoomStatus } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
@@ -23,7 +24,11 @@ export const AdminRoomPage = () => {
     if (isError || !room) {
         return (
             <div className={styles.adminPageShell}>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
+                <button
+                    className={styles.actionBtnSafe}
+                    type="button"
+                    onClick={() => navigate(PATH.admin.adminDashboard)}
+                >
                     Back to Dashboard
                 </button>
                 <p className={styles.placeholderText}>Room was not found.</p>
@@ -51,7 +56,11 @@ export const AdminRoomPage = () => {
                     <span className={styles.eyebrow}>Room control</span>
                     <h1 className={styles.sidebarTitle}>{room.title}</h1>
                 </div>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
+                <button
+                    className={styles.actionBtnSafe}
+                    type="button"
+                    onClick={() => navigate(PATH.admin.adminDashboard)}
+                >
                     Back to Dashboard
                 </button>
             </header>

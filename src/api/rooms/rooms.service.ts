@@ -1,6 +1,6 @@
-import { api } from "../client.ts";
-import type {CreateRoomDTO} from "./types.ts";
-import type {AdminRoomStatus} from "../admin/types.ts";
+import { api } from '../client.ts';
+import type { CreateRoomDTO } from './types.ts';
+import type { AdminRoomStatus } from '../admin/types.ts';
 
 export const roomApi = {
     getRooms: async (publicity?: 'public' | 'private') => {
@@ -8,8 +8,8 @@ export const roomApi = {
         return response.data;
     },
 
-    getRoomDetailed: async (roommId: string) => {
-        const response = await api.get(`/rooms/${roommId}`);
+    getRoomDetailed: async <T = any>(roomId: string): Promise<T> => {
+        const response = await api.get<T>(`/rooms/${roomId}`);
         return response.data;
     },
 
@@ -49,6 +49,4 @@ export const roomApi = {
         const response = await api.patch(`/rooms/${roomId}/join`, { password });
         return response;
     },
-
-}
-
+};

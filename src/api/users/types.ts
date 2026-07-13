@@ -44,5 +44,5 @@ export interface RespectProfileResponse {
 
 export interface CreateProfileCommentResponse {
     message?: string;
-    comment: ProfileComment;
+    comment_id: string;
 }

@@ -6,9 +6,9 @@ import { AdminListPagination } from '../../components/admin/AdminListPagination.
 import { AdminSidebarSearch } from '../../components/admin/AdminSidebarSearch.tsx';
 import type { AdminEntity, AdminTabKey } from '../../components/admin/adminPanelTypes.ts';
 import { useAdminAuditLogs } from '../../hooks/admin/useAdminAuditLogs.ts';
-import { useAdminRooms } from '../../hooks/admin/useAdminRooms.ts';
+import { useAdminRooms } from '../../hooks/admin/rooms/useAdminRooms.ts';
 import { useAdminSocket } from '../../hooks/admin/useAdminSocket.ts';
-import { useAdminUsers } from '../../hooks/admin/useAdminUsers.ts';
+import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import type { PaginationMeta } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
@@ -90,13 +90,19 @@ export const AdminDashboard = () => {
         setRoomsSearch(nextSearch);
     }, []);
 
-    const selectUser = useCallback((id: string) => {
-        navigate(PATH.admin.href.userPanel(id));
-    }, [navigate]);
+    const selectUser = useCallback(
+        (id: string) => {
+            navigate(PATH.admin.href.userPanel(id));
+        },
+        [navigate],
+    );
 
-    const selectRoom = useCallback((id: string) => {
-        navigate(PATH.admin.href.roomPanel(id));
-    }, [navigate]);
+    const selectRoom = useCallback(
+        (id: string) => {
+            navigate(PATH.admin.href.roomPanel(id));
+        },
+        [navigate],
+    );
 
     return (
         <div className={styles.adminPageShell}>

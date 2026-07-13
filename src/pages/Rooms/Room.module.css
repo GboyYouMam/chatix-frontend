@@ -147,6 +147,56 @@
     padding: 1rem 2rem;
 }
 
+.socketScream {
+    position: fixed;
+    right: 2rem;
+    bottom: 6.5rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: min(520px, calc(100vw - 2rem));
+    padding: 1rem;
+    border: 2px solid #ff2a2a;
+    border-left: 8px solid #fa4d98;
+    border-radius: 4px;
+    background: #19080d;
+    color: #fff;
+    box-shadow: 0 0 24px rgba(250, 77, 152, 0.45);
+    animation: socketScreamShake 0.16s linear 4;
+}
+
+.socketScreamTitle {
+    color: #ffb000;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.socketScreamText {
+    margin-top: 0.35rem;
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.socketScreamClose {
+    flex: 0 0 auto;
+    border: 1px solid #fa4d98;
+    background: transparent;
+    color: #fa4d98;
+    padding: 0.45rem 0.75rem;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.socketScreamClose:hover {
+    background: #fa4d98;
+    color: #000;
+}
+
 .replyForm {
     display: flex;
     gap: 1rem;
@@ -262,6 +312,13 @@
 @keyframes flash {
     0% { background-color: rgba(250, 77, 152, 0.4); }
     100% { background-color: transparent; }
+}
+
+@keyframes socketScreamShake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
 }
 
 .moggedBadge {

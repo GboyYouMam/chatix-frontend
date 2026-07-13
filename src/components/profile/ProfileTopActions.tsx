@@ -15,7 +15,10 @@ export const ProfileTopActions = ({ isMyProfile }: ProfileTopActionsProps) => {
                 &lt;- back to rooms
             </button>
             {isMyProfile ? (
-                <button className={styles.editBtn} onClick={() => navigate(PATH.authAndUser.editProfile)}>
+                <button
+                    className={styles.editBtn}
+                    onClick={() => navigate(PATH.authAndUser.editProfile)}
+                >
                     edit profile
                 </button>
             ) : (

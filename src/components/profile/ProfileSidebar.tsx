@@ -10,7 +10,6 @@ interface ProfileSidebarProps {
     bannerAlt: string;
     fallbackBanner: 'left' | 'right';
 }
-
 export const ProfileSidebar = ({
     actionLabel,
     actionDisabled = false,
@@ -19,7 +18,8 @@ export const ProfileSidebar = ({
     bannerAlt,
     fallbackBanner,
 }: ProfileSidebarProps) => {
-    const fallbackImage = fallbackBanner === 'left' ? profileSideBannerFirst : profileSideBannerSecond;
+    const fallbackImage =
+        fallbackBanner === 'left' ? profileSideBannerFirst : profileSideBannerSecond;
 
     return (
         <aside className={styles.sideCol}>
@@ -31,7 +31,11 @@ export const ProfileSidebar = ({
                 <div />
             )}
             <div className={styles.verticalBanner}>
-                <img src={bannerSrc || fallbackImage} alt={bannerAlt} className={styles.bannerImage} />
+                <img
+                    src={bannerSrc || fallbackImage}
+                    alt={bannerAlt}
+                    className={styles.bannerImage}
+                />
             </div>
         </aside>
     );

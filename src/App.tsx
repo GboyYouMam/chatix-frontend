@@ -1,27 +1,57 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { Login } from './pages/Auth/Login';
-import { Register } from './pages/Auth/Register';
 import { Rooms } from './pages/Rooms/Rooms';
-import { Profile } from "./pages/Profile/Profile";
-import { EditProfile } from './pages/Profile/EditProfile';
 import { ProtectedRoute } from "./components/ProtectedRouter";
-import { Room } from "./pages/Rooms/Room";
-import { JoinRoom } from "./pages/Rooms/JoinRoom";
 import { PATH } from "./utils/pathList.ts"
 
 const router = createBrowserRouter([
     { path: PATH.root.home, element: <Navigate to={PATH.rooms.rooms} replace /> },
-    { path: PATH.authAndUser.login, element: <Login /> },
-    { path: PATH.authAndUser.register, element: <Register /> },
-    { path: PATH.authAndUser.profile, element: <Profile /> },
+    {
+        path: PATH.authAndUser.login,
+        lazy: async () => {
+            const { Login } = await import('./pages/Auth/Login.tsx');
+            return { Component: Login };
+        },
+    },
+    {
+        path: PATH.authAndUser.register,
+        lazy: async () => {
+            const { Register } = await import('./pages/Auth/Register.tsx');
+            return { Component: Register };
+        },
+    },
+    {
+        path: PATH.authAndUser.profile,
+        lazy: async () => {
+            const { Profile } = await import('./pages/Profile/Profile.tsx');
+            return { Component: Profile };
+        },
+    },
     { path: PATH.rooms.rooms, element: <Rooms /> },
 
     {
         element: <ProtectedRoute />,
         children: [
-            { path: PATH.rooms.room, element: <Room /> },
-            { path: PATH.rooms.joinRoom, element: <JoinRoom /> },
-            { path: PATH.authAndUser.editProfile, element: <EditProfile /> },
+            {
+                path: PATH.rooms.room,
+                lazy: async () => {
+                    const { Room } = await import('./pages/Rooms/Room.tsx');
+                    return { Component: Room };
+                },
+            },
+            {
+                path: PATH.rooms.joinRoom,
+                lazy: async () => {
+                    const { JoinRoom } = await import('./pages/Rooms/JoinRoom.tsx');
+                    return { Component: JoinRoom };
+                },
+            },
+            {
+                path: PATH.authAndUser.editProfile,
+                lazy: async () => {
+                    const { EditProfile } = await import('./pages/Profile/EditProfile.tsx');
+                    return { Component: EditProfile };
+                },
+            },
         ]
     },
     {

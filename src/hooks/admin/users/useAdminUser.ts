@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import type { AdminUser, PaginatedResponse } from '../../api/admin/types.ts';
-import { getPaginated } from '../../utils/adminQueryUtils.ts';
+import type { AdminUser, PaginatedResponse } from '../../../api/admin/types.ts';
+import { getPaginated } from '../../../utils/adminQueryUtils.ts';
 
 export const useAdminUser = (userId?: string) => {
     const queryClient = useQueryClient();
@@ -20,7 +20,8 @@ export const useAdminUser = (userId?: string) => {
                 limit: 1,
                 search: userId ?? '',
             });
-            const foundUser = response.items.find((user) => user.id === userId) ?? response.items[0];
+            const foundUser =
+                response.items.find((user) => user.id === userId) ?? response.items[0];
 
             if (!foundUser) {
                 throw new Error('User was not found');

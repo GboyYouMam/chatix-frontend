@@ -6,8 +6,8 @@ import { AdminForcedTitleControl } from '../../components/admin/control/AdminFor
 import { AdminTimeModifierControl } from '../../components/admin/control/AdminTimeModifierControl.tsx';
 import type { DurationUnit } from '../../components/admin/adminPanelTypes.ts';
 import { addDuration, formatDate, getWarnCount } from '../../components/admin/adminPanelUtils.ts';
-import { useAdminUser } from '../../hooks/admin/useAdminUser.ts';
-import { useAdminUsers } from '../../hooks/admin/useAdminUsers.ts';
+import { useAdminUser } from '../../hooks/admin/users/useAdminUser.ts';
+import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import { useAdminWarnings } from '../../hooks/admin/useAdminWarnings.ts';
 import type { UpdateModifiersPayload } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
@@ -19,7 +19,11 @@ export const AdminUserPage = () => {
     const [warningsPaging, setWarningsPaging] = useState({ userId: '', page: 1 });
     const warningsPage = warningsPaging.userId === (userId ?? '') ? warningsPaging.page : 1;
     const { user, isLoading, isError } = useAdminUser(userId);
-    const { updateModifiers, vaporizeUser } = useAdminUsers({ page: 1, search: '', enabled: false });
+    const { updateModifiers, vaporizeUser } = useAdminUsers({
+        page: 1,
+        search: '',
+        enabled: false,
+    });
     const updateModifiersMutate = updateModifiers.mutate;
     const {
         warnings,
@@ -36,46 +40,61 @@ export const AdminUserPage = () => {
     const addWarningMutate = addWarning.mutate;
     const revokeWarningMutate = revokeWarning.mutate;
 
-    const updateUserModifiers = useCallback((data: UpdateModifiersPayload) => {
-        if (!userId) return;
-        updateModifiersMutate({ userId, data });
-    }, [updateModifiersMutate, userId]);
+    const updateUserModifiers = useCallback(
+        (data: UpdateModifiersPayload) => {
+            if (!userId) return;
+            updateModifiersMutate({ userId, data });
+        },
+        [updateModifiersMutate, userId],
+    );
 
-    const updateBanDuration = useCallback((
-        amount: number,
-        unit: DurationUnit,
-    ) => {
-        if (!Number.isFinite(amount) || amount <= 0) return;
-        const nextValue = addDuration(amount, unit);
-        updateUserModifiers({ bannedUntil: nextValue });
-    }, [updateUserModifiers]);
+    const updateBanDuration = useCallback(
+        (amount: number, unit: DurationUnit) => {
+            if (!Number.isFinite(amount) || amount <= 0) return;
+            const nextValue = addDuration(amount, unit);
+            updateUserModifiers({ bannedUntil: nextValue });
+        },
+        [updateUserModifiers],
+    );
 
-    const updateYapCooldown = useCallback((
-        amount: number,
-        unit: DurationUnit,
-    ) => {
-        if (!Number.isFinite(amount) || amount <= 0) return;
-        const nextValue = addDuration(amount, unit);
-        updateUserModifiers({ yapCooldown: nextValue });
-    }, [updateUserModifiers]);
+    const updateYapCooldown = useCallback(
+        (amount: number, unit: DurationUnit) => {
+            if (!Number.isFinite(amount) || amount <= 0) return;
+            const nextValue = addDuration(amount, unit);
+            updateUserModifiers({ yapCooldown: nextValue });
+        },
+        [updateUserModifiers],
+    );
 
-    const saveForcedTitle = useCallback((value: string) => {
-        updateUserModifiers({ forcedTitle: value.trim() || null });
-    }, [updateUserModifiers]);
+    const saveForcedTitle = useCallback(
+        (value: string) => {
+            updateUserModifiers({ forcedTitle: value.trim() || null });
+        },
+        [updateUserModifiers],
+    );
 
-    const addUserWarning = useCallback((reason: string) => {
-        if (!userId || reason.trim().length < 3) return;
-        addWarningMutate({ userId, reason: reason.trim() });
-    }, [addWarningMutate, userId]);
+    const addUserWarning = useCallback(
+        (reason: string) => {
+            if (!userId || reason.trim().length < 3) return;
+            addWarningMutate({ userId, reason: reason.trim() });
+        },
+        [addWarningMutate, userId],
+    );
 
-    const revokeUserWarning = useCallback((warningId: string) => {
-        if (!userId) return;
-        revokeWarningMutate({ userId, warningId });
-    }, [revokeWarningMutate, userId]);
+    const revokeUserWarning = useCallback(
+        (warningId: string) => {
+            if (!userId) return;
+            revokeWarningMutate({ userId, warningId });
+        },
+        [revokeWarningMutate, userId],
+    );
 
-    const changeWarningsPage = useCallback((page: number) => {
-        setWarningsPaging({ userId: userId ?? '', page });
-    }, [userId]);
+    const changeWarningsPage = useCallback(
+        (page: number) => {
+            setWarningsPaging({ userId: userId ?? '', page });
+        },
+        [userId],
+    );
 
     const vaporizeSelectedUser = () => {
         if (!user) return;
@@ -93,7 +112,11 @@ export const AdminUserPage = () => {
     if (isError || !user) {
         return (
             <div className={styles.adminPageShell}>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
+                <button
+                    className={styles.actionBtnSafe}
+                    type="button"
+                    onClick={() => navigate(PATH.admin.adminDashboard)}
+                >
                     Back to Dashboard
                 </button>
                 <p className={styles.placeholderText}>User was not found.</p>
@@ -108,22 +131,34 @@ export const AdminUserPage = () => {
                     <span className={styles.eyebrow}>User control</span>
                     <h1 className={styles.sidebarTitle}>{user.username}</h1>
                 </div>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
+                <button
+                    className={styles.actionBtnSafe}
+                    type="button"
+                    onClick={() => navigate(PATH.admin.adminDashboard)}
+                >
                     Back to Dashboard
                 </button>
             </header>
 
             <section className={styles.profileCard}>
                 {user.pfp_url ? (
-                    <img className={styles.profileAvatar} src={user.pfp_url} alt={`${user.username} avatar`} />
+                    <img
+                        className={styles.profileAvatar}
+                        src={user.pfp_url}
+                        alt={`${user.username} avatar`}
+                    />
                 ) : (
-                    <div className={styles.profileAvatarFallback}>{user.username.slice(0, 1).toUpperCase()}</div>
+                    <div className={styles.profileAvatarFallback}>
+                        {user.username.slice(0, 1).toUpperCase()}
+                    </div>
                 )}
 
                 <div className={styles.profileSummary}>
                     <span className={styles.eyebrow}>{user.role}</span>
                     <h2 className={styles.panelTitle}>{user.username}</h2>
-                    <span className={styles.sectionNote}>Joined {formatDate(user.createdAt ?? user.created_at)}</span>
+                    <span className={styles.sectionNote}>
+                        Joined {formatDate(user.createdAt ?? user.created_at)}
+                    </span>
                 </div>
 
                 <div className={styles.statGrid}>
@@ -149,12 +184,12 @@ export const AdminUserPage = () => {
                 </div>
 
                 <div className={styles.actionGroup}>
-                    <AdminUserQuickActions selectedUser={user} onUpdateModifiers={updateUserModifiers} />
-
-                    <AdminForcedTitleControl
+                    <AdminUserQuickActions
                         selectedUser={user}
-                        onSave={saveForcedTitle}
+                        onUpdateModifiers={updateUserModifiers}
                     />
+
+                    <AdminForcedTitleControl selectedUser={user} onSave={saveForcedTitle} />
 
                     <AdminTimeModifierControl
                         currentValue={user.bannedUntil}
@@ -186,7 +221,11 @@ export const AdminUserPage = () => {
                         onRevokeWarning={revokeUserWarning}
                     />
 
-                    <button className={styles.actionBtnDanger} type="button" onClick={vaporizeSelectedUser}>
+                    <button
+                        className={styles.actionBtnDanger}
+                        type="button"
+                        onClick={vaporizeSelectedUser}
+                    >
                         Vaporize user
                     </button>
                 </div>

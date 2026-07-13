@@ -13,10 +13,10 @@ interface ProfileCommentsSectionProps {
 }
 
 export const ProfileCommentsSection = ({
-                                           profileUsername,
-                                           initialComments,
-                                           canInteractWithProfile,
-                                       }: ProfileCommentsSectionProps) => {
+    profileUsername,
+    initialComments,
+    canInteractWithProfile,
+}: ProfileCommentsSectionProps) => {
     const navigate = useNavigate();
     const [comments, setComments] = useState(initialComments);
     const [commentBody, setCommentBody] = useState('');
@@ -31,8 +31,8 @@ export const ProfileCommentsSection = ({
 
         setIsCommentSubmitting(true);
         try {
-            const response = await usersApi.createProfileComment(profileUsername, cleanBody);
-            setComments((prev) => [response.comment, ...prev]);
+            await usersApi.createProfileComment(profileUsername, cleanBody);
+            setComments(await usersApi.getProfileComments(profileUsername));
             setCommentBody('');
             toast('comment added');
         } catch (error) {
@@ -88,7 +88,9 @@ export const ProfileCommentsSection = ({
                                 >
                                     {comment.author?.username ?? 'unknown'}
                                 </button>
-                                <span>{new Date(comment.createdAt).toLocaleDateString('uk-UA')}</span>
+                                <span>
+                                    {new Date(comment.createdAt).toLocaleDateString('uk-UA')}
+                                </span>
                             </div>
                             <p className={styles.commentBody}>{comment.body}</p>
                         </article>
