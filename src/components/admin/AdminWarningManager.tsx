@@ -12,8 +12,8 @@ const AdminWarningItem = memo(({
     warning: AdminWarning;
     onRevokeWarning: (warningId: string) => void;
 }) => {
-    const createdAt = useMemo(() => formatDate(warning.createdAt), [warning.createdAt]);
-    const revokedAt = useMemo(() => formatDate(warning.revokedAt), [warning.revokedAt]);
+    const createdAt = formatDate(warning.createdAt);
+    const revokedAt = formatDate(warning.revokedAt);
 
     return (
         <div className={styles.warningCard}>
@@ -47,6 +47,10 @@ export const AdminWarningManager = memo(({
     onRevokeWarning,
 }: WarningManagerProps) => {
     const [warningReason, setWarningReason] = useState('');
+    const pagination = useMemo(
+        () => ({ ...warningsPagination, page: warningsPage }),
+        [warningsPage, warningsPagination],
+    );
 
     return (
         <>
@@ -94,7 +98,7 @@ export const AdminWarningManager = memo(({
                 ))}
 
                 <AdminListPagination
-                    pagination={{ ...warningsPagination, page: warningsPage }}
+                    pagination={pagination}
                     onPageChange={onPageChange}
                 />
             </div>

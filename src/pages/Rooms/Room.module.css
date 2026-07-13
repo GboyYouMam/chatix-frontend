@@ -229,6 +229,7 @@
     position: absolute;
     bottom: 120%;
     left: 0;
+    display: none;
     width: 300px;
     background: #1a1a1a;
     border: 1px solid #fa4d98;
@@ -239,6 +240,11 @@
     color: #e0e0e0;
     font-size: 0.9rem;
     pointer-events: none;
+}
+
+.quoteLink:hover .quotePopup,
+.quoteLink:focus-within .quotePopup {
+    display: block;
 }
 
 .popupMeta {

@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
@@ -26,12 +26,11 @@ export const Rooms = () => {
         queryFn: () => roomApi.getRooms(roomType),
     });
 
-    const filteredRooms = useMemo(() => {
-        return rooms?.filter((room: RoomDetails) =>
-            room.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            room.topic?.toLowerCase().includes(searchQuery.toLowerCase())
-        ) || [];
-    }, [rooms, searchQuery]);
+    const normalizedSearchQuery = searchQuery.toLowerCase();
+    const filteredRooms = rooms?.filter((room: RoomDetails) =>
+        room.title.toLowerCase().includes(normalizedSearchQuery) ||
+        room.topic?.toLowerCase().includes(normalizedSearchQuery)
+    ) || [];
 
     const handleGoToMyProfile = () => {
         if (user && user.username) {

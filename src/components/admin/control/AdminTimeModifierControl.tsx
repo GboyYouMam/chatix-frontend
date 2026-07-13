@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import styles from '../../../pages/Admin/AdminPanel.module.css';
 import type { DurationUnit, TimeModifierControlProps } from '../adminPanelTypes.ts';
 import { formatDate } from '../adminPanelUtils.ts';
@@ -16,7 +16,7 @@ export const AdminTimeModifierControl = memo(({
 }: TimeModifierControlProps) => {
     const [amount, setAmount] = useState(initialAmount);
     const [unit, setUnit] = useState<DurationUnit>(initialUnit);
-    const formattedCurrentValue = useMemo(() => formatDate(currentValue), [currentValue]);
+    const formattedCurrentValue = formatDate(currentValue);
     const buttonClassName = intent === 'danger' ? styles.actionBtnDanger : styles.actionBtnWarning;
 
     return (

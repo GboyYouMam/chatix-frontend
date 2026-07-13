@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AdminWarningManager } from '../../components/admin/AdminWarningManager.tsx';
 import { AdminUserQuickActions } from '../../components/admin/actions/AdminUserQuickActions.tsx';
@@ -20,6 +20,7 @@ export const AdminUserPage = () => {
     const warningsPage = warningsPaging.userId === (userId ?? '') ? warningsPaging.page : 1;
     const { user, isLoading, isError } = useAdminUser(userId);
     const { updateModifiers, vaporizeUser } = useAdminUsers({ page: 1, search: '', enabled: false });
+    const updateModifiersMutate = updateModifiers.mutate;
     const {
         warnings,
         addWarning,
@@ -32,36 +33,49 @@ export const AdminUserPage = () => {
         search: '',
         enabled: Boolean(userId),
     });
+    const addWarningMutate = addWarning.mutate;
+    const revokeWarningMutate = revokeWarning.mutate;
 
-    const updateUserModifiers = (data: UpdateModifiersPayload) => {
+    const updateUserModifiers = useCallback((data: UpdateModifiersPayload) => {
         if (!userId) return;
-        updateModifiers.mutate({ userId, data });
-    };
+        updateModifiersMutate({ userId, data });
+    }, [updateModifiersMutate, userId]);
 
-    const updateDuration = (field: 'bannedUntil' | 'yapCooldown') => (
+    const updateBanDuration = useCallback((
         amount: number,
         unit: DurationUnit,
     ) => {
         if (!Number.isFinite(amount) || amount <= 0) return;
         const nextValue = addDuration(amount, unit);
-        updateUserModifiers(field === 'bannedUntil'
-            ? { bannedUntil: nextValue }
-            : { yapCooldown: nextValue });
-    };
+        updateUserModifiers({ bannedUntil: nextValue });
+    }, [updateUserModifiers]);
 
-    const addUserWarning = (reason: string) => {
+    const updateYapCooldown = useCallback((
+        amount: number,
+        unit: DurationUnit,
+    ) => {
+        if (!Number.isFinite(amount) || amount <= 0) return;
+        const nextValue = addDuration(amount, unit);
+        updateUserModifiers({ yapCooldown: nextValue });
+    }, [updateUserModifiers]);
+
+    const saveForcedTitle = useCallback((value: string) => {
+        updateUserModifiers({ forcedTitle: value.trim() || null });
+    }, [updateUserModifiers]);
+
+    const addUserWarning = useCallback((reason: string) => {
         if (!userId || reason.trim().length < 3) return;
-        addWarning.mutate({ userId, reason: reason.trim() });
-    };
+        addWarningMutate({ userId, reason: reason.trim() });
+    }, [addWarningMutate, userId]);
 
-    const revokeUserWarning = (warningId: string) => {
+    const revokeUserWarning = useCallback((warningId: string) => {
         if (!userId) return;
-        revokeWarning.mutate({ userId, warningId });
-    };
+        revokeWarningMutate({ userId, warningId });
+    }, [revokeWarningMutate, userId]);
 
-    const changeWarningsPage = (page: number) => {
+    const changeWarningsPage = useCallback((page: number) => {
         setWarningsPaging({ userId: userId ?? '', page });
-    };
+    }, [userId]);
 
     const vaporizeSelectedUser = () => {
         if (!user) return;
@@ -139,7 +153,7 @@ export const AdminUserPage = () => {
 
                     <AdminForcedTitleControl
                         selectedUser={user}
-                        onSave={(value) => updateUserModifiers({ forcedTitle: value.trim() || null })}
+                        onSave={saveForcedTitle}
                     />
 
                     <AdminTimeModifierControl
@@ -149,7 +163,7 @@ export const AdminUserPage = () => {
                         initialUnit="hours"
                         label="Ban user"
                         submitLabel="Apply ban"
-                        onSubmit={updateDuration('bannedUntil')}
+                        onSubmit={updateBanDuration}
                     />
 
                     <AdminTimeModifierControl
@@ -159,7 +173,7 @@ export const AdminUserPage = () => {
                         initialUnit="minutes"
                         label="Set yap cooldown"
                         submitLabel="Apply cooldown"
-                        onSubmit={updateDuration('yapCooldown')}
+                        onSubmit={updateYapCooldown}
                     />
 
                     <AdminWarningManager

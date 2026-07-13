@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import type { MessageData } from '../../api/messages/types.ts';
 import styles from '../../pages/Rooms/Room.module.css';
 
-export const MessageFormatter = ({ text, allMessages }: { text: string, allMessages: any[] }) => {
-    const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
-
+export const MessageFormatter = ({
+    text,
+    allMessages,
+}: {
+    text: string;
+    allMessages: MessageData[];
+}) => {
     const handleScroll = (shortId: string) => {
         const element = document.getElementById(`post-${shortId}`);
         if (element) {
@@ -20,23 +24,32 @@ export const MessageFormatter = ({ text, allMessages }: { text: string, allMessa
             {parts.map((part, i) => {
                 if (part.startsWith('>>')) {
                     const shortId = part.slice(2);
-
-                    const quotedMsg = allMessages.find(m => m.id.endsWith(shortId));
+                    const quotedMsg = allMessages.find((message) => message.id.endsWith(shortId));
+                    const scrollToQuotedMessage = () => handleScroll(shortId);
 
                     return (
                         <span
                             key={i}
                             className={styles.quoteLink}
-                            onClick={() => handleScroll(shortId)}
-                            onMouseEnter={() => setHoveredPostId(shortId)}
-                            onMouseLeave={() => setHoveredPostId(null)}
+                            onClick={scrollToQuotedMessage}
+                            onKeyDown={(event) => {
+                                if (event.key !== 'Enter' && event.key !== ' ') return;
+                                event.preventDefault();
+                                scrollToQuotedMessage();
+                            }}
+                            role="button"
+                            tabIndex={0}
                         >
                             {part}
 
-                            {hoveredPostId === shortId && quotedMsg && (
+                            {quotedMsg && (
                                 <div className={styles.quotePopup}>
-                                    <div className={styles.popupMeta}>№{shortId} {quotedMsg.author.username}</div>
-                                    <div className={styles.popupText}>{quotedMsg.cipherText}</div>
+                                    <div className={styles.popupMeta}>
+                                        No.{shortId} {quotedMsg.author?.username ?? 'Anon'}
+                                    </div>
+                                    <div className={styles.popupText}>
+                                        {quotedMsg.cipherText ?? '[empty message]'}
+                                    </div>
                                 </div>
                             )}
                         </span>

@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../../pages/Rooms/Rooms.module.css';
 import type {RoomDetails} from "../../api/rooms/types.ts";
@@ -11,9 +10,7 @@ interface RoomCardProps {
 export const RoomCard = ({ room }: RoomCardProps) => {
     const navigate = useNavigate();
 
-    const formattedDate = useMemo(() => {
-        return new Date(room.createdAt).toLocaleDateString('uk-UA');
-    }, [room.createdAt]);
+    const formattedDate = new Date(room.createdAt).toLocaleDateString('uk-UA');
 
     return (
         <div className={styles.card}>

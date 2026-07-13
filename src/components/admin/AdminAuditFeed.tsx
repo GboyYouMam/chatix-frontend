@@ -1,12 +1,12 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import styles from '../../pages/Admin/AdminPanel.module.css';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 import type { AuditFeedProps } from './adminPanelTypes.ts';
 import { formatDate, getLogSummary } from './adminPanelUtils.ts';
 
 const AdminAuditLogEntry = memo(({ log }: { log: AdminAuditLog }) => {
-    const formattedCreatedAt = useMemo(() => formatDate(log.createdAt), [log.createdAt]);
-    const summary = useMemo(() => getLogSummary(log), [log]);
+    const formattedCreatedAt = formatDate(log.createdAt);
+    const summary = getLogSummary(log);
 
     return (
         <div className={styles.logEntry}>

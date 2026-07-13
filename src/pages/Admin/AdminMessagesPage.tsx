@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
 import { AdminListPagination } from '../../components/admin/AdminListPagination.tsx';
@@ -14,27 +14,28 @@ export const AdminMessagesPage = () => {
     const [search, setSearch] = useState('');
     const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
     const { messages, pagination, isFetching, deleteMessage } = useAdminMessages({ page, search });
+    const deleteMessageMutate = deleteMessage.mutate;
     const selectedMessage = messages.find((message) => message.id === selectedMessageId) ?? null;
 
-    const applySearch = (nextSearch: string) => {
+    const applySearch = useCallback((nextSearch: string) => {
         setPage(1);
         setSelectedMessageId(null);
         setSearch(nextSearch);
-    };
+    }, []);
 
-    const changePage = (nextPage: number) => {
+    const changePage = useCallback((nextPage: number) => {
         setPage(nextPage);
         setSelectedMessageId(null);
-    };
+    }, []);
 
-    const deleteSelectedMessage = () => {
+    const deleteSelectedMessage = useCallback(() => {
         if (!selectedMessage) return;
         if (window.confirm('Delete this message?')) {
-            deleteMessage.mutate(selectedMessage.id, {
+            deleteMessageMutate(selectedMessage.id, {
                 onSuccess: () => setSelectedMessageId(null),
             });
         }
-    };
+    }, [deleteMessageMutate, selectedMessage]);
 
     return (
         <div className={styles.adminPageShell}>

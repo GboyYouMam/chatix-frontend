@@ -1,11 +1,9 @@
-import { memo, useMemo } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import { memo } from 'react';
+import styles from './AdminLogActions.module.css';
 import type { LogActionsProps } from '../adminPanelTypes.ts';
 
 export const AdminLogActions = memo(({ selectedLog }: LogActionsProps) => {
-    const target = useMemo(() => {
-        return [selectedLog.targetType, selectedLog.targetId].filter(Boolean).join(':') || 'n/a';
-    }, [selectedLog.targetId, selectedLog.targetType]);
+    const target = [selectedLog.targetType, selectedLog.targetId].filter(Boolean).join(':') || 'n/a';
 
     return (
         <div className={styles.actionGroup}>

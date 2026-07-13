@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from './ProfileCommentsSection.module.css';
@@ -13,19 +13,14 @@ interface ProfileCommentsSectionProps {
 }
 
 export const ProfileCommentsSection = ({
-    profileUsername,
-    initialComments,
-    canInteractWithProfile,
-}: ProfileCommentsSectionProps) => {
+                                           profileUsername,
+                                           initialComments,
+                                           canInteractWithProfile,
+                                       }: ProfileCommentsSectionProps) => {
     const navigate = useNavigate();
     const [comments, setComments] = useState(initialComments);
     const [commentBody, setCommentBody] = useState('');
     const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
-
-    useEffect(() => {
-        setComments(initialComments);
-        setCommentBody('');
-    }, [initialComments, profileUsername]);
 
     const handleCreateComment = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

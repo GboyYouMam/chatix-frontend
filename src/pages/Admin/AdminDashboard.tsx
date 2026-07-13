@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminAuditFeed } from '../../components/admin/AdminAuditFeed.tsx';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
@@ -80,15 +80,23 @@ export const AdminDashboard = () => {
         });
     }, [liveLogs, auditLogs]);
 
-    const applyUsersSearch = (nextSearch: string) => {
+    const applyUsersSearch = useCallback((nextSearch: string) => {
         setUsersPage(1);
         setUsersSearch(nextSearch);
-    };
+    }, []);
 
-    const applyRoomsSearch = (nextSearch: string) => {
+    const applyRoomsSearch = useCallback((nextSearch: string) => {
         setRoomsPage(1);
         setRoomsSearch(nextSearch);
-    };
+    }, []);
+
+    const selectUser = useCallback((id: string) => {
+        navigate(PATH.admin.href.userPanel(id));
+    }, [navigate]);
+
+    const selectRoom = useCallback((id: string) => {
+        navigate(PATH.admin.href.roomPanel(id));
+    }, [navigate]);
 
     return (
         <div className={styles.adminPageShell}>
@@ -117,7 +125,7 @@ export const AdminDashboard = () => {
                     pagination={usersState.pagination}
                     onApplySearch={applyUsersSearch}
                     onPageChange={setUsersPage}
-                    onSelect={(id) => navigate(PATH.admin.href.userPanel(id))}
+                    onSelect={selectUser}
                 />
 
                 <AdminDashboardList
@@ -128,7 +136,7 @@ export const AdminDashboard = () => {
                     pagination={roomsState.pagination}
                     onApplySearch={applyRoomsSearch}
                     onPageChange={setRoomsPage}
-                    onSelect={(id) => navigate(PATH.admin.href.roomPanel(id))}
+                    onSelect={selectRoom}
                 />
             </div>
         </div>
