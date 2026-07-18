@@ -17,6 +17,10 @@ const PATH_PATTERNS = {
         room: "/room/:id",
         joinRoom: "/room/:id/join",
     },
+    fightClub: {
+        lobby: "/lobby",
+        duel: "/duel",
+    },
     admin: {
         adminDashboard: "/admin",
         adminUserPanel: "/admin/users/:userId",
@@ -38,6 +42,12 @@ export const PATH = {
         href: {
             room: (id: string | number) => href(PATH_PATTERNS.rooms.room, { id: String(id) }),
             joinRoom: (id: string | number) => href(PATH_PATTERNS.rooms.joinRoom, { id: String(id) }),
+        },
+    },
+    fightClub: {
+        ...PATH_PATTERNS.fightClub,
+        href: {
+            duel: (params: URLSearchParams) => `${PATH_PATTERNS.fightClub.duel}?${params.toString()}`,
         },
     },
     admin: {

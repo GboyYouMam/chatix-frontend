@@ -1,0 +1,551 @@
+.layout {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 3rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+
+.eyebrow {
+    margin: 0 0 0.25rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.logo {
+    margin: 0;
+    color: var(--text);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3rem;
+    letter-spacing: 4px;
+}
+
+.headerControls,
+.stats,
+.cardTop,
+.cardStats,
+.modalHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stats {
+    color: var(--primary);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+}
+
+.debtStat {
+    color: #ff7b7b;
+}
+
+.primaryBtn,
+.cardCta {
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: var(--bg);
+    padding: 0.8rem 1.2rem;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.primaryBtn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.hero {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: flex-end;
+}
+
+.hero p,
+.hero span,
+.card p,
+.modalNote {
+    color: var(--muted);
+}
+
+.hero h2 {
+    max-width: 820px;
+    margin: 0.5rem 0 0;
+    color: var(--primary);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+
+.hero span {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 2rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.panel,
+.card,
+.modal,
+.empty {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.panel {
+    padding: 1rem;
+}
+
+.panel h2,
+.modal h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.segmented {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+}
+
+.segmentBtn,
+.iconBtn {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--muted);
+    padding: 0.65rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+.activeSegment {
+    border-color: var(--primary);
+    background: rgba(250, 77, 152, 0.12);
+    color: var(--primary);
+}
+
+.range,
+.numberInput,
+.modal input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.range {
+    accent-color: var(--primary);
+}
+
+.numberInput,
+.modal input {
+    margin-top: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font: inherit;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    padding: 1.25rem;
+}
+
+.cardTop {
+    justify-content: space-between;
+}
+
+.creator {
+    color: var(--primary);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+}
+
+.badge {
+    border-radius: 999px;
+    background: rgba(250, 77, 152, 0.12);
+    color: var(--primary);
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+.debtBadge {
+    background: rgba(255, 123, 123, 0.12);
+    color: #ff7b7b;
+}
+
+.card h3 {
+    margin: 1rem 0 0.5rem;
+    font-family: 'Times New Roman', Times, serif;
+    color: var(--text);
+    font-size: 1.7rem;
+}
+
+.cardStats {
+    justify-content: space-between;
+    margin: 1.25rem 0;
+    color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+}
+
+.cardCta {
+    width: 100%;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    padding: 2rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(9, 9, 11, 0.82);
+    backdrop-filter: blur(8px);
+}
+
+.modal {
+    width: min(520px, 100%);
+    padding: 1.25rem;
+}
+
+.modalHeader {
+    justify-content: space-between;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 0.9rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.modal .segmented {
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 0.9rem;
+}
+
+.modalNote {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 820px) {
+    .header,
+    .hero {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .hero h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Fight Club polish */
+.layout {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 80% 10%, rgba(250, 77, 152, 0.12), transparent 26rem),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        #08080d;
+    background-size: auto, 42px 42px, 42px 42px, auto;
+}
+
+.layout::before {
+    position: absolute;
+    z-index: 0;
+    top: 5rem;
+    right: -3rem;
+    width: min(58vw, 660px);
+    height: min(70vw, 720px);
+    background: url('../../assets/fight-lobby-silhouette.png') center / contain no-repeat;
+    filter: brightness(0) invert(1) contrast(1.1);
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.layout > * {
+    position: relative;
+    z-index: 1;
+}
+
+.layout::before { display: none; }
+
+.layout > .backgroundImage {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+}
+
+.layout > .modalOverlay {
+    position: fixed;
+    z-index: 50;
+}
+
+.lobbyBackdrop {
+    top: 4rem;
+    right: -2rem;
+    width: min(58vw, 720px);
+    height: auto;
+    opacity: 0.32;
+    filter: brightness(0) invert(1) contrast(1.2);
+    mix-blend-mode: screen;
+}
+
+.header {
+    background: rgba(8, 8, 13, 0.76);
+    border-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+}
+
+.logo {
+    font-size: clamp(2.25rem, 7vw, 3.5rem);
+    text-shadow: 0 0 28px rgba(250, 77, 152, 0.28);
+}
+
+.headerControls {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.roomsBtn {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    padding: 0.8rem 1rem;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.roomsBtn:hover {
+    border-color: var(--primary);
+    background: rgba(250, 77, 152, 0.08);
+    color: var(--text);
+    transform: translateY(-2px);
+}
+
+.primaryBtn,
+.cardCta,
+.segmentBtn,
+.iconBtn {
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.primaryBtn:hover,
+.cardCta:hover {
+    box-shadow: 0 8px 25px rgba(250, 77, 152, 0.24);
+    transform: translateY(-2px);
+}
+
+.primaryBtn:active,
+.cardCta:active,
+.segmentBtn:active,
+.iconBtn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.hero {
+    position: relative;
+    min-height: 250px;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.hero::after {
+    position: absolute;
+    right: 2rem;
+    bottom: 1rem;
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid rgba(250, 77, 152, 0.2);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1rem rgba(250, 77, 152, 0.025), 0 0 0 2rem rgba(250, 77, 152, 0.02);
+    content: '';
+    pointer-events: none;
+}
+
+.hero h2 {
+    max-width: 760px;
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    line-height: 0.98;
+    text-wrap: balance;
+}
+
+.content {
+    align-items: start;
+}
+
+.panel,
+.card,
+.modal,
+.empty {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.panel {
+    position: sticky;
+    top: 92px;
+}
+
+.grid {
+    gap: 1.25rem;
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.card::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    content: '';
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+.card:hover {
+    border-color: rgba(250, 77, 152, 0.45);
+    box-shadow: 0 20px 60px rgba(250, 77, 152, 0.12), inset 0 1px rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+}
+
+.card:hover::before { opacity: 1; }
+
+.card:nth-child(2) { animation-delay: 50ms; }
+.card:nth-child(3) { animation-delay: 100ms; }
+.card:nth-child(4) { animation-delay: 150ms; }
+
+.card h3 {
+    overflow-wrap: anywhere;
+    line-height: 1.05;
+}
+
+.cardCta {
+    box-shadow: 0 5px 18px rgba(250, 77, 152, 0.12);
+}
+
+.modalOverlay {
+    animation: fadeIn 180ms ease both;
+}
+
+.modal {
+    animation: modalIn 260ms cubic-bezier(0.2, 0.85, 0.2, 1) both;
+}
+
+.modal input:focus,
+.numberInput:focus,
+.segmentBtn:focus-visible,
+.primaryBtn:focus-visible,
+.cardCta:focus-visible,
+.iconBtn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.roomsBtn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 820px) {
+    .hero {
+        min-height: 210px;
+        padding-top: 3rem;
+    }
+
+    .hero::after { right: -3rem; bottom: -2rem; }
+    .panel { position: static; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .modal,
+    .modalOverlay { animation: none; }
+
+    .card:hover,
+    .primaryBtn:hover,
+    .cardCta:hover,
+    .roomsBtn:hover { transform: none; }
+}
