@@ -1,23 +1,26 @@
 import { useState } from 'react';
-import { Socket } from 'socket.io-client';
+import toast from 'react-hot-toast';
 import styles from '../../pages/Rooms/Room.module.css';
-import { RoomSocketEvent } from "../../hooks/useRoomSocket.ts";
 
 interface RoomReplyFormProps {
     roomId: string;
     authorId: string | undefined;
-    socket: Socket | null;
+    onSendMessage: (payload: { roomId: string; authorId: string; text: string }) => void;
 }
 
-export const RoomReplyForm = ({ roomId, authorId, socket }: RoomReplyFormProps) => {
+export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyFormProps) => {
     const [newMessage, setNewMessage] = useState('');
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newMessage.trim() || !socket || !authorId) return;
+        if (!newMessage.trim()) return;
+        if (!authorId) {
+            toast.error('Log in before replying.');
+            return;
+        }
 
         try {
-            socket.emit(RoomSocketEvent.sendMessage, {
+            onSendMessage({
                 roomId,
                 authorId,
                 text: newMessage
@@ -25,6 +28,7 @@ export const RoomReplyForm = ({ roomId, authorId, socket }: RoomReplyFormProps) 
             setNewMessage('');
         } catch (error) {
             console.error('Failed to yap via socket:', error);
+            toast.error('Failed to send message.');
         }
     };
 

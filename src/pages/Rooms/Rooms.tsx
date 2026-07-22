@@ -1,15 +1,16 @@
 import {useMemo, useState} from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
-import type { RoomDetails } from '../../api/rooms/types.ts';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
 import clsx from 'clsx';
 import styles from './Rooms.module.css';
 import bannerPng from '../../assets/banner.png';
 import { useNavigate} from "react-router-dom";
 import {useAuthStore} from "../../store/authStore.ts";
-import {useRooms} from "../../hooks/useRooms.ts";
+import {useRooms} from "../../hooks/rooms/useRooms.ts";
 import {RoomCard} from "../../components/rooms/RoomCard.tsx";
+import { type RoomDetails } from "../../api/rooms/types.ts";
+import { PATH } from "../../utils/pathList.ts";
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -38,9 +39,9 @@ export const Rooms = () => {
 
     const handleGoToMyProfile = () => {
         if (user && user.username) {
-            navigate(`/profile/${user.username}`);
+            navigate(PATH.authAndUser.href.profile(user.username));
         } else {
-            navigate('/login');
+            navigate(PATH.authAndUser.login);
         }
     };
 

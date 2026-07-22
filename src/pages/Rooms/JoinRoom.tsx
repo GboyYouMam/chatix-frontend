@@ -1,25 +1,31 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../../api/client';
 import toast from 'react-hot-toast';
 import styles from './Room.module.css';
+import { PATH } from '../../utils/pathList.ts';
+import {useRooms} from "../../hooks/rooms/useRooms.ts";
 
 export const JoinRoom = () => {
     const { id } = useParams<{ id: string }>();
+    const { joinRoom } = useRooms();
     const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [isHacking, setIsHacking] = useState(false);
 
     const handleJoin = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!id) return;
         if (!password.trim()) return;
 
         setIsHacking(true);
         try {
-            await api.post(`/rooms/${id}/join`, { password });
+            await joinRoom.mutateAsync({
+                roomId: id,
+                password: password
+            });
             toast.success('ACCESS GRANTED.');
 
-            navigate(`/room/${id}`);
+            navigate(PATH.rooms.href.room(id));
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Access Denied.');
         } finally {
@@ -50,7 +56,7 @@ export const JoinRoom = () => {
                 </form>
 
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate(PATH.root.home)}
                     className={styles.backBtn}
                     style={{ marginTop: '2rem', display: 'block', width: '100%' }}
                 >

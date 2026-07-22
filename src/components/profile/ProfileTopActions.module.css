@@ -1,0 +1,52 @@
+.topActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3.5rem;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.backBtn {
+    background-color: #18181b;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.backBtn:hover {
+    opacity: 0.9;
+}
+
+.backBtn:active {
+    transform: scale(0.98);
+}
+
+.editBtn {
+    background-color: var(--primary);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.editBtn:hover {
+    opacity: 0.9;
+}
+
+.editBtn:active {
+    transform: scale(0.98);
+}

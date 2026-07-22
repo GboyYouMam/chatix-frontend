@@ -1,0 +1,47 @@
+.sideCol {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.actionBtn {
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    font-family: inherit;
+}
+
+.actionBtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.actionBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.verticalBanner {
+    border-radius: 8px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    min-height: 500px;
+}
+
+.bannerImage {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+}

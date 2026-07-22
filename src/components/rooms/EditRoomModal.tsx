@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './CreateRoomModal.module.css';
-import {useRooms} from "../../hooks/useRooms.ts";
+import { useUpdateRoom } from "../../hooks/rooms/useUpdateRoom.ts";
 
 const updateRoomSchema = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
@@ -25,7 +25,7 @@ interface updateRoomModalProps {
 }
 
 export const UpdateRoomModal = ({ isOpen, onClose, onSuccess, roomId, initialData }: updateRoomModalProps) => {
-    const { updateRoom, deleteRoom } = useRooms();
+    const { updateRoom, deleteRoom } = useUpdateRoom();
 
     const {
         register,

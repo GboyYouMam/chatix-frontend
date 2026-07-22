@@ -8,6 +8,7 @@ import fourthImageAuth from '../../assets/fourthImageAuth.png';
 import headerImage from '../../assets/headerImage.png';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { PATH } from '../../utils/pathList.ts';
 
 const loginSchema = z.object({
     username: z.string().min(1).max(25).nonempty('username is missing are we deadass?'),
@@ -94,7 +95,7 @@ export const Login = () => {
 
                     <div className={styles.footer}>
                         <span className={styles.mutedText}>new here?</span>
-                        <Link to="/register" className={styles.link}>
+                        <Link to={PATH.authAndUser.register} className={styles.link}>
                             ascend now
                         </Link>
                     </div>
