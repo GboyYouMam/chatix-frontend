@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useMemo, useState} from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
@@ -26,11 +26,16 @@ export const Rooms = () => {
         queryFn: () => roomApi.getRooms(roomType),
     });
 
-    const normalizedSearchQuery = searchQuery.toLowerCase();
-    const filteredRooms = rooms?.filter((room: RoomDetails) =>
-        room.title.toLowerCase().includes(normalizedSearchQuery) ||
-        room.topic?.toLowerCase().includes(normalizedSearchQuery)
-    ) || [];
+    const filteredRooms = useMemo(() => {
+        if (!rooms) return [];
+
+        const lowerCaseQuery = searchQuery.toLowerCase();
+
+        return rooms.filter((room: RoomDetails) =>
+            room.title.toLowerCase().includes(lowerCaseQuery) ||
+            room.topic?.toLowerCase().includes(lowerCaseQuery)
+        );
+    }, [rooms, searchQuery]);
 
     const handleGoToMyProfile = () => {
         if (user && user.username) {
@@ -121,7 +126,7 @@ export const Rooms = () => {
                             placeholder="find your place"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleBackendSearch()} // Пошук на Enter
+                            onKeyDown={(e) => e.key === 'Enter' && handleBackendSearch()}
                         />
                         <span className={styles.searchLmao}>lmao</span>
                         <button
@@ -129,7 +134,7 @@ export const Rooms = () => {
                             onClick={handleBackendSearch}
                             disabled={searchRoomByName.isPending}
                         >
-                            {searchRoomByName.isPending ? 'searching...' : 'search'}
+                            {searchRoomByName.isPending ? 'searching...' : 'join'}
                         </button>
                     </div>
                 </div>

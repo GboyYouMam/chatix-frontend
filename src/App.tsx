@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import {ProtectedRoute} from "./components/ProtectedRouter.tsx";
 import { Rooms } from './pages/Rooms/Rooms';
-import { ProtectedRoute } from "./components/ProtectedRouter";
 import { PATH } from "./utils/pathList.ts"
 
 const router = createBrowserRouter([

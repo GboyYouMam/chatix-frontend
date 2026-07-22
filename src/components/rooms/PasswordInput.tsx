@@ -1,15 +1,9 @@
-import {type Control, type FieldErrors, type UseFormRegister, useWatch} from "react-hook-form";
+import { useFormContext, useWatch} from "react-hook-form";
 import type {CreateRoomValues} from "./CreateRoomModal.tsx";
 import styles from './CreateRoomModal.module.css';
 
-
-interface PasswordInputProps {
-    control: Control<CreateRoomValues>;
-    register: UseFormRegister<CreateRoomValues>;
-    errors: FieldErrors<CreateRoomValues>;
-}
-
-export const PasswordInput = ({ control, register, errors }: PasswordInputProps) => {
+export const PasswordInput = () => {
+    const { control, register, formState: { errors } } = useFormContext<CreateRoomValues>();
     const publicity = useWatch({
         control,
         name: 'publicity',
