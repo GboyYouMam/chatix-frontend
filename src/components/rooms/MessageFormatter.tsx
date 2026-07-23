@@ -1,55 +1,43 @@
+import { useMemo, useState } from 'react';
 import type { MessageData } from '../../api/messages/types.ts';
-import styles from '../../pages/Rooms/Room.module.css';
+import styles from './MessageFormatter.module.css';
 
-export const MessageFormatter = ({
-    text,
-    allMessages,
-}: {
+interface MessageFormatterProps {
     text: string;
     allMessages: MessageData[];
-}) => {
-    const handleScroll = (shortId: string) => {
-        const element = document.getElementById(`post-${shortId}`);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            element.classList.add(styles.highlighted);
-            setTimeout(() => element.classList.remove(styles.highlighted), 2000);
-        }
-    };
+    onQuoteClick: (shortId: string) => void;
+}
+
+export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFormatterProps) => {
+    const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
 
     const parts = text.split(/(>>[a-zA-Z0-9]+)/g);
+    const messagesByShortId = useMemo(() => {
+        return new Map(allMessages.map((message) => [message.id.slice(-6), message]));
+    }, [allMessages]);
 
     return (
         <div className={styles.formattedText}>
             {parts.map((part, i) => {
                 if (part.startsWith('>>')) {
                     const shortId = part.slice(2);
-                    const quotedMsg = allMessages.find((message) => message.id.endsWith(shortId));
-                    const scrollToQuotedMessage = () => handleScroll(shortId);
+                    const quotedMsg = messagesByShortId.get(shortId);
+                    const isHovered = hoveredPostId === shortId;
 
                     return (
                         <span
                             key={i}
                             className={styles.quoteLink}
-                            onClick={scrollToQuotedMessage}
-                            onKeyDown={(event) => {
-                                if (event.key !== 'Enter' && event.key !== ' ') return;
-                                event.preventDefault();
-                                scrollToQuotedMessage();
-                            }}
-                            role="button"
-                            tabIndex={0}
+                            onClick={() => onQuoteClick(shortId)}
+                            onMouseEnter={() => setHoveredPostId(shortId)}
+                            onMouseLeave={() => setHoveredPostId(null)}
                         >
                             {part}
 
-                            {quotedMsg && (
+                            {isHovered && quotedMsg && (
                                 <div className={styles.quotePopup}>
-                                    <div className={styles.popupMeta}>
-                                        No.{shortId} {quotedMsg.author?.username ?? 'Anon'}
-                                    </div>
-                                    <div className={styles.popupText}>
-                                        {quotedMsg.cipherText ?? '[empty message]'}
-                                    </div>
+                                    <div className={styles.popupMeta}>{shortId} {quotedMsg.author?.username}</div>
+                                    <div className={styles.popupText}>{quotedMsg.cipherText}</div>
                                 </div>
                             )}
                         </span>

@@ -1,4 +1,4 @@
-import { useForm} from 'react-hook-form';
+import {FormProvider, useForm} from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './CreateRoomModal.module.css';
@@ -33,13 +33,7 @@ interface CreateRoomModalProps {
 export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalProps) => {
     const { createRoom } = useCreateRoom();
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors, isSubmitting }
-    } = useForm<CreateRoomValues>({
+    const methods = useForm<CreateRoomValues>({
         resolver: zodResolver(createRoomScheme),
         defaultValues: {
             title: '',
@@ -60,7 +54,7 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
 
         createRoom.mutate(payload, {
             onSuccess: () => {
-                reset();
+                methods.reset;
                 onSuccess();
                 onClose();
             }
@@ -74,40 +68,42 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
 
                 <h2 className={styles.title}>CREATE NEW ROOM</h2>
 
-                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                    <div className={styles.inputGroup}>
-                        <label>Title *</label>
-                        <input {...register('title')} placeholder="e.g. YAPYAPYAP" />
-                        {errors.title && <span className={styles.error}>{errors.title.message}</span>}
-                    </div>
+                <FormProvider {...methods}>
+                    <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
+                        <div className={styles.inputGroup}>
+                            <label>Title *</label>
+                            <input {...methods.register('title')} placeholder="e.g. YAPYAPYAP" />
+                            {methods.formState.errors.title && <span className={styles.error}>{methods.formState.errors.title.message}</span>}
+                        </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Topic</label>
-                        <input {...register('topic')} placeholder="describe it in small words" />
-                    </div>
+                        <div className={styles.inputGroup}>
+                            <label>Topic</label>
+                            <input {...methods.register('topic')} placeholder="describe it in small words" />
+                        </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Description</label>
-                        <textarea {...register('description')} rows={3} placeholder="Describe it in MORE words" />
-                    </div>
+                        <div className={styles.inputGroup}>
+                            <label>Description</label>
+                            <textarea {...methods.register('description')} rows={3} placeholder="Describe it in MORE words" />
+                        </div>
 
-                    <div className={styles.radioGroup}>
-                        <label className={styles.radioLabel}>
-                            <input type="radio" value="public" {...register('publicity')} />
-                            <span className={styles.radioText}>Public</span>
-                        </label>
-                        <label className={styles.radioLabel}>
-                            <input type="radio" value="private" {...register('publicity')} />
-                            <span className={styles.radioText}>Private</span>
-                        </label>
-                    </div>
+                        <div className={styles.radioGroup}>
+                            <label className={styles.radioLabel}>
+                                <input type="radio" value="public" {...methods.register('publicity')} />
+                                <span className={styles.radioText}>Public</span>
+                            </label>
+                            <label className={styles.radioLabel}>
+                                <input type="radio" value="private" {...methods.register('publicity')} />
+                                <span className={styles.radioText}>Private</span>
+                            </label>
+                        </div>
 
-                    <PasswordInput control={control} register={register} errors={errors} />
+                        <PasswordInput />
 
-                    <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-                        {isSubmitting ? 'Creating...' : 'Create This Shi'}
-                    </button>
-                </form>
+                        <button type="submit" className={styles.submitBtn} disabled={methods.formState.isSubmitting}>
+                            {methods.formState.isSubmitting ? 'Creating...' : 'Create This Shi'}
+                        </button>
+                    </form>
+                </FormProvider>
             </div>
         </div>
     );
