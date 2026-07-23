@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import {ProtectedRoute} from "./components/ProtectedRouter.tsx";
 import { Rooms } from './pages/Rooms/Rooms';
-import { PATH } from "./utils/pathList.ts"
+import { ProtectedRoute } from './components/ProtectedRouter';
+import { PATH } from './utils/pathList.ts';
 
 const router = createBrowserRouter([
     { path: PATH.root.home, element: <Navigate to={PATH.rooms.rooms} replace /> },
@@ -24,6 +24,20 @@ const router = createBrowserRouter([
         lazy: async () => {
             const { Profile } = await import('./pages/Profile/Profile.tsx');
             return { Component: Profile };
+        },
+    },
+    {
+        path: PATH.fightClub.lobby,
+        lazy: async () => {
+            const { Lobby } = await import('./pages/Fight-Club/Lobby.tsx');
+            return { Component: Lobby };
+        },
+    },
+    {
+        path: PATH.fightClub.duel,
+        lazy: async () => {
+            const { Duel } = await import('./pages/Fight-Club/Duel.tsx');
+            return { Component: Duel };
         },
     },
     { path: PATH.rooms.rooms, element: <Rooms /> },
@@ -52,7 +66,7 @@ const router = createBrowserRouter([
                     return { Component: EditProfile };
                 },
             },
-        ]
+        ],
     },
     {
         element: <ProtectedRoute requireAdmin />,
@@ -62,33 +76,34 @@ const router = createBrowserRouter([
                 lazy: async () => {
                     const { AdminDashboard } = await import('./pages/Admin/AdminDashboard.tsx');
                     return { Component: AdminDashboard };
-                }
+                },
             },
             {
                 path: PATH.admin.adminUserPanel,
                 lazy: async () => {
                     const { AdminUserPage } = await import('./pages/Admin/AdminUserPage.tsx');
                     return { Component: AdminUserPage };
-                }
+                },
             },
             {
-                path:  PATH.admin.adminRoomPanel,
+                path: PATH.admin.adminRoomPanel,
                 lazy: async () => {
                     const { AdminRoomPage } = await import('./pages/Admin/AdminRoomPage.tsx');
                     return { Component: AdminRoomPage };
-                }
+                },
             },
             {
-                path:  PATH.admin.adminMessagePanel,
+                path: PATH.admin.adminMessagePanel,
                 lazy: async () => {
-                    const { AdminMessagesPage } = await import('./pages/Admin/AdminMessagesPage.tsx');
+                    const { AdminMessagesPage } =
+                        await import('./pages/Admin/AdminMessagesPage.tsx');
                     return { Component: AdminMessagesPage };
-                }
+                },
             },
         ],
     },
 
-    { path: PATH.root.notFound, element: <Navigate to={PATH.rooms.rooms} replace /> }
+    { path: PATH.root.notFound, element: <Navigate to={PATH.rooms.rooms} replace /> },
 ]);
 
 function App() {
