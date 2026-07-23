@@ -1,29 +1,17 @@
-import { api } from "../client.ts";
-import type {UpdateModifiersPayload} from "./types.ts";
+import { api } from '../client.ts';
+import type { UpdateModifiersPayload } from './types.ts';
 
 export const adminApi = {
-    vaporizeUser: async (userId: string) => {
-        const response = await api.delete(`/admin/users/${userId}/vaporize`);
-        return response;
-    },
+    vaporizeUser: (userId: string) => api.delete(`/admin/users/${userId}/vaporize`),
 
-    updateModifier: async (userId: string, data: UpdateModifiersPayload) => {
-        const response = await api.patch(`/admin/users/${userId}/modifiers`, data);
-        return response;
-    },
+    updateModifier: (userId: string, data: UpdateModifiersPayload) =>
+        api.patch(`/admin/users/${userId}/modifiers`, data),
 
-    deleteMessage: async (messageId: string) => {
-        const response = await api.delete(`/admin/messages/${messageId}`);
-        return response;
-    },
+    deleteMessage: (messageId: string) => api.delete(`/admin/messages/${messageId}`),
 
-    addWarning: async (userId: string, reason: string) => {
-        const response = await api.post(`/admin/users/${userId}/warnings`, { reason });
-        return response;
-    },
+    addWarning: (userId: string, reason: string) =>
+        api.post(`/admin/users/${userId}/warnings`, { reason }),
 
-    revokeWarning: async (userId: string, warningId: string) => {
-        const response = await api.delete(`/admin/users/${userId}/warnings/${warningId}`);
-        return response;
-    },
-}
+    revokeWarning: (userId: string, warningId: string) =>
+        api.delete(`/admin/users/${userId}/warnings/${warningId}`),
+};

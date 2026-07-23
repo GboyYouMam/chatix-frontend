@@ -1,13 +1,8 @@
-import { api } from '../client.ts'
+import { api } from '../client.ts';
 
 export const messagesApi = {
-    getHistory: async (roomId: string) => {
-        const response = await api.get(`/messages/${roomId}`)
-        return response.data
-    },
+    getHistory: async (roomId: string) => (await api.get(`/messages/${roomId}`)).data,
 
-    sendMessage: async (data: { roomId: string; cipherText: string }) => {
-        const response = await api.post('/messages', data);
-        return response.data;
-    }
-}
+    sendMessage: async (data: { roomId: string; cipherText: string }) =>
+        (await api.post('/messages', data)).data,
+};

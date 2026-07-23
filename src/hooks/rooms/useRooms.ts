@@ -24,7 +24,7 @@ export const useRooms = () => {
         onSuccess: (data) => {
             console.log(data);
             toast.success('Room found! U dam lucky');
-            navigate(PATH.rooms.href.room(data.data.id));
+            navigate(PATH.rooms.href.room(data.id));
         },
         onError: () => {
             toast.error('Room not found. Maybe it got nuked? Or u just spell it wrong');
