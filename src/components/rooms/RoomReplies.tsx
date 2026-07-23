@@ -5,6 +5,7 @@ import { MessageFormatter } from './MessageFormatter.tsx';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from '../../api/messages/types.ts';
 import { PATH } from '../../utils/pathList.ts';
+import { formatAttachmentSize } from './attachments.ts';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -107,13 +108,50 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                             </span>
                         </div>
 
-                        <div className={styles.postBody}>
-                            <MessageFormatter
-                                text={msg.cipherText || ''}
-                                allMessages={messages}
-                                onQuoteClick={handleScrollToQuote}
-                            />
-                        </div>
+                        {msg.cipherText && (
+                            <div className={styles.postBody}>
+                                <MessageFormatter
+                                    text={msg.cipherText}
+                                    allMessages={messages}
+                                    onQuoteClick={handleScrollToQuote}
+                                />
+                            </div>
+                        )}
+
+                        {msg.attachments && msg.attachments.length > 0 && (
+                            <div className={styles.attachments}>
+                                {msg.attachments.map((attachment) => (
+                                    <figure className={styles.attachment} key={attachment.id}>
+                                        <a href={attachment.url} target="_blank" rel="noreferrer">
+                                            {attachment.mimeType.startsWith('image/') ? (
+                                                <img
+                                                    className={styles.attachmentImage}
+                                                    src={attachment.url}
+                                                    alt={attachment.fileName}
+                                                    loading="lazy"
+                                                />
+                                            ) : (
+                                                <span className={styles.attachmentFile}>
+                                                    [DOWNLOAD FILE]
+                                                </span>
+                                            )}
+                                        </a>
+                                        <figcaption className={styles.attachmentDescription}>
+                                            File:{' '}
+                                            <a
+                                                href={attachment.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                {attachment.fileName}
+                                            </a>{' '}
+                                            ({formatAttachmentSize(attachment.size)},{' '}
+                                            {attachment.mimeType})
+                                        </figcaption>
+                                    </figure>
+                                ))}
+                            </div>
+                        )}
 
                         {msg.ipAddress && (
                             <div className={styles.ipAddress}>[HOST: {msg.ipAddress}]</div>
