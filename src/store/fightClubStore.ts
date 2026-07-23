@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { DuelStatus, FightChallenge, StakeFilter } from '../api/fight-club/types.ts';
 
-interface DuelState {
+export interface DuelState {
     p1Hp: number;
     p2Hp: number;
     p1Combo: number;

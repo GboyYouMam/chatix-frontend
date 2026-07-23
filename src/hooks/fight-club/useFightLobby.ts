@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { io, type Socket } from 'socket.io-client';
 import { useAuthStore } from '../../store/authStore.ts';
 import { useFightClubStore } from '../../store/fightClubStore.ts';
 import { PATH } from '../../utils/pathList.ts';
-import type { FightChallenge, StakeType } from '../../api/fight-club/types.ts';
+import type { FightChallenge } from '../../api/fight-club/types.ts';
+import { useFightLobbySocket } from './useFightClubSocket.ts';
 
 export const useFightLobby = () => {
     const navigate = useNavigate();
@@ -20,9 +20,6 @@ export const useFightLobby = () => {
     const addChallenge = useFightClubStore((state) => state.addChallenge);
     const setChallenges = useFightClubStore((state) => state.setChallenges);
     const removeChallenge = useFightClubStore((state) => state.removeChallenge);
-    const socketRef = useRef<Socket | null>(null);
-    const pendingCreateRef = useRef(false);
-
     const startDuel = useCallback(
         (challenge: FightChallenge, isCreator: boolean = false) => {
             const creator = isCreator || challenge.creatorId === user?.id;
@@ -45,33 +42,14 @@ export const useFightLobby = () => {
     );
     const goRooms = useCallback(() => navigate(PATH.rooms.rooms), [navigate]);
 
-    useEffect(() => {
-        if (!token) {
-            setChallenges([]);
-            return;
-        }
-
-        const socket = io(`${import.meta.env.VITE_API_URL}/fight-club`, {
-            auth: { token },
-        });
-        socketRef.current = socket;
-        socket.on('fight:challenges', setChallenges);
-        socket.on('fight:challenge_created', (challenge: FightChallenge) => {
-            addChallenge(challenge);
-            if (pendingCreateRef.current && challenge.creatorId === user?.id) {
-                pendingCreateRef.current = false;
-                startDuel(challenge, true);
-            }
-        });
-        socket.on('fight:challenge_removed', ({ matchId }: { matchId: string }) =>
-            removeChallenge(matchId),
-        );
-
-        return () => {
-            socket.disconnect();
-            if (socketRef.current === socket) socketRef.current = null;
-        };
-    }, [addChallenge, removeChallenge, setChallenges, startDuel, token, user?.id]);
+    const { createChallenge } = useFightLobbySocket({
+        token,
+        userId: user?.id,
+        addChallenge,
+        setChallenges,
+        removeChallenge,
+        startDuel,
+    });
 
     const filteredChallenges = useMemo(
         () =>
@@ -84,14 +62,6 @@ export const useFightLobby = () => {
                 );
             }),
         [challenges, maxStake, minStake, stakeFilter],
-    );
-
-    const createChallenge = useCallback(
-        (draft: { stakeType: StakeType; stakeAmount: number; title: string }) => {
-            pendingCreateRef.current = true;
-            socketRef.current?.emit('fight:create', draft);
-        },
-        [],
     );
 
     return {
