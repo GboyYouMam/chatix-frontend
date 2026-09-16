@@ -1,19 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { io, type Socket } from 'socket.io-client';
+import { useCallback, useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore.ts';
 import type { MessageData } from '../../api/messages/types.ts';
+import { messagesApi } from '../../api/messages/messages.service.ts';
 
 type SendMessagePayload = {
     roomId: string;
-    authorId: string;
     text: string;
-};
-
-type SendMessageResponse = {
-    error?: string;
-    message?: string;
-    status?: string;
+    attachments: File[];
 };
 
 type SocketErrorPayload = {
@@ -34,7 +29,6 @@ const getSocketErrorMessage = (error: unknown) => {
 export const useRoomSocket = (roomId: string | undefined) => {
     const queryClient = useQueryClient();
     const { user } = useAuthStore();
-    const socketRef = useRef<Socket | null>(null);
     const [socketError, setSocketError] = useState<string | null>(null);
     const userId = user?.id;
     const username = user?.username;
@@ -43,7 +37,6 @@ export const useRoomSocket = (roomId: string | undefined) => {
         if (!roomId) return;
 
         const newSocket = io(import.meta.env.VITE_API_URL);
-        socketRef.current = newSocket;
 
         const showSocketError = (error: unknown) => {
             setSocketError(getSocketErrorMessage(error) || 'Socket error. Try again.');
@@ -80,28 +73,26 @@ export const useRoomSocket = (roomId: string | undefined) => {
             newSocket.off('exception', showSocketError);
             newSocket.off('errorMessage', showErrorMessage);
             newSocket.disconnect();
-            if (socketRef.current === newSocket) {
-                socketRef.current = null;
-            }
         };
     }, [roomId, queryClient, userId, username]);
 
     const sendMessage = useCallback(
-        (payload: SendMessagePayload) => {
-            const socket = socketRef.current;
-            if (!socket) {
-                setSocketError('Socket is not connected yet.');
-                return;
+        async (payload: SendMessagePayload) => {
+            try {
+                const message = await messagesApi.sendMessage({
+                    roomId: payload.roomId,
+                    cipherText: payload.text,
+                    attachments: payload.attachments,
+                });
+                queryClient.setQueryData(['messages', payload.roomId], (messages: MessageData[] | undefined) =>
+                    messages?.some((item) => item.id === message.id) ? messages : [...(messages ?? []), message],
+                );
+            } catch (error) {
+                setSocketError(getSocketErrorMessage(error) || 'Failed to send message.');
+                throw error;
             }
-
-            socket.emit('sendMessage', payload, (response?: SendMessageResponse) => {
-                const message =
-                    response?.error ??
-                    (response?.status === 'error' ? response.message : undefined);
-                if (message) setSocketError(message);
-            });
         },
-        [],
+        [queryClient],
     );
 
     const clearSocketError = useCallback(() => setSocketError(null), []);

@@ -1,13 +1,16 @@
-import { api } from '../client.ts'
+import { api } from '../client.ts';
 
 export const messagesApi = {
-    getHistory: async (roomId: string) => {
-        const response = await api.get(`/messages/${roomId}`)
-        return response.data
-    },
+    getHistory: async (roomId: string) => (await api.get(`/messages/${roomId}`)).data,
 
-    sendMessage: async (data: { roomId: string; cipherText: string }) => {
-        const response = await api.post('/messages', data);
-        return response.data;
-    }
-}
+    sendMessage: async (data: { roomId: string; cipherText: string; attachments?: File[] }) => {
+        const formData = new FormData();
+        formData.append('roomId', data.roomId);
+        formData.append('cipherText', data.cipherText);
+        data.attachments?.forEach((file) => formData.append('attachments', file));
+
+        return (await api.post('/messages', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })).data;
+    },
+};
