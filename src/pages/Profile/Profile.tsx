@@ -1,6 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import type { CSSProperties } from 'react';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
+import { ProfileBackground } from '../../components/cosmetics/ProfileBackground.tsx';
+import { StickerRow } from '../../components/cosmetics/StickerRow.tsx';
+import { backgroundPatternOf } from '../../components/cosmetics/profileCosmetics.ts';
+import { resolveAccentColor } from '../../components/shop/cosmeticPalette.ts';
 import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore.ts';
 import { notify } from '../../lib/toast';
@@ -144,9 +149,15 @@ export const Profile = () => {
     }
 
     const comments = profileData.comments ?? [];
+    const cosmetics = profileData.cosmetics;
+    const accentStyle = cosmetics?.accent
+        ? ({ '--profile-accent': resolveAccentColor(cosmetics.accent) } as CSSProperties)
+        : undefined;
+    const backgroundPattern = backgroundPatternOf(cosmetics?.background);
 
     return (
-        <div className={styles.layout}>
+        <div className={styles.layout} style={accentStyle}>
+            {backgroundPattern && <ProfileBackground pattern={backgroundPattern} />}
             <MedalBook
                 isOpen={medalBookOpen}
                 onClose={() => setMedalBookOpen(false)}
@@ -174,6 +185,7 @@ export const Profile = () => {
                             alt="Profile Up Banner"
                             className={styles.bannerImage}
                         />
+                        <StickerRow stickers={cosmetics?.stickers} />
                     </div>
 
                     <ProfileCard

@@ -9,6 +9,8 @@ import { formatAttachmentSize } from './attachments.ts';
 import { DELETED_MESSAGE } from '../../hooks/rooms/messageCache.ts';
 import { formatDate } from '../../utils/date.ts';
 import { FeaturedMedals } from '../achievements/FeaturedMedals.tsx';
+import { resolveAccentColor } from '../shop/cosmeticPalette.ts';
+import { glyphFor } from '../cosmetics/profileCosmetics.ts';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -73,6 +75,15 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                         <div className={styles.postMeta}>
                             <span
                                 className={styles.username}
+                                style={
+                                    msg.author?.cosmetics?.nameColor
+                                        ? {
+                                              color: resolveAccentColor(
+                                                  msg.author.cosmetics.nameColor,
+                                              ),
+                                          }
+                                        : undefined
+                                }
                                 onClick={() =>
                                     msg.author?.username
                                         ? navigate(
@@ -81,6 +92,11 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                         : null
                                 }
                             >
+                                {msg.author?.cosmetics?.nameIcon && (
+                                    <span aria-hidden="true">
+                                        {glyphFor(msg.author.cosmetics.nameIcon)}{' '}
+                                    </span>
+                                )}
                                 {msg.author?.username || 'Anon'}
                                 <FeaturedMedals keys={msg.author?.featuredAchievements} />
 
@@ -120,6 +136,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                         text={msg.cipherText}
                                         allMessages={messages}
                                         onQuoteClick={handleScrollToQuote}
+                                        quoteStyle={msg.author?.cosmetics?.quoteStyle}
                                     />
                                 )}
                             </div>

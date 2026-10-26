@@ -14,7 +14,10 @@ export interface MessageData {
     ipTag?: string;
     isDeleted?: boolean;
     createdAt: string | Date;
-    author?: UserData & { featuredAchievements?: string[] };
+    author?: UserData & {
+        featuredAchievements?: string[];
+        cosmetics?: MessageAuthorCosmetics | null;
+    };
     attachments?: MessageAttachment[];
     authorId?: string;
 }
@@ -22,4 +25,10 @@ export interface MessageData {
 export interface MessagePage {
     items: MessageData[];
     nextCursor: string | null;
+}
+
+export interface MessageAuthorCosmetics {
+    nameColor?: string | null;
+    nameIcon?: string | null;
+    quoteStyle?: string | null;
 }

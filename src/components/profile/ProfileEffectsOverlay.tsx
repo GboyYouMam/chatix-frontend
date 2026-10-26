@@ -16,9 +16,7 @@ export const ProfileEffectsOverlay = ({ activeEffect }: ProfileEffectsOverlayPro
                 alt={activeEffect === 'aura' ? 'Aura Level Up' : 'Debt Paid'}
                 className={styles.farmGif}
             />
-            <div className={styles.auraText}>
-                {activeEffect === 'aura' ? 'AURA +1' : 'DEBT -1'}
-            </div>
+            <div className={styles.auraText}>{activeEffect === 'aura' ? 'AURA +1' : 'DEBT -1'}</div>
         </div>
     );
 };

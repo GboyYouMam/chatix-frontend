@@ -6,9 +6,29 @@ interface MessageFormatterProps {
     text: string;
     allMessages: MessageData[];
     onQuoteClick: (shortId: string) => void;
+    quoteStyle?: string | null;
 }
 
-export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFormatterProps) => {
+const quoteStyleClass = (value: string | null | undefined): string | undefined => {
+    switch (value?.replace(/^quote_/, '')) {
+        case 'neon':
+            return styles.quoteNeon;
+        case 'greentext':
+            return styles.quoteGreentext;
+        case 'redacted':
+            return styles.quoteRedacted;
+        default:
+            return undefined;
+    }
+};
+
+export const MessageFormatter = ({
+    text,
+    allMessages,
+    onQuoteClick,
+    quoteStyle,
+}: MessageFormatterProps) => {
+    const styleClass = quoteStyleClass(quoteStyle);
     const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
 
     const parts = text.split(/(>>[a-zA-Z0-9]+)/g);
@@ -27,7 +47,7 @@ export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFor
                     return (
                         <span
                             key={i}
-                            className={`${styles.quoteLink} ${isHovered ? styles.quoteLinkExpanded : ''}`}
+                            className={`${styles.quoteLink} ${styleClass ?? ''} ${isHovered ? styles.quoteLinkExpanded : ''}`}
                             onClick={() => {
                                 setHoveredPostId((current) =>
                                     current === shortId ? null : shortId,
