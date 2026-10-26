@@ -2,9 +2,11 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: #0a0a0a;
-    color: #e0e0e0;
-    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--room-bg, #0a0a0a);
+    background-image: var(--room-pattern, none);
+    background-attachment: fixed;
+    color: var(--room-text, #e0e0e0);
+    font-family: var(--room-font-body, 'Courier New', Courier, monospace);
 }
 
 .header {
@@ -12,8 +14,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2rem;
-    border-bottom: 1px solid #333;
-    background: #111;
+    border-bottom: 1px solid var(--room-border, #333);
+    background: var(--room-surface, #111);
 }
 
 .headerLeft {
@@ -54,7 +56,8 @@
 }
 
 .boardTitle {
-    color: var(--primary, #fa4d98);
+    color: var(--room-accent, var(--primary, #fa4d98));
+    font-family: var(--room-font-heading, inherit);
     margin: 0;
     font-size: 1.5rem;
     text-transform: uppercase;
@@ -81,7 +84,7 @@
 }
 
 .subject {
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
     font-weight: bold;
 }
 
@@ -101,11 +104,11 @@
 }
 
 .date {
-    color: #888;
+    color: var(--room-muted, #888);
 }
 
 .postId {
-    color: #888;
+    color: var(--room-muted, #888);
     cursor: pointer;
 }
 
@@ -127,9 +130,9 @@
 }
 
 .replyBlock {
-    background: #151515;
-    border: 1px solid #333;
-    border-left: 3px solid #fa4d98;
+    background: var(--room-surface, #151515);
+    border: 1px solid var(--room-border, #333);
+    border-left: 3px solid var(--room-accent, #fa4d98);
     padding: 1rem;
     max-width: 80%;
     border-radius: 4px;
@@ -141,9 +144,9 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(17, 17, 17, 0.95);
+    background: var(--room-surface, rgba(17, 17, 17, 0.95));
     backdrop-filter: blur(5px);
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--room-border, #333);
     padding: 1rem 2rem;
     box-sizing: border-box;
 }
@@ -234,9 +237,9 @@
 .replyInput {
     flex: 1;
     min-width: 0;
-    background: #0a0a0a;
-    border: 1px solid #333;
-    color: #fff;
+    background: var(--room-bg, #0a0a0a);
+    border: 1px solid var(--room-border, #333);
+    color: var(--room-text, #fff);
     padding: 1rem;
     font-family: inherit;
     resize: none;
@@ -334,7 +337,7 @@
     max-width: 420px;
     margin-top: 0.35rem;
     overflow-wrap: anywhere;
-    color: #888;
+    color: var(--room-muted, #888);
     font-size: 0.75rem;
 }
 
@@ -347,7 +350,7 @@
 .emptyThread {
     text-align: center;
     margin-top: 2rem;
-    color: #888;
+    color: var(--room-muted, #888);
 }
 
 .ipAddress {
@@ -408,7 +411,7 @@
 
 .popupMeta {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--room-muted, #888);
     margin-bottom: 0.4rem;
     border-bottom: 1px solid #333;
     padding-bottom: 0.2rem;
@@ -588,7 +591,7 @@
 }
 .joinCard p {
     margin-bottom: 2rem;
-    color: #888;
+    color: var(--room-muted, #888);
 }
 .joinForm {
     display: flex;
@@ -608,5 +611,138 @@
 @media (max-width: 600px) {
     .joinCard {
         padding: 1.25rem;
+    }
+}
+
+/* room themes: decor on top of the variable set, scoped to the room root */
+.layout[data-room-theme='fight_club'] .boardTitle {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.layout[data-room-theme='fight_club'] .replyBlock {
+    border: 2px solid var(--room-border);
+    border-left-width: 8px;
+    border-radius: 18px 4px 18px 4px;
+}
+.layout[data-room-theme='vaporwave'] .boardTitle {
+    text-shadow: 0 0 10px var(--room-accent);
+}
+.layout[data-room-theme='vaporwave'] .replyBlock {
+    background: rgba(61, 18, 96, 0.7);
+}
+.layout[data-room-theme='corpo'] .replyBlock {
+    border-radius: 0;
+    border-left-width: 4px;
+    box-shadow: 0 1px 2px rgba(31, 35, 40, 0.08);
+}
+.layout[data-room-theme='corpo'] .header {
+    box-shadow: 0 1px 0 var(--room-border);
+}
+.layout[data-room-theme='crime_scene'] .header {
+    border-bottom: 10px solid transparent;
+    border-image: var(--room-pattern) 10;
+}
+.layout[data-room-theme='crime_scene'] .replyBlock {
+    border-color: var(--room-accent);
+    border-left-width: 10px;
+    border-radius: 0;
+}
+.layout[data-room-theme='win98'] .header {
+    background: var(--room-surface);
+    border-bottom: 2px solid var(--room-border);
+}
+.layout[data-room-theme='win98'] .boardTitle {
+    background: var(--room-accent);
+    color: #ffffff;
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 1.1rem;
+}
+.layout[data-room-theme='win98'] .replyBlock {
+    background: var(--room-surface);
+    border: 2px solid;
+    border-color: #ffffff #404040 #404040 #ffffff;
+    border-left: 2px solid;
+    border-radius: 0;
+    box-shadow: inset -1px -1px #0a0a0a;
+}
+.layout[data-room-theme='graveyard'] .replyBlock {
+    border-radius: 48px 48px 6px 6px;
+    background: linear-gradient(180deg, var(--room-surface), #1f231f);
+    border-left-width: 1px;
+    border-top-width: 3px;
+    padding-top: 1.5rem;
+}
+.layout[data-room-theme='graveyard'] .boardTitle {
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+}
+
+/* new room perks: promoted / sponsored / spotlight / system lines */
+.promotedPill,
+.sponsorPill {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--room-accent, #fa4d98);
+    color: var(--room-accent, #fa4d98);
+    font-size: 0.75rem;
+    text-transform: lowercase;
+    border-radius: 999px;
+}
+.sponsorLine {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: var(--room-muted, #888);
+}
+.spotlightBox {
+    border: 1px dashed var(--room-accent, #fa4d98);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 80%;
+    background: var(--room-surface, #151515);
+}
+.spotlightMeta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--room-muted, #888);
+    margin-bottom: 0.4rem;
+}
+.systemLine {
+    text-align: center;
+    color: var(--room-muted, #888);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin: 0.75rem auto;
+    max-width: 80%;
+}
+.actionRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0;
+}
+.actionBtn {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    border: 1px solid var(--room-accent, #fa4d98);
+    color: var(--room-accent, #fa4d98);
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.actionBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.countdown {
+    font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+    .layout {
+        background-attachment: scroll;
     }
 }

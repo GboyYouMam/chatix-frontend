@@ -5,6 +5,8 @@ import type {
     ShopEquipSlot,
     ShopMe,
     ShopPurchaseResponse,
+    ShopUseBody,
+    ShopUseResponse,
 } from './types.ts';
 
 export const shopApi = {
@@ -20,4 +22,7 @@ export const shopApi = {
         itemKey: string | null,
     ): Promise<{ equipped: ShopEquipped }> =>
         (await api.patch('/shop/equip', { slot, itemKey })).data,
+
+    use: async (body: ShopUseBody): Promise<ShopUseResponse> =>
+        (await api.post('/shop/use', body)).data,
 };

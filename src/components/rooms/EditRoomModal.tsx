@@ -1,16 +1,19 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './CreateRoomModal.module.css';
 import { useUpdateRoom } from '../../hooks/rooms/useUpdateRoom.ts';
 import { Modal } from '../ui/Modal.tsx';
 import { AdminConfirmDialog } from '../admin/AdminConfirmDialog.tsx';
+import { ThemePicker } from './ThemePicker.tsx';
+import { ROOM_THEME_KEYS, roomThemeOf } from '../../themes/roomThemes.ts';
 
 const updateRoomSchema = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
     topic: z.string().max(255).optional(),
     description: z.string().optional(),
+    theme: z.enum(ROOM_THEME_KEYS),
 });
 
 type UpdateRoomValues = z.infer<typeof updateRoomSchema>;
@@ -24,6 +27,7 @@ interface updateRoomModalProps {
         title: string;
         topic?: string;
         description?: string;
+        theme?: string | null;
     };
 }
 
@@ -39,6 +43,7 @@ export const UpdateRoomModal = ({
 
     const {
         register,
+        control,
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
@@ -48,6 +53,7 @@ export const UpdateRoomModal = ({
             title: initialData?.title || '',
             topic: initialData?.topic || '',
             description: initialData?.description || '',
+            theme: roomThemeOf(initialData?.theme),
         },
     });
 
@@ -112,6 +118,14 @@ export const UpdateRoomModal = ({
                             placeholder="Lore goes here..."
                         />
                     </div>
+
+                    <Controller
+                        name="theme"
+                        control={control}
+                        render={({ field }) => (
+                            <ThemePicker value={field.value} onChange={field.onChange} />
+                        )}
+                    />
 
                     <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                         {isSubmitting ? 'Updating...' : 'Update This Shi'}

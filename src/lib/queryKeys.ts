@@ -7,4 +7,5 @@ export const queryKeys = {
     profile: (username?: string) => ['profile', username] as const,
     shopCatalog: () => ['shop', 'catalog'] as const,
     shopMe: () => ['shop', 'me'] as const,
+    leaderboard: (week: string) => ['economy', 'leaderboard', week] as const,
 };

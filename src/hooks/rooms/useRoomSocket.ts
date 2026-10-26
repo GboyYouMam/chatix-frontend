@@ -80,11 +80,19 @@ export const useRoomSocket = (roomId: string | undefined) => {
             },
         );
 
+        newSocket.on(
+            'roomNotice',
+            ({ roomId: affectedRoomId, text }: { roomId: string; text: string }) => {
+                if (affectedRoomId === roomId) notify.info(text, `notice-${text}`);
+            },
+        );
+
         return () => {
             newSocket.off('connect', onConnect);
             newSocket.off('newMessage');
             newSocket.off('messageDeleted');
             newSocket.off('roomQuarantined');
+            newSocket.off('roomNotice');
             newSocket.off('connect_error', showSocketError);
             newSocket.off('error', showSocketError);
             newSocket.off('exception', showSocketError);

@@ -17,9 +17,11 @@ export interface MessageData {
     author?: UserData & {
         featuredAchievements?: string[];
         cosmetics?: MessageAuthorCosmetics | null;
+        renameCursed?: boolean;
     };
     attachments?: MessageAttachment[];
     authorId?: string;
+    kind?: 'user' | 'system';
 }
 
 export interface MessagePage {

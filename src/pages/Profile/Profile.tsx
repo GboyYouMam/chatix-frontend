@@ -16,6 +16,7 @@ import { ProfileTopActions } from '../../components/profile/ProfileTopActions.ts
 import { ProfileSidebar } from '../../components/profile/ProfileSidebar.tsx';
 import { ProfileCard } from '../../components/profile/ProfileCard.tsx';
 import { ProfileModerationBar } from '../../components/profile/ProfileModerationBar.tsx';
+import { ProfileTrollActions } from '../../components/rooms/PerkActions.tsx';
 import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
 import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
 import { WidgetGrid } from '../../components/widgets/WidgetGrid.tsx';
@@ -213,6 +214,12 @@ export const Profile = () => {
                         guestbook={commentsSection}
                     />
                     <ProfileModerationBar profileData={profileData} />
+                    {canInteractWithProfile && (
+                        <ProfileTrollActions
+                            targetUserId={profileData.id}
+                            targetName={profileData.username}
+                        />
+                    )}
                     <ProfileDescription description={profileData.description} />
                     {!guestbookInGrid && commentsSection}
                 </main>

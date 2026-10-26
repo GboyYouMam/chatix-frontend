@@ -11,14 +11,18 @@ import { formatDate } from '../../utils/date.ts';
 import { FeaturedMedals } from '../achievements/FeaturedMedals.tsx';
 import { resolveAccentColor } from '../shop/cosmeticPalette.ts';
 import { glyphFor } from '../cosmetics/profileCosmetics.ts';
+import { useAuthStore } from '../../store/authStore.ts';
+import { SpotlightButton } from './PerkActions.tsx';
 
 interface RoomRepliesProps {
+    roomId: string;
     messages: MessageData[];
     roomCreatorUsername: string;
 }
 
-export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps) => {
+export const RoomReplies = ({ messages, roomCreatorUsername, roomId }: RoomRepliesProps) => {
     const navigate = useNavigate();
+    const user = useAuthStore((state) => state.user);
 
     const messageRefs = useRef(new Map<string, HTMLDivElement>());
     const formattedDatesById = useMemo(() => {
@@ -57,7 +61,14 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
     return (
         <div className={styles.replies}>
             {messages.map((msg: MessageData) => {
+                if (msg.kind === 'system')
+                    return (
+                        <div key={msg.id} className={styles.systemLine}>
+                            {msg.cipherText}
+                        </div>
+                    );
                 const shortId = msg.id.slice(-6);
+                const isOwnMessage = Boolean(user) && msg.author?.username === user?.username;
 
                 return (
                     <div
@@ -98,6 +109,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                     </span>
                                 )}
                                 {msg.author?.username || 'Anon'}
+                                {msg.author?.renameCursed && ' (he/him/it/mogged)'}
                                 <FeaturedMedals keys={msg.author?.featuredAchievements} />
 
                                 {msg.author?.username === roomCreatorUsername && (
@@ -124,6 +136,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                             >
                                 №{shortId || 'ERROR'}
                             </span>
+                            {isOwnMessage && <SpotlightButton roomId={roomId} messageId={msg.id} />}
                         </div>
 
                         {msg.ipTag && <div className={styles.ipAddress}>[HOST: {msg.ipTag}]</div>}

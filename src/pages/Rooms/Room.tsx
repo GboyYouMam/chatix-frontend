@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
@@ -18,6 +19,9 @@ import { queryKeys } from '../../lib/queryKeys.ts';
 import { notify } from '../../lib/toast.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { StatusPill } from '../../components/rooms/StatusPill.tsx';
+import { SpotlightBanner } from '../../components/rooms/SpotlightBanner.tsx';
+import { RoomPerkActions } from '../../components/rooms/PerkActions.tsx';
+import { roomThemeOf, roomThemeStyle } from '../../themes/roomThemes.ts';
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
@@ -106,9 +110,14 @@ export const Room = () => {
     if (!room) return <div className={styles.error}>Room 404. It got nuked or never existed.</div>;
 
     const isRoomCreator = user?.id === room.creator.id || user?.username === room.creator.username;
+    const themeKey = roomThemeOf(room.theme);
 
     return (
-        <div className={styles.layout}>
+        <div
+            className={styles.layout}
+            data-room-theme={themeKey}
+            style={roomThemeStyle(themeKey) as CSSProperties}
+        >
             <header className={styles.header}>
                 <div className={styles.headerLeft}>
                     <button className={styles.backBtn} onClick={() => navigate(-1)}>
@@ -145,6 +154,11 @@ export const Room = () => {
             </header>
 
             <main className={styles.threadContainer}>
+                {room.sponsoredBy && (
+                    <p className={styles.sponsorLine}>sponsored by @{room.sponsoredBy.username}</p>
+                )}
+                <SpotlightBanner spotlight={room.spotlight} />
+                {isRoomCreator && <RoomPerkActions roomId={room.id} />}
                 {room.status && room.status !== 'active' && (
                     <div className={styles.error}>
                         <StatusPill status={room.status} />{' '}
@@ -166,7 +180,11 @@ export const Room = () => {
                         load older (if u dare)
                     </button>
                 )}
-                <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
+                <RoomReplies
+                    messages={messages}
+                    roomCreatorUsername={room.creator.username}
+                    roomId={room.id}
+                />
             </main>
 
             <RoomReplyForm
@@ -192,6 +210,7 @@ export const Room = () => {
                     initialData={{
                         title: room.title,
                         topic: room.topic ?? '',
+                        theme: room.theme,
                         description: room.description ?? '',
                     }}
                 />

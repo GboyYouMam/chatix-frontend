@@ -157,6 +157,13 @@ export const Rooms = () => {
                         mogger mart
                     </button>
                     <button
+                        type="button"
+                        className={styles.shopLink}
+                        onClick={() => navigate(PATH.economy.leaderboard)}
+                    >
+                        leaderboard
+                    </button>
+                    <button
                         className={styles.profileBtn}
                         aria-label="Profile"
                         onClick={handleGoToMyProfile}
