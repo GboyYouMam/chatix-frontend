@@ -1,23 +1,14 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import type { AdminRoom, PaginatedResponse } from '../../../api/admin/types.ts';
-import { roomApi } from '../../../api/rooms/rooms.service.ts';
+import { useQuery } from '@tanstack/react-query';
+import type { AdminRoom } from '../../../api/admin/types.ts';
+import { adminApi } from '../../../api/admin/admin.service.ts';
+import { adminKeys } from '../adminKeys.ts';
 
 export const useAdminRoom = (roomId?: string) => {
-    const queryClient = useQueryClient();
-
     const roomQuery = useQuery({
-        queryKey: ['admin', 'rooms', roomId],
-        queryFn: async () => {
-            const cachedRoom = queryClient
-                .getQueriesData<PaginatedResponse<AdminRoom>>({ queryKey: ['admin', 'rooms'] })
-                .flatMap(([, data]) => data?.items ?? [])
-                .find((room) => room.id === roomId);
-
-            if (cachedRoom) return cachedRoom;
-
-            return await roomApi.getRoomDetailed<AdminRoom>(roomId as string);
-        },
+        queryKey: adminKeys.room(roomId),
+        queryFn: () => adminApi.getRoom<AdminRoom>(roomId!),
         enabled: Boolean(roomId),
+        staleTime: 10_000,
     });
 
     return {

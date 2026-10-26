@@ -7,30 +7,32 @@ interface AdminListPaginationProps {
     onPageChange: (page: number) => void;
 }
 
-export const AdminListPagination = memo(({ pagination, onPageChange }: AdminListPaginationProps) => {
-    const totalPages = Math.max(pagination.totalPages, 1);
+export const AdminListPagination = memo(
+    ({ pagination, onPageChange }: AdminListPaginationProps) => {
+        const totalPages = Math.max(pagination.totalPages, 1);
 
-    return (
-        <div className={styles.paginationRow}>
-            <button
-                className={styles.paginationButton}
-                type="button"
-                disabled={pagination.page <= 1}
-                onClick={() => onPageChange(Math.max(pagination.page - 1, 1))}
-            >
-                Prev
-            </button>
-            <span className={styles.paginationText}>
-                {pagination.page} / {totalPages}
-            </span>
-            <button
-                className={styles.paginationButton}
-                type="button"
-                disabled={pagination.page >= pagination.totalPages}
-                onClick={() => onPageChange(pagination.page + 1)}
-            >
-                Next
-            </button>
-        </div>
-    );
-});
+        return (
+            <div className={styles.paginationRow}>
+                <button
+                    className={styles.paginationButton}
+                    type="button"
+                    disabled={pagination.page <= 1}
+                    onClick={() => onPageChange(Math.max(pagination.page - 1, 1))}
+                >
+                    prev
+                </button>
+                <span className={styles.paginationText}>
+                    {pagination.page} / {totalPages}
+                </span>
+                <button
+                    className={styles.paginationButton}
+                    type="button"
+                    disabled={pagination.page >= pagination.totalPages}
+                    onClick={() => onPageChange(pagination.page + 1)}
+                >
+                    next
+                </button>
+            </div>
+        );
+    },
+);

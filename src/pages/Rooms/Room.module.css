@@ -86,7 +86,7 @@
 }
 
 .username {
-    color: #4da6fa;
+    color: var(--primary);
     font-weight: bold;
     cursor: pointer;
 }
@@ -262,7 +262,9 @@
     background: transparent;
     color: #fa4d98;
     cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
 }
 
 .attachBtn:hover {
@@ -337,10 +339,12 @@
 }
 
 .attachmentDescription a {
-    color: #4da6fa;
+    color: var(--primary);
 }
 
-.loading, .error, .emptyThread {
+.loading,
+.error,
+.emptyThread {
     text-align: center;
     margin-top: 2rem;
     color: #888;
@@ -355,13 +359,15 @@
     border-top: 1px dashed #333;
     padding-top: 0.5rem;
     opacity: 0.6;
-    transition: opacity 0.2s ease, color 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        color 0.2s ease;
     cursor: default;
 }
 
 .ipAddress:hover {
     opacity: 1;
-    color: #4da6fa;
+    color: var(--primary);
 }
 
 /*for quoting*/
@@ -413,15 +419,27 @@
 }
 
 @keyframes flash {
-    0% { background-color: rgba(250, 77, 152, 0.4); }
-    100% { background-color: transparent; }
+    0% {
+        background-color: rgba(250, 77, 152, 0.4);
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 @keyframes socketScreamShake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    100% { transform: translateX(0); }
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-4px);
+    }
+    50% {
+        transform: translateX(4px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .moggedBadge {
@@ -435,9 +453,15 @@
 }
 
 @keyframes shamePulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .opBadge {

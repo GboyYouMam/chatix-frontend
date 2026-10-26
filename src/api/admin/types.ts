@@ -1,9 +1,14 @@
-import type { User, UserData } from '../auth/types.ts';
+import type { UserData } from '../auth/types.ts';
 import type { MessageData } from '../messages/types.ts';
 import type { RoomDetails } from '../rooms/types.ts';
 
-export const AdminRoomStatus = {active: "active", checkout: "checkout", banned: "banned", quarantined: "quarantined" } as const;
-export type AdminRoomStatus = (typeof AdminRoomStatus)[keyof typeof AdminRoomStatus]
+export const AdminRoomStatus = {
+    active: 'active',
+    checkout: 'checkout',
+    banned: 'banned',
+    quarantined: 'quarantined',
+} as const;
+export type AdminRoomStatus = (typeof AdminRoomStatus)[keyof typeof AdminRoomStatus];
 
 export interface PaginationMeta {
     page: number;
@@ -17,22 +22,32 @@ export interface PaginatedResponse<T> {
     pagination: PaginationMeta;
 }
 
-export interface AdminUser extends User {
+export interface AdminUser {
+    id: string;
+    username: string;
+    role: string;
+    pfpUrl?: string | null;
+    description?: string | null;
+    aura: number;
+    debt: number;
+    isClown: boolean;
+    isMogged: boolean;
+    adminGlazeMode: boolean;
+    canChangeProfile: boolean;
+    bannedUntil?: string | null;
+    yapCooldown?: string | null;
     createdAt?: string | Date;
-    created_at?: string | Date;
-    warnsCount?: number;
-    warns_count?: number;
+    activeWarningsCount?: number;
+    isAutoBanned?: boolean;
+    banReason?: string | null;
     forcedTitle?: string | null;
-    isMogged?: boolean;
-    is_mogged?: boolean;
-    admin_glaze_mode?: boolean;
-    can_change_profile?: boolean;
 }
 
 export interface AdminRoom extends RoomDetails {
     status?: AdminRoomStatus;
     quarantineReason?: string | null;
     quarantinedUntil?: string | Date | null;
+    messagesCount?: number;
 }
 
 export interface AdminMessage extends MessageData {
@@ -73,6 +88,7 @@ export interface UpdateModifiersPayload {
     bannedUntil?: string | null;
     yapCooldown?: string | null;
     forcedTitle?: string | null;
-    aura?: number;
-    debt?: number;
+    auraDelta?: number;
+    debtDelta?: number;
+    banReason?: string | null;
 }

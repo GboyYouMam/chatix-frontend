@@ -17,11 +17,25 @@ export const AdminForcedTitleControl = memo(({ selectedUser, onSave }: ForcedTit
                     className={styles.textInput}
                     value={forcedTitle}
                     onChange={(event) => setForcedTitle(event.target.value)}
-                    placeholder="Optional forced title"
+                    placeholder="optional forced title"
                 />
             </label>
-            <button className={styles.actionBtnSafe} type="button" onClick={() => onSave(forcedTitle)}>
-                Save forced title
+            <button
+                className={styles.actionBtnSafe}
+                type="button"
+                onClick={() => onSave(forcedTitle)}
+            >
+                save forced title
+            </button>
+            <button
+                className={styles.actionBtnSafe}
+                type="button"
+                onClick={() => {
+                    setForcedTitle('');
+                    onSave('');
+                }}
+            >
+                clear
             </button>
         </div>
     );

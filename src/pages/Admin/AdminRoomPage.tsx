@@ -85,6 +85,14 @@ export const AdminRoomPage = () => {
                         <span className={styles.sectionNote}>Visibility</span>
                         <strong>{room.publicity}</strong>
                     </div>
+                    <div className={styles.statCard}>
+                        <span className={styles.sectionNote}>Password</span>
+                        <strong>{room.hasPassword ? 'locked' : 'open'}</strong>
+                    </div>
+                    <div className={styles.statCard}>
+                        <span className={styles.sectionNote}>Messages</span>
+                        <strong>{room.messagesCount ?? 0}</strong>
+                    </div>
                 </div>
 
                 {room.description && <p className={styles.roomDescription}>{room.description}</p>}

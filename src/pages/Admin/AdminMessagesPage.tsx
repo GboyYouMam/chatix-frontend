@@ -7,13 +7,18 @@ import { AdminMessageActions } from '../../components/admin/actions/AdminMessage
 import { useAdminMessages } from '../../hooks/admin/useAdminMessages.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
+import { AdminConfirmDialog } from '../../components/admin/AdminConfirmDialog.tsx';
 
 export const AdminMessagesPage = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
     const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
-    const { messages, pagination, isFetching, deleteMessage } = useAdminMessages({ page, search });
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const { messages, pagination, isFetching, isInitialLoading, deleteMessage } = useAdminMessages({
+        page,
+        search,
+    });
     const deleteMessageMutate = deleteMessage.mutate;
     const selectedMessage = messages.find((message) => message.id === selectedMessageId) ?? null;
 
@@ -30,12 +35,8 @@ export const AdminMessagesPage = () => {
 
     const deleteSelectedMessage = useCallback(() => {
         if (!selectedMessage) return;
-        if (window.confirm('Delete this message?')) {
-            deleteMessageMutate(selectedMessage.id, {
-                onSuccess: () => setSelectedMessageId(null),
-            });
-        }
-    }, [deleteMessageMutate, selectedMessage]);
+        setConfirmDelete(true);
+    }, [selectedMessage]);
 
     return (
         <div className={styles.adminPageShell}>
@@ -44,7 +45,11 @@ export const AdminMessagesPage = () => {
                     <span className={styles.eyebrow}>Moderation</span>
                     <h1 className={styles.sidebarTitle}>Messages</h1>
                 </div>
-                <button className={styles.actionBtnSafe} type="button" onClick={() => navigate(PATH.admin.adminDashboard)}>
+                <button
+                    className={styles.actionBtnSafe}
+                    type="button"
+                    onClick={() => navigate(PATH.admin.adminDashboard)}
+                >
                     Back to Dashboard
                 </button>
             </header>
@@ -68,6 +73,8 @@ export const AdminMessagesPage = () => {
                         currentItems={messages}
                         selectedId={selectedMessageId}
                         onSelect={setSelectedMessageId}
+                        isFetching={isFetching}
+                        isInitialLoading={isInitialLoading}
                     />
 
                     <AdminListPagination pagination={pagination} onPageChange={changePage} />
@@ -76,7 +83,9 @@ export const AdminMessagesPage = () => {
                 <section className={styles.actionsPanel}>
                     <div className={styles.sectionHeader}>
                         <h2 className={styles.panelTitle}>Message Actions</h2>
-                        {selectedMessage && <span className={styles.sectionNote}>{selectedMessage.id}</span>}
+                        {selectedMessage && (
+                            <span className={styles.sectionNote}>{selectedMessage.id}</span>
+                        )}
                     </div>
 
                     {selectedMessage ? (
@@ -94,6 +103,22 @@ export const AdminMessagesPage = () => {
                     )}
                 </section>
             </main>
+            {confirmDelete && selectedMessage && (
+                <AdminConfirmDialog
+                    title="delete this message?"
+                    body="this message is gone for good."
+                    confirmLabel="do it"
+                    onCancel={() => setConfirmDelete(false)}
+                    onConfirm={() =>
+                        deleteMessageMutate(selectedMessage.id, {
+                            onSuccess: () => {
+                                setSelectedMessageId(null);
+                                setConfirmDelete(false);
+                            },
+                        })
+                    }
+                />
+            )}
         </div>
     );
 };

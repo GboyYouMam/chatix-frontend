@@ -16,27 +16,9 @@ export const ADMIN_TAB_KEYS = {
     AUDIT_LOGS: 'audit-logs',
 } as const;
 
-export type AdminTabKey = typeof ADMIN_TAB_KEYS[keyof typeof ADMIN_TAB_KEYS];
-
-export interface TabConfig {
-    key: AdminTabKey;
-    label: string;
-}
+export type AdminTabKey = (typeof ADMIN_TAB_KEYS)[keyof typeof ADMIN_TAB_KEYS];
 
 export type AdminEntity = AdminUser | AdminRoom | AdminMessage | AdminAuditLog;
-
-export interface SidebarProps {
-    activeTab: AdminTabKey;
-    currentItems: AdminEntity[];
-    isFetching: boolean;
-    pagination: PaginationMeta;
-    selectedId: string | null;
-    tabs: TabConfig[];
-    onActiveTabChange: (tab: AdminTabKey) => void;
-    onApplySearch: (search: string) => void;
-    onPageChange: (page: number) => void;
-    onSelect: (id: string) => void;
-}
 
 export interface AuditFeedProps {
     logs: AdminAuditLog[];
@@ -66,10 +48,11 @@ export interface TimeModifierControlProps {
 
 export interface WarningManagerProps {
     warnings: AdminWarning[];
+    activeWarningCount?: number;
     warningsLoading: boolean;
     warningsPage: number;
     warningsPagination: PaginationMeta;
-    onAddWarning: (reason: string) => void;
+    onAddWarning: (reason: string) => Promise<unknown>;
     onPageChange: (page: number) => void;
     onRevokeWarning: (warningId: string) => void;
 }
@@ -88,8 +71,4 @@ export interface RoomActionHandlers {
 export interface MessageActionsProps {
     selectedMessage: AdminMessage;
     onDelete: () => void;
-}
-
-export interface LogActionsProps {
-    selectedLog: AdminAuditLog;
 }

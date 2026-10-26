@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminAuditFeed } from '../../components/admin/AdminAuditFeed.tsx';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
@@ -7,7 +7,6 @@ import { AdminSidebarSearch } from '../../components/admin/AdminSidebarSearch.ts
 import type { AdminEntity, AdminTabKey } from '../../components/admin/adminPanelTypes.ts';
 import { useAdminAuditLogs } from '../../hooks/admin/useAdminAuditLogs.ts';
 import { useAdminRooms } from '../../hooks/admin/rooms/useAdminRooms.ts';
-import { useAdminSocket } from '../../hooks/admin/useAdminSocket.ts';
 import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import type { PaginationMeta } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
@@ -18,6 +17,7 @@ interface AdminDashboardListProps {
     activeTab: Extract<AdminTabKey, 'users' | 'rooms'>;
     currentItems: AdminEntity[];
     isFetching: boolean;
+    isInitialLoading: boolean;
     pagination: PaginationMeta;
     onApplySearch: (search: string) => void;
     onPageChange: (page: number) => void;
@@ -29,12 +29,13 @@ const AdminDashboardList = ({
     activeTab,
     currentItems,
     isFetching,
+    isInitialLoading,
     pagination,
     onApplySearch,
     onPageChange,
     onSelect,
 }: AdminDashboardListProps) => (
-    <section className={styles.listPanel}>
+    <section className={styles.listPanel} id={activeTab}>
         <div className={styles.listPanelHeader}>
             <div>
                 <span className={styles.eyebrow}>{activeTab}</span>
@@ -52,6 +53,8 @@ const AdminDashboardList = ({
             currentItems={currentItems}
             selectedId={null}
             onSelect={onSelect}
+            isFetching={isFetching}
+            isInitialLoading={isInitialLoading}
         />
 
         <AdminListPagination pagination={pagination} onPageChange={onPageChange} />
@@ -65,20 +68,9 @@ export const AdminDashboard = () => {
     const [usersSearch, setUsersSearch] = useState('');
     const [roomsSearch, setRoomsSearch] = useState('');
 
-    const { logs: liveLogs } = useAdminSocket();
     const usersState = useAdminUsers({ page: usersPage, search: usersSearch });
     const roomsState = useAdminRooms({ page: roomsPage, search: roomsSearch });
     const { auditLogs } = useAdminAuditLogs({ page: 1, limit: 25, search: '' });
-
-    const terminalLogs = useMemo(() => {
-        const seenLogIds = new Set<string>();
-
-        return [...liveLogs, ...auditLogs].filter((log) => {
-            if (seenLogIds.has(log.id)) return false;
-            seenLogIds.add(log.id);
-            return true;
-        });
-    }, [liveLogs, auditLogs]);
 
     const applyUsersSearch = useCallback((nextSearch: string) => {
         setUsersPage(1);
@@ -120,7 +112,7 @@ export const AdminDashboard = () => {
                 </button>
             </header>
 
-            <AdminAuditFeed logs={terminalLogs} />
+            <AdminAuditFeed logs={auditLogs} />
 
             <div className={styles.dashboardGrid}>
                 <AdminDashboardList
@@ -128,6 +120,7 @@ export const AdminDashboard = () => {
                     activeTab="users"
                     currentItems={usersState.users}
                     isFetching={usersState.isFetching}
+                    isInitialLoading={usersState.isInitialLoading}
                     pagination={usersState.pagination}
                     onApplySearch={applyUsersSearch}
                     onPageChange={setUsersPage}
@@ -139,6 +132,7 @@ export const AdminDashboard = () => {
                     activeTab="rooms"
                     currentItems={roomsState.rooms}
                     isFetching={roomsState.isFetching}
+                    isInitialLoading={roomsState.isInitialLoading}
                     pagination={roomsState.pagination}
                     onApplySearch={applyRoomsSearch}
                     onPageChange={setRoomsPage}
