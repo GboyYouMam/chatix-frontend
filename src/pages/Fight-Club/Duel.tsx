@@ -1,12 +1,13 @@
 import { DuelCommandDeck } from '../../components/fight-club/DuelCommandDeck.tsx';
 import { DuelPlayerPanel } from '../../components/fight-club/DuelPlayerPanel.tsx';
 import { DuelResultOverlay } from '../../components/fight-club/DuelResultOverlay.tsx';
+import { QtePad } from '../../components/fight-club/QtePad.tsx';
 import { useFightDuel } from '../../hooks/fight-club/useFightDuel.ts';
 import duelBackdrop from '../../assets/fight-duel-face.png';
 import styles from './Duel.module.css';
 
 export const Duel = () => {
-    const { duel, players, stakeType, stakeAmount, goLobby } = useFightDuel();
+    const { duel, players, stakeType, stakeAmount, goLobby, hit } = useFightDuel();
 
     return (
         <div className={styles.layout}>
@@ -33,6 +34,12 @@ export const Duel = () => {
                     currentKey={duel.currentKey}
                     isStunned={duel.isStunned}
                     lastHit={duel.lastHit}
+                />
+                <QtePad
+                    promptId={duel.promptId}
+                    correct={duel.currentKey}
+                    disabled={duel.status !== 'fighting' || !duel.promptId}
+                    onPress={hit}
                 />
                 <DuelPlayerPanel {...players.enemy} align="right" />
             </main>

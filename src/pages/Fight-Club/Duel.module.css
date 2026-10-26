@@ -68,6 +68,16 @@
     padding: 1.25rem;
 }
 
+.qtePad {
+    display: none;
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.qtePad p { color: var(--muted); }
+.qtePad > div { display: grid; grid-template-columns: repeat(3, minmax(56px, 1fr)); gap: 0.5rem; }
+.qtePad button { min-height: 56px; border: 1px solid var(--primary); border-radius: 8px; background: var(--surface); color: var(--text); font: 800 1.25rem 'Courier New', monospace; }
+
 .playerRight {
     text-align: right;
 }
@@ -226,6 +236,10 @@
     .playerRight .comboRow {
         justify-content: flex-start;
     }
+}
+
+@media (pointer: coarse) {
+    .qtePad { display: block; }
 }
 
 /* Fight Club polish */
