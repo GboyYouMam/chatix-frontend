@@ -8,7 +8,6 @@ export const getAttachmentSelectionError = (files: { name: string; size: number 
     return oversized ? `${oversized.name} is larger than 10 MB.` : null;
 };
 
-export const formatAttachmentSize = (bytes: number) =>
-    bytes < 1024 * 1024
-        ? `${Math.max(1, Math.ceil(bytes / 1024))} KB`
-        : `${Number((bytes / 1024 / 1024).toFixed(1))} MB`;
+export const formatAttachmentSize = (bytes: number) => bytes < 1024 * 1024
+    ? `${Math.max(1, Math.ceil(bytes / 1024))} KB`
+    : `${Number((bytes / 1024 / 1024).toFixed(1))} MB`;
