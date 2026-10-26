@@ -2,8 +2,9 @@
     display: flex;
     background-color: var(--surface);
     border-radius: 12px;
-    padding: 3rem;
-    gap: 3rem;
+    padding: 2.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
     align-items: flex-start;
 }
 
@@ -28,7 +29,7 @@
 }
 
 .userInfo {
-    flex-grow: 1;
+    flex: 1 1 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,6 +51,7 @@
     font-size: 3rem;
     margin: 0 0 0.5rem 0;
     letter-spacing: 2px;
+    overflow-wrap: anywhere;
 }
 
 .forcedTitle {
@@ -70,7 +72,9 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 1rem;
-    min-width: 220px;
+    flex: 1 1 220px;
+    max-width: 320px;
+    margin-left: auto;
 }
 
 .date {
