@@ -7,6 +7,8 @@ import { BanGate } from './components/BanGate.tsx';
 import { Banned } from './pages/Banned/Banned.tsx';
 import { useUserSocket } from './hooks/useUserSocket.ts';
 import { AdminLayout } from './components/admin/AdminLayout.tsx';
+import { useEffect } from 'react';
+import { startSessionSync } from './lib/sessionSync.ts';
 
 const router = createBrowserRouter([
     {
@@ -127,6 +129,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    useEffect(() => startSessionSync(), []);
     useSessionBootstrap();
     useUserSocket();
     return <RouterProvider router={router} />;

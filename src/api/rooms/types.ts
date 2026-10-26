@@ -9,6 +9,8 @@ export interface CreateRoomDTO {
 
 export type UpdateRoomDTO = Partial<CreateRoomDTO>;
 
+export type RoomStatus = 'active' | 'checkout' | 'quarantined' | 'banned' | 'rejected';
+
 export interface RoomDetails {
     id: string;
     title: string;
@@ -16,6 +18,8 @@ export interface RoomDetails {
     description?: string | null;
     publicity: 'public' | 'private';
     hasPassword: boolean;
+    status?: RoomStatus;
+    statusReason?: string | null;
     createdAt: string | Date;
     creator: UserData;
 }

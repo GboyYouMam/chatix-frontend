@@ -1,5 +1,6 @@
 import styles from './ProfileModerationBar.module.css';
 import type { ProfileData } from '../../api/users/types.ts';
+import { formatDate } from '../../utils/date.ts';
 
 interface ProfileModerationBarProps {
     profileData: ProfileData;
@@ -8,10 +9,7 @@ interface ProfileModerationBarProps {
 const formatModerationDate = (value?: string | null) => {
     if (!value) return null;
 
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) return value;
-
-    return parsed.toLocaleString('uk-UA');
+    return Number.isNaN(new Date(value).getTime()) ? value : formatDate(value);
 };
 
 const getWarnings = (profileData: ProfileData): string[] => {
@@ -36,21 +34,27 @@ export const ProfileModerationBar = ({ profileData }: ProfileModerationBarProps)
             <div className={styles.moderationSummary}>
                 <div className={styles.moderationItem}>
                     <span className={styles.moderationLabel}>YAP COOLDOWN:</span>
-                    <span className={`${styles.moderationValue} ${yapCooldown ? styles.warningText : styles.mutedText}`}>
+                    <span
+                        className={`${styles.moderationValue} ${yapCooldown ? styles.warningText : styles.mutedText}`}
+                    >
                         {yapCooldown ?? 'NONE'}
                     </span>
                 </div>
                 <div className={styles.divider}></div>
                 <div className={styles.moderationItem}>
                     <span className={styles.moderationLabel}>BANNED UNTIL:</span>
-                    <span className={`${styles.moderationValue} ${bannedUntil ? styles.errorText : styles.mutedText}`}>
+                    <span
+                        className={`${styles.moderationValue} ${bannedUntil ? styles.errorText : styles.mutedText}`}
+                    >
                         {bannedUntil ?? 'CLEAN'}
                     </span>
                 </div>
                 <div className={styles.divider}></div>
                 <div className={styles.moderationItem}>
                     <span className={styles.moderationLabel}>WARNS:</span>
-                    <span className={`${styles.moderationValue} ${warnsCount > 0 ? styles.warningText : styles.mutedText}`}>
+                    <span
+                        className={`${styles.moderationValue} ${warnsCount > 0 ? styles.warningText : styles.mutedText}`}
+                    >
                         {warnsCount}
                     </span>
                 </div>

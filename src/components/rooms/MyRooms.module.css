@@ -1,0 +1,32 @@
+.section {
+    margin: 0 0 24px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+}
+.section h2 {
+    margin: 0 0 12px;
+    color: var(--primary);
+    font:
+        20px 'Times New Roman',
+        serif;
+    letter-spacing: 2px;
+}
+.list {
+    display: grid;
+    gap: 10px;
+}
+.room {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.room a {
+    color: var(--text);
+}
+.room p {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--muted);
+}

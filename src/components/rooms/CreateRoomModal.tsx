@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './CreateRoomModal.module.css';
 import { PasswordInput } from './PasswordInput.tsx';
 import { useCreateRoom } from '../../hooks/rooms/useCreateRoom.ts';
+import { Modal } from '../ui/Modal.tsx';
 
 const createRoomScheme = z
     .object({
@@ -44,8 +45,6 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
         },
     });
 
-    if (!isOpen) return null;
-
     const onSubmit = (data: CreateRoomValues) => {
         const payload = { ...data };
 
@@ -63,10 +62,15 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
     };
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose}>
-                    ✕
+        <Modal isOpen={isOpen} onClose={onClose} label="create room">
+            <div className={styles.modal}>
+                <button
+                    type="button"
+                    className={styles.closeBtn}
+                    onClick={onClose}
+                    aria-label="close modal"
+                >
+                    ×
                 </button>
 
                 <h2 className={styles.title}>CREATE NEW ROOM</h2>
@@ -131,6 +135,6 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
                     </form>
                 </FormProvider>
             </div>
-        </div>
+        </Modal>
     );
 };

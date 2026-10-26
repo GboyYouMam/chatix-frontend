@@ -1,4 +1,5 @@
 import styles from './ProfileCard.module.css';
+import { formatDate } from '../../utils/date.ts';
 import type { ProfileData } from '../../api/users/types.ts';
 
 interface ProfileCardProps {
@@ -32,7 +33,7 @@ export const ProfileCard = ({ profileData }: ProfileCardProps) => {
 
             <div className={styles.statsCol}>
                 <span className={styles.date}>
-                    when u came here: {new Date(profileData.created_at).toLocaleDateString('uk-UA')}
+                    when u came here: {formatDate(profileData.created_at)}
                 </span>
                 <div className={styles.featuresBox}>
                     <div className={styles.featureItem}>
@@ -50,7 +51,7 @@ export const ProfileCard = ({ profileData }: ProfileCardProps) => {
                     <div className={styles.featureItem}>
                         <span>DEBT:</span>
                         <span className={profileData.debt > 0 ? styles.errorText : ''}>
-                            {profileData.debt}$
+                            {profileData.debt} debt
                         </span>
                     </div>
                     <div className={styles.featureItem}>

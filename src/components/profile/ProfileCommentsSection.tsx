@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { notify } from '../../lib/toast';
+import { formatDate } from '../../utils/date.ts';
 import styles from './ProfileCommentsSection.module.css';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileComment } from '../../api/users/types.ts';
@@ -36,8 +37,7 @@ export const ProfileCommentsSection = ({
             setCommentBody('');
             notify.success('comment added');
         } catch (error) {
-            console.error('Failed to add profile comment:', error);
-            notify.error('could not add comment');
+            notify.error(error);
         } finally {
             setIsCommentSubmitting(false);
         }
@@ -88,9 +88,7 @@ export const ProfileCommentsSection = ({
                                 >
                                     {comment.author?.username ?? 'unknown'}
                                 </button>
-                                <span>
-                                    {new Date(comment.createdAt).toLocaleDateString('uk-UA')}
-                                </span>
+                                <span>{formatDate(comment.createdAt)}</span>
                             </div>
                             <p className={styles.commentBody}>{comment.body}</p>
                         </article>

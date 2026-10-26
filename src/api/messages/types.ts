@@ -11,9 +11,10 @@ export interface MessageAttachment {
 export interface MessageData {
     id: string;
     cipherText?: string;
-    ipAddress?: string;
+    ipTag?: string;
+    isDeleted?: boolean;
     createdAt: string | Date;
-    author?: UserData;
+    author?: UserData & { featuredAchievements?: string[] };
     attachments?: MessageAttachment[];
     authorId?: string;
 }

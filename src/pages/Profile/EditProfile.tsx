@@ -24,6 +24,11 @@ export const EditProfile = () => {
     const [rightPreview, setRightPreview] = useState<string | null>(user?.right_banner_url || null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [vibePlaceholder] = useState(() =>
+        Math.random() < 1 / 40
+            ? "first rule of this profile: we don't talk about the basement"
+            : 'e.g. chill af / unbothered',
+    );
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const upperInputRef = useRef<HTMLInputElement>(null);
@@ -48,8 +53,8 @@ export const EditProfile = () => {
 
         try {
             const formData = new FormData();
-            if (vibe) formData.append('vibe', vibe);
-            if (description) formData.append('description', description);
+            formData.append('vibe', vibe);
+            formData.append('description', description);
 
             if (file) formData.append('file', file);
             if (upperBanner) formData.append('upper_banner', upperBanner);
@@ -65,8 +70,7 @@ export const EditProfile = () => {
             );
             notify.success('profile visuals ascended');
         } catch (error) {
-            console.error('Failed to update profile:', error);
-            notify.error('Could not update profile');
+            notify.error(error);
         } finally {
             setIsLoading(false);
         }
@@ -190,9 +194,10 @@ export const EditProfile = () => {
                             type="text"
                             value={vibe}
                             onChange={(e) => setVibe(e.target.value)}
-                            placeholder="e.g. chill af / unbothered"
+                            placeholder={vibePlaceholder}
                             maxLength={50}
                         />
+                        <span>{vibe.length}/50</span>
                     </div>
 
                     <div className={styles.inputGroup}>
@@ -202,8 +207,9 @@ export const EditProfile = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="tell them about u kiddo"
                             rows={5}
-                            maxLength={300}
+                            maxLength={500}
                         />
+                        <span>{description.length}/500</span>
                     </div>
 
                     <button type="submit" className={styles.saveBtn} disabled={isLoading}>

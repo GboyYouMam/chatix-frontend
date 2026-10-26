@@ -22,9 +22,13 @@ export const useRooms = () => {
     const searchRoomByName = useMutation({
         mutationFn: (roomName: string) => roomApi.findRoomByName(roomName),
         onSuccess: (data) => {
-            console.log(data);
-            notify.success('Room found! U dam lucky');
-            navigate(PATH.rooms.href.room(data.id));
+            if (data.publicity === 'private') {
+                notify.info('private. know the password or leave.');
+                navigate(PATH.rooms.href.joinRoom(data.id));
+            } else {
+                notify.success('room found. u got lucky.');
+                navigate(PATH.rooms.href.room(data.id));
+            }
         },
         onError: () => {
             notify.error('Room not found. Maybe it got nuked? Or u just spell it wrong');

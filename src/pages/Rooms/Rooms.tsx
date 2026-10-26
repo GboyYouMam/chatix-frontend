@@ -13,6 +13,8 @@ import { type RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.ts';
 import { notify } from '../../lib/toast.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
+import { MyRooms } from '../../components/rooms/MyRooms.tsx';
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -25,6 +27,9 @@ export const Rooms = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isGlitching, setIsGlitching] = useState(false);
+    const [searchPlaceholder] = useState(() =>
+        Math.random() < 1 / 40 ? 'ask nobody about rule #1' : 'find your place',
+    );
     const tripleClick = useRef(createTripleClickDetector());
 
     const triggerEasterEgg = () => {
@@ -38,8 +43,13 @@ export const Rooms = () => {
         window.setTimeout(() => navigate(PATH.fightClub.lobby), 600);
     };
 
-    const { data: rooms, isLoading } = useQuery({
-        queryKey: ['rooms', roomType],
+    const {
+        data: rooms,
+        isLoading,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: queryKeys.rooms(roomType),
         queryFn: () => roomApi.getRooms(roomType),
     });
 
@@ -69,6 +79,14 @@ export const Rooms = () => {
     };
 
     const renderGridContent = () => {
+        if (isError) {
+            return (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
+                    the lobby is on fire. <button onClick={() => void refetch()}>retry</button>
+                </div>
+            );
+        }
+
         if (isLoading) {
             return (
                 <div
@@ -153,6 +171,7 @@ export const Rooms = () => {
 
             <main className={styles.mainContent}>
                 <h2 className={styles.subtitle}>if u in debt or just a chud ts for you</h2>
+                {token && <MyRooms />}
 
                 <div className={styles.actionContainer}>
                     <button className={styles.addBtn} onClick={() => setIsCreateModalOpen(true)}>
@@ -176,7 +195,7 @@ export const Rooms = () => {
                         <input
                             type="text"
                             className={styles.searchInput}
-                            placeholder="find your place"
+                            placeholder={searchPlaceholder}
                             value={searchQuery}
                             onChange={(e) => {
                                 const query = e.target.value;
@@ -208,7 +227,7 @@ export const Rooms = () => {
             <CreateRoomModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => queryClient.invalidateQueries({ queryKey: ['rooms'] })}
+                onSuccess={() => queryClient.invalidateQueries({ queryKey: queryKeys.rooms() })}
             />
         </div>
     );

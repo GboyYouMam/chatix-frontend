@@ -4,6 +4,7 @@ import styles from '../../pages/Rooms/Room.module.css';
 import type { RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { useMemo } from 'react';
+import { formatDate } from '../../utils/date.ts';
 
 interface RoomOpPostProps {
     room: RoomDetails;
@@ -14,7 +15,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
     const navigate = useNavigate();
 
     const formattedDate = useMemo(() => {
-        return new Date(room.createdAt).toLocaleDateString('uk-UA');
+        return formatDate(room.createdAt);
     }, [room.createdAt]);
 
     const handleCopyInviteLink = async () => {
@@ -41,7 +42,6 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
                     <span className={styles.moggedBadge}> [MOGGED]</span>
                 )}
                 <span className={styles.date}>{formattedDate}</span>
-                <span className={styles.postId}>№OP_{room.id.slice(-6)}</span>
             </div>
             <div className={styles.postBody}>
                 {room.description || 'No description provided by OP.'}

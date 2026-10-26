@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
@@ -14,6 +14,10 @@ import { RoomReplyForm } from '../../components/rooms/RoomReplyForm';
 import { RoomSocketErrorScream } from '../../components/rooms/RoomSocketErrorScream.tsx';
 
 import { useRoomSocket } from '../../hooks/rooms/useRoomSocket.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
+import { notify } from '../../lib/toast.ts';
+import { PATH } from '../../utils/pathList.ts';
+import { StatusPill } from '../../components/rooms/StatusPill.tsx';
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
@@ -29,8 +33,9 @@ export const Room = () => {
         data: room,
         isLoading: roomLoading,
         refetch: refetchRoom,
+        error: roomError,
     } = useQuery({
-        queryKey: ['room', id],
+        queryKey: queryKeys.room(id),
         queryFn: () => roomApi.getRoomDetailed(id!),
         enabled: !!id,
     });
@@ -38,17 +43,28 @@ export const Room = () => {
     const {
         data: messagePages,
         isLoading: messagesLoading,
+        error: messagesError,
+        refetch: refetchMessages,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
     } = useInfiniteQuery({
-        queryKey: ['messages', id],
+        queryKey: queryKeys.messages(id),
         queryFn: ({ pageParam }) =>
             messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
         initialPageParam: null as string | null,
         getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
+    useEffect(() => {
+        if (
+            messagesError &&
+            (messagesError as { response?: { status?: number } })?.response?.status === 403
+        ) {
+            notify.info('private. know the password or leave.');
+            navigate(PATH.rooms.href.joinRoom(id!));
+        }
+    }, [messagesError, navigate, id]);
     useLayoutEffect(() => {
         if (previousScroll.current) {
             window.scrollTo(
@@ -73,6 +89,18 @@ export const Room = () => {
             .reverse()
             .flatMap((page) => page.items) ?? [];
 
+    if (roomError)
+        return (
+            <div className={styles.error}>
+                the room is cooked. <button onClick={() => void refetchRoom()}>retry</button>
+            </div>
+        );
+    if (messagesError)
+        return (
+            <div className={styles.error}>
+                the thread is on fire. <button onClick={() => void refetchMessages()}>retry</button>
+            </div>
+        );
     if (roomLoading || messagesLoading)
         return <div className={styles.loading}>Loading thread...</div>;
     if (!room) return <div className={styles.error}>Room 404. It got nuked or never existed.</div>;
@@ -84,7 +112,7 @@ export const Room = () => {
             <header className={styles.header}>
                 <div className={styles.headerLeft}>
                     <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                        {'<< back to lobby'}
+                        {'← back to lobby'}
                     </button>
                     <h1 className={styles.boardTitle}>
                         /{room.publicity}/ — {room.title}
@@ -95,6 +123,7 @@ export const Room = () => {
                     <button
                         className={styles.editRoomBtn}
                         onClick={() => setIsEditModalOpen(true)}
+                        aria-label="edit room"
                         title="Edit Room"
                     >
                         <svg
@@ -116,6 +145,17 @@ export const Room = () => {
             </header>
 
             <main className={styles.threadContainer}>
+                {room.status && room.status !== 'active' && (
+                    <div className={styles.error}>
+                        <StatusPill status={room.status} />{' '}
+                        {room.status === 'checkout' && 'this room is under review. replies paused.'}
+                        {room.status === 'quarantined' &&
+                            (room.statusReason || 'this room is quarantined. replies paused.')}
+                        {room.status === 'banned' && 'this room is banned.'}
+                        {room.status === 'rejected' &&
+                            (room.statusReason || 'this room got rejected.')}
+                    </div>
+                )}
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
                 {hasNextPage && (
                     <button
@@ -129,7 +169,16 @@ export const Room = () => {
                 <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
             </main>
 
-            <RoomReplyForm roomId={id!} authorId={user?.id} onSendMessage={sendMessage} />
+            <RoomReplyForm
+                roomId={id!}
+                authorId={user?.id}
+                onSendMessage={sendMessage}
+                lockedReason={
+                    room.status && room.status !== 'active'
+                        ? 'replies paused. read the room status, chud.'
+                        : undefined
+                }
+            />
             {socketError && (
                 <RoomSocketErrorScream message={socketError} onClose={clearSocketError} />
             )}

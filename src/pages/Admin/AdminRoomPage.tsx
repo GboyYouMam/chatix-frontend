@@ -104,7 +104,6 @@ export const AdminRoomPage = () => {
             <main className={styles.actionsPanel}>
                 <div className={styles.sectionHeader}>
                     <h2 className={styles.panelTitle}>Actions</h2>
-                    <span className={styles.sectionNote}>{room.id}</span>
                 </div>
                 <AdminRoomActions selectedRoom={room} actions={actions} />
             </main>

@@ -24,7 +24,7 @@ export const useAuth = () => {
                 navigate(PATH.rooms.rooms);
             } catch {
                 logoutStore();
-                notify.error('Failed to parse your profile profile.');
+                notify.error('failed to load your profile, chud.');
             }
         },
         onError: (
@@ -36,8 +36,10 @@ export const useAuth = () => {
             }>,
         ) => {
             if (error.response?.data.code === 'BANNED') return;
-            const msg = error.response?.data?.message || 'Invalid credentials, chud';
-            notify.error(msg);
+            if (error.response?.status === 401) notify.error('wrong username or password.');
+            else if (!error.response || error.response.status >= 500)
+                notify.error("can't reach the server. try again, chud.");
+            else notify.error(error.response.data?.message || 'login failed, chud.');
         },
     });
 

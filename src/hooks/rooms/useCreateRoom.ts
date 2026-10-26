@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service.ts';
 import { notify } from '../../lib/toast';
 import type { CreateRoomDTO } from '../../api/rooms/types.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 export const useCreateRoom = () => {
     const queryClient = useQueryClient();
@@ -9,11 +10,17 @@ export const useCreateRoom = () => {
     const createRoom = useMutation({
         mutationFn: (data: CreateRoomDTO) => roomApi.createRoom(data),
         onSuccess: () => {
-            notify.success('Room created. Go yap about it.');
-            queryClient.invalidateQueries({ queryKey: ['rooms'] });
+            notify.success('room sent to the mods. u have to wait son 😭');
+            queryClient.invalidateQueries({ queryKey: queryKeys.rooms() });
+            queryClient.invalidateQueries({ queryKey: queryKeys.myRooms() });
         },
         onError: (error) => {
-            notify.error(error);
+            if (
+                (error as { response?: { status?: number; data?: { code?: string } } }).response
+                    ?.data?.code === 'ROOM_NAME_TAKEN'
+            )
+                notify.error('this name is taken. be original, chud.');
+            else notify.error(error);
         },
     });
 
