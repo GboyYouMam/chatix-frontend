@@ -165,7 +165,7 @@ export const DripEditor = () => {
             <p className={styles.note}>
                 every pick saves instantly. locked stuff needs aura first.{' '}
                 <Link to={PATH.shop.shop} className={styles.shopLink}>
-                    open the soap market
+                    open the mogger mart
                 </Link>
             </p>
 

@@ -108,8 +108,8 @@ export const Shop = () => {
             </header>
 
             <section className={styles.hero}>
-                <p className={styles.eyebrow}>aura farm checkout</p>
-                <h1 className={styles.title}>THE SOAP MARKET</h1>
+                <p className={styles.eyebrow}>est. hypergamy era</p>
+                <h1 className={styles.title}>MOGGER MART</h1>
                 <p className={styles.tagline}>
                     nothing here is refundable except ur dignity. buy stuff. look cool. be
                     insufferable.

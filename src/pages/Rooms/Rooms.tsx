@@ -154,7 +154,7 @@ export const Rooms = () => {
                         className={styles.shopLink}
                         onClick={() => navigate(PATH.shop.shop)}
                     >
-                        soap market
+                        mogger mart
                     </button>
                     <button
                         className={styles.profileBtn}
