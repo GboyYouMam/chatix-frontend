@@ -35,7 +35,7 @@ export const PerkButton = ({
         if (hideWhenEmpty) return null;
         return (
             <Link className={styles.actionBtn} to={PATH.shop.shop}>
-                {label}: buy in the mogger mart
+                {label}: buy in the laryok shop
             </Link>
         );
     }

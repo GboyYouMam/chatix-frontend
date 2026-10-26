@@ -39,8 +39,8 @@ export const ThemePicker = ({ value, onChange }: ThemePickerProps) => {
             const price = priceOf(key);
             notify.info(
                 price
-                    ? `locked. ${formatPrice(price)} at the mogger mart.`
-                    : 'locked. go buy it at the mogger mart.',
+                    ? `locked. ${formatPrice(price)} at the laryok shop.`
+                    : 'locked. go buy it at the laryok shop.',
                 `theme-locked-${key}`,
             );
             return;
@@ -103,7 +103,7 @@ export const ThemePicker = ({ value, onChange }: ThemePickerProps) => {
                 {value === 'basement' ? 'basement is free. ' : ''}
                 locked themes come from the{' '}
                 <Link to={PATH.shop.shop} className={styles.shopLink}>
-                    mogger mart
+                    laryok shop
                 </Link>
                 .
             </p>

@@ -6,7 +6,7 @@ export const MART_TAGLINES: readonly string[] = [
     'every purchase raises your market value by 0.0001%. trust.',
     'invest in drip. the algorithm (and hypergamy) is watching.',
     'your aura is a vibe. hypergamy is a spreadsheet.',
-    'mogged by a shelf. welcome to the mogger mart.',
+    'mogged by a shelf. welcome to the laryok shop.',
     "hypergamy isn't a personality. buy one.",
     'the market is open. the discourse is open. ur wallet is not.',
     'nobody in the comments asked for ur aura count. buy anyway.',
