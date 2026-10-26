@@ -73,6 +73,7 @@
 }
 
 .mainContent {
+    box-sizing: border-box;
     flex: 1;
     max-width: 1400px;
     margin: 0 auto;
