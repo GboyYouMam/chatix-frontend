@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
 import clsx from 'clsx';
@@ -14,14 +14,15 @@ import { PATH } from "../../utils/pathList.ts";
 
 export const Rooms = () => {
     const navigate = useNavigate();
-    const { user } = useAuthStore();
+    const user = useAuthStore((state) => state.user);
+    const queryClient = useQueryClient();
     const { searchRoomByName } = useRooms();
 
     const [roomType, setRoomType] = useState<'public' | 'private'>('public');
     const [searchQuery, setSearchQuery] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    const { data: rooms, isLoading, refetch } = useQuery({
+    const { data: rooms, isLoading } = useQuery({
         queryKey: ['rooms', roomType],
         queryFn: () => roomApi.getRooms(roomType),
     });
@@ -147,7 +148,7 @@ export const Rooms = () => {
             <CreateRoomModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => refetch()}
+                onSuccess={() => queryClient.invalidateQueries({ queryKey: ['rooms'] })}
             />
         </div>
     );
