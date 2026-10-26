@@ -11,9 +11,30 @@ export function auditSentence(item: AdminAuditLog) {
     let detail: string | null = null;
 
     switch (action) {
-        case 'user.ban':
+        case 'user.ban': {
             verb = 'banned';
+            const banUntil = after?.bannedUntil;
+            const startedAt = before?.bannedUntil ?? item.createdAt;
+            const durationMs =
+                typeof banUntil === 'string'
+                    ? new Date(banUntil).getTime() - new Date(startedAt as string | Date).getTime()
+                    : NaN;
+            const reason = typeof after?.banReason === 'string' ? after.banReason : details.reason;
+            const minutes = Math.round(durationMs / 60_000);
+            const duration = Number.isFinite(minutes)
+                ? minutes >= 60
+                    ? `${Math.round(minutes / 60)} hr`
+                    : `${minutes} min`
+                : null;
+            detail =
+                [
+                    duration ? `for ${duration}` : null,
+                    typeof reason === 'string' ? `“${reason}”` : null,
+                ]
+                    .filter(Boolean)
+                    .join(' — ') || null;
             break;
+        }
         case 'user.unban':
             verb = 'unbanned';
             break;

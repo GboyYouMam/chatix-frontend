@@ -32,7 +32,7 @@ test('formats contract audit actions without exposing ids', () => {
             actor: 'jes95us',
             verb: 'banned',
             target: 'tester777',
-            detail: null,
+            detail: 'for 3 min — “ur eyeline”',
         },
     );
     assert.equal(
