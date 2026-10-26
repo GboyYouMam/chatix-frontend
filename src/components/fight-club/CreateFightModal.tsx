@@ -2,6 +2,7 @@ import { memo, useCallback, useState } from 'react';
 import clsx from 'clsx';
 import type { StakeType } from '../../api/fight-club/types.ts';
 import styles from '../../pages/Fight-Club/Lobby.module.css';
+import { Modal } from '../ui/Modal.tsx';
 
 interface CreateFightModalProps {
     isOpen: boolean;
@@ -24,15 +25,13 @@ export const CreateFightModal = memo(({ isOpen, onClose, onCreate }: CreateFight
         onClose();
     }, [onClose, onCreate, stakeAmount, stakeType, title]);
 
-    if (!isOpen) return null;
-
     return (
-        <div className={styles.modalOverlay}>
+        <Modal isOpen={isOpen} onClose={onClose} label="start fight">
             <div className={styles.modal}>
                 <div className={styles.modalHeader}>
                     <h2>start fight</h2>
-                    <button className={styles.iconBtn} onClick={onClose}>
-                        x
+                    <button className={styles.iconBtn} onClick={onClose} aria-label="close modal">
+                        ×
                     </button>
                 </div>
 
@@ -71,6 +70,6 @@ export const CreateFightModal = memo(({ isOpen, onClose, onCreate }: CreateFight
                     sign in soap
                 </button>
             </div>
-        </div>
+        </Modal>
     );
 });

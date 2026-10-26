@@ -1,0 +1,13 @@
+.dialog {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    max-width: min(94vw, 620px);
+    max-height: 92dvh;
+    overflow: auto;
+}
+.dialog::backdrop {
+    background: rgb(0 0 0 / 78%);
+    backdrop-filter: blur(4px);
+}
