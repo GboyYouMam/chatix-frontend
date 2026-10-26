@@ -505,3 +505,74 @@
     margin-bottom: 10px;
     font-family: 'Courier New', monospace;
 }
+
+@media (max-width: 600px) {
+    .header {
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+    .headerLeft {
+        min-width: 0;
+        flex: 1;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .backBtn {
+        min-height: 40px;
+        margin: 0;
+    }
+    .boardTitle {
+        overflow-wrap: anywhere;
+        font-size: 1.1rem;
+    }
+    .editRoomBtn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+    .threadContainer {
+        min-width: 0;
+        padding: 1rem 0.75rem 190px;
+    }
+    .replyBlock {
+        box-sizing: border-box;
+        max-width: 100%;
+        padding: 0.75rem;
+    }
+    .replyFormContainer {
+        padding: 0.5rem;
+        padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    }
+    .replyForm {
+        gap: 0.5rem;
+    }
+    .replyInput {
+        height: 56px;
+        padding: 0.65rem;
+    }
+    .attachBtn {
+        flex: 0 0 48px;
+        min-height: 48px;
+    }
+    .submitBtn {
+        min-height: 48px;
+        padding: 0 0.75rem;
+    }
+    .selectedFiles {
+        flex-wrap: wrap;
+    }
+    .socketScream {
+        right: 0.5rem;
+        bottom: 7rem;
+        left: 0.5rem;
+        max-width: none;
+    }
+    .quoteLinkExpanded .quotePopup {
+        display: block;
+        position: static;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}

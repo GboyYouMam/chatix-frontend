@@ -27,8 +27,25 @@ export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFor
                     return (
                         <span
                             key={i}
-                            className={styles.quoteLink}
-                            onClick={() => onQuoteClick(shortId)}
+                            className={`${styles.quoteLink} ${isHovered ? styles.quoteLinkExpanded : ''}`}
+                            onClick={() => {
+                                setHoveredPostId((current) =>
+                                    current === shortId ? null : shortId,
+                                );
+                                onQuoteClick(shortId);
+                            }}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                    event.preventDefault();
+                                    setHoveredPostId((current) =>
+                                        current === shortId ? null : shortId,
+                                    );
+                                    onQuoteClick(shortId);
+                                }
+                            }}
+                            role="button"
+                            tabIndex={0}
+                            aria-expanded={isHovered}
                             onMouseEnter={() => setHoveredPostId(shortId)}
                             onMouseLeave={() => setHoveredPostId(null)}
                         >
@@ -36,7 +53,9 @@ export const MessageFormatter = ({ text, allMessages, onQuoteClick }: MessageFor
 
                             {isHovered && quotedMsg && (
                                 <div className={styles.quotePopup}>
-                                    <div className={styles.popupMeta}>{shortId} {quotedMsg.author?.username}</div>
+                                    <div className={styles.popupMeta}>
+                                        {shortId} {quotedMsg.author?.username}
+                                    </div>
                                     <div className={styles.popupText}>{quotedMsg.cipherText}</div>
                                 </div>
                             )}
