@@ -13,6 +13,7 @@ import { type RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.ts';
 import { notify } from '../../lib/toast.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -38,8 +39,13 @@ export const Rooms = () => {
         window.setTimeout(() => navigate(PATH.fightClub.lobby), 600);
     };
 
-    const { data: rooms, isLoading } = useQuery({
-        queryKey: ['rooms', roomType],
+    const {
+        data: rooms,
+        isLoading,
+        isError,
+        refetch,
+    } = useQuery({
+        queryKey: queryKeys.rooms(roomType),
         queryFn: () => roomApi.getRooms(roomType),
     });
 
@@ -69,6 +75,14 @@ export const Rooms = () => {
     };
 
     const renderGridContent = () => {
+        if (isError) {
+            return (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
+                    the lobby is on fire. <button onClick={() => void refetch()}>retry</button>
+                </div>
+            );
+        }
+
         if (isLoading) {
             return (
                 <div
@@ -208,7 +222,7 @@ export const Rooms = () => {
             <CreateRoomModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => queryClient.invalidateQueries({ queryKey: ['rooms'] })}
+                onSuccess={() => queryClient.invalidateQueries({ queryKey: queryKeys.rooms() })}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
@@ -15,6 +15,8 @@ import { RoomSocketErrorScream } from '../../components/rooms/RoomSocketErrorScr
 
 import { useRoomSocket } from '../../hooks/rooms/useRoomSocket.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
+import { notify } from '../../lib/toast.ts';
+import { PATH } from '../../utils/pathList.ts';
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,6 +32,7 @@ export const Room = () => {
         data: room,
         isLoading: roomLoading,
         refetch: refetchRoom,
+        error: roomError,
     } = useQuery({
         queryKey: queryKeys.room(id),
         queryFn: () => roomApi.getRoomDetailed(id!),
@@ -39,6 +42,8 @@ export const Room = () => {
     const {
         data: messagePages,
         isLoading: messagesLoading,
+        error: messagesError,
+        refetch: refetchMessages,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
@@ -50,6 +55,15 @@ export const Room = () => {
         getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
+    useEffect(() => {
+        if (
+            messagesError &&
+            (messagesError as { response?: { status?: number } })?.response?.status === 403
+        ) {
+            notify.info('private. know the password or leave.');
+            navigate(PATH.rooms.href.joinRoom(id!));
+        }
+    }, [messagesError, navigate, id]);
     useLayoutEffect(() => {
         if (previousScroll.current) {
             window.scrollTo(
@@ -74,6 +88,18 @@ export const Room = () => {
             .reverse()
             .flatMap((page) => page.items) ?? [];
 
+    if (roomError)
+        return (
+            <div className={styles.error}>
+                the room is cooked. <button onClick={() => void refetchRoom()}>retry</button>
+            </div>
+        );
+    if (messagesError)
+        return (
+            <div className={styles.error}>
+                the thread is on fire. <button onClick={() => void refetchMessages()}>retry</button>
+            </div>
+        );
     if (roomLoading || messagesLoading)
         return <div className={styles.loading}>Loading thread...</div>;
     if (!room) return <div className={styles.error}>Room 404. It got nuked or never existed.</div>;
