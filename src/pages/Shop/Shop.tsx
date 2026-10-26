@@ -117,7 +117,7 @@ export const Shop = () => {
 
             <section className={styles.hero}>
                 <p className={styles.eyebrow}>est. hypergamy era</p>
-                <h1 className={styles.title}>MOGGER MART</h1>
+                <h1 className={styles.title}>LARYOK SHOP</h1>
                 <RotatingTagline className={styles.tagline} />
             </section>
 
