@@ -1,4 +1,4 @@
-﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service.ts';
 import { notify } from '../../lib/toast';
 import type { CreateRoomDTO } from '../../api/rooms/types.ts';

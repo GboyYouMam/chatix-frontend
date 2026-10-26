@@ -1,4 +1,4 @@
-﻿import { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { notify } from '../../lib/toast';
 import { MessageFormatter } from './MessageFormatter.tsx';

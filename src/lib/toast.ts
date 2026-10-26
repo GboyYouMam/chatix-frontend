@@ -1,4 +1,4 @@
-﻿import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { parseApiError } from '../api/errors.ts';
 
 export const notify = {

@@ -1,4 +1,4 @@
-﻿import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-﻿import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { RoomDetails } from '../../api/rooms/types.ts';

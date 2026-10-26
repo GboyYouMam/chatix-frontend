@@ -1,4 +1,4 @@
-﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { notify } from '../../lib/toast';
 import type { AdminMessage } from '../../api/admin/types.ts';
 import {
