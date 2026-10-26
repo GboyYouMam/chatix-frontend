@@ -1,6 +1,6 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import styles from './Room.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import {useRooms} from "../../hooks/rooms/useRooms.ts";
@@ -23,11 +23,11 @@ export const JoinRoom = () => {
                 roomId: id,
                 password: password
             });
-            toast.success('ACCESS GRANTED.');
+            notify.success('ACCESS GRANTED.');
 
             navigate(PATH.rooms.href.room(id));
         } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Access Denied.');
+            notify.error(error.response?.data?.message || 'Access Denied.');
         } finally {
             setIsHacking(false);
         }
@@ -66,3 +66,4 @@ export const JoinRoom = () => {
         </div>
     );
 };
+

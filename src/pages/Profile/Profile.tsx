@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom';
+﻿import { useNavigate, useParams } from 'react-router-dom';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
 import { useState } from "react";
 import { useAuthStore } from "../../store/authStore.ts";
-import toast from "react-hot-toast";
+import { notify } from '../../lib/toast';
 import { usersApi } from "../../api/users/users.service.ts";
 import type { ProfileData } from "../../api/users/types.ts";
 import { ProfileEffectsOverlay } from "../../components/profile/ProfileEffectsOverlay.tsx";
@@ -102,7 +102,7 @@ export const Profile = () => {
                 respectCount: response.respectCount,
                 hasRespected: response.respected,
             }));
-            toast.success(response.alreadyRespected ? "respect already sent" : "respect sent");
+            notify.success(response.alreadyRespected ? "respect already sent" : "respect sent");
         } catch (error) {
             console.error('Failed to respect profile:', error);
             // Відкат у разі помилки
@@ -111,7 +111,7 @@ export const Profile = () => {
                 respectCount: Math.max((prev.respectCount ?? prev.respect_count ?? 1) - 1, 0),
                 hasRespected: false,
             }));
-            toast.error("could not send respect");
+            notify.error("could not send respect");
         } finally {
             setIsRespectLoading(false);
         }
@@ -195,3 +195,4 @@ export const Profile = () => {
         </div>
     );
 };
+

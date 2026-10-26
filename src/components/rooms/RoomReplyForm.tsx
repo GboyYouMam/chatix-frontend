@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import { getAttachmentSelectionError, MAX_ATTACHMENTS } from './attachments.ts';
 
@@ -19,7 +19,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
         const files = [...attachments, ...Array.from(event.target.files ?? [])];
         const error = getAttachmentSelectionError(files);
         if (error) {
-            toast.error(error);
+            notify.error(error);
             event.target.value = '';
             return;
         }
@@ -32,7 +32,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
         if (isSending) return;
         if (!newMessage.trim() && !attachments.length) return;
         if (!authorId) {
-            toast.error('Log in before replying.');
+            notify.error('Log in before replying.');
             return;
         }
 
@@ -47,7 +47,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             setAttachments([]);
             if (fileInputRef.current) fileInputRef.current.value = '';
         } catch {
-            toast.error('Failed to send message.');
+            notify.error('Failed to send message.');
         } finally {
             setIsSending(false);
         }

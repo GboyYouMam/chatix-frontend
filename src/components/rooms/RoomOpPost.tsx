@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+﻿import { useNavigate } from 'react-router-dom';
+import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { RoomDetails } from "../../api/rooms/types.ts";
 import { PATH } from '../../utils/pathList.ts';
@@ -21,9 +21,9 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
         const inviteUrl = `${window.location.origin}${PATH.rooms.href.joinRoom(room.id)}`;
         try {
             await navigator.clipboard.writeText(inviteUrl);
-            toast.success('Invite link copied. Send it to your bums.');
+            notify.success('Invite link copied. Send it to your bums.');
         } catch (error) {
-            toast.error('Failed to copy link.');
+            notify.error('Failed to copy link.');
         }
     };
 

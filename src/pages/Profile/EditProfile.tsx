@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { api } from '../../api/client';
 import styles from './EditProfile.module.css';
-import toast from "react-hot-toast";
+import { notify } from '../../lib/toast';
 import { PATH } from '../../utils/pathList.ts';
 
 export const EditProfile = () => {
@@ -61,10 +61,10 @@ export const EditProfile = () => {
             });
 
             navigate(user?.username ? PATH.authAndUser.href.profile(user.username) : PATH.rooms.rooms);
-            toast.success('profile visuals ascended');
+            notify.success('profile visuals ascended');
         } catch (error) {
             console.error('Failed to update profile:', error);
-            toast.error('Could not update profile');
+            notify.error('Could not update profile');
         } finally {
             setIsLoading(false);
         }
@@ -133,3 +133,4 @@ export const EditProfile = () => {
         </div>
     );
 };
+

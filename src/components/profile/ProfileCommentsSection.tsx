@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import styles from './ProfileCommentsSection.module.css';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileComment } from '../../api/users/types.ts';
@@ -34,10 +34,10 @@ export const ProfileCommentsSection = ({
             await usersApi.createProfileComment(profileUsername, cleanBody);
             setComments(await usersApi.getProfileComments(profileUsername));
             setCommentBody('');
-            toast('comment added');
+            notify.success('comment added');
         } catch (error) {
             console.error('Failed to add profile comment:', error);
-            toast.error('could not add comment');
+            notify.error('could not add comment');
         } finally {
             setIsCommentSubmitting(false);
         }

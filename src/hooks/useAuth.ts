@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { notify } from '../lib/toast';
 import { authService } from '../api/auth/auth.service.ts';
 import { useAuthStore } from '../store/authStore';
 import { AxiosError } from 'axios';
@@ -20,16 +20,16 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
-                toast.success(`welcome back bum ${user.username}!`);
+                notify.success(`welcome back bum ${user.username}!`);
                 navigate(PATH.rooms.rooms);
             } catch (err) {
                 logoutStore();
-                toast.error('Failed to parse your profile profile.');
+                notify.error('Failed to parse your profile profile.');
             }
         },
         onError: (error: AxiosError<{ message: string }>) => {
             const msg = error.response?.data?.message || 'Invalid credentials, chud';
-            toast.error(msg);
+            notify.error(msg);
         },
     });
 
@@ -40,24 +40,24 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
-                toast.success('Ascension complete! Profile created');
+                notify.success('Ascension complete! Profile created');
                 navigate(PATH.rooms.rooms);
             } catch (err) {
                 logoutStore();
-                toast.error('Registration passed, but profile failed to load.');
+                notify.error('Registration passed, but profile failed to load.');
             }
         },
         onError: (error: AxiosError<{ message: string | string[] }>) => {
             const message = error.response?.data?.message;
             const msg = Array.isArray(message) ? message[0] : message || 'Registration failed';
-            toast.error(msg);
+            notify.error(msg);
         },
     });
 
     const handleLogout = () => {
         logoutStore();
         queryClient.clear();
-        toast.success('Logged out. See ya, chud.');
+        notify.success('Logged out. See ya, chud.');
         navigate(PATH.authAndUser.login);
     };
 
@@ -69,3 +69,4 @@ export const useAuth = () => {
         logout: handleLogout
     };
 };
+

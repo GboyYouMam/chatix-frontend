@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { notify } from '../../lib/toast';
 import type { AdminMessage } from '../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -30,10 +30,10 @@ export const useAdminMessages = ({
     const deleteMessage = useMutation({
         mutationFn: (messageId: string) => adminApi.deleteMessage(messageId),
         onSuccess: async () => {
-            toast.success('Message deleted.');
+            notify.success('Message deleted.');
             await Promise.all([invalidateMessages(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to delete message')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to delete message')),
     });
 
     return {
@@ -44,3 +44,4 @@ export const useAdminMessages = ({
         deleteMessage,
     };
 };
+
