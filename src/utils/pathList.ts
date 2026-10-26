@@ -18,6 +18,9 @@ const PATH_PATTERNS = {
         room: '/room/:id',
         joinRoom: '/room/:id/join',
     },
+    economy: {
+        leaderboard: '/leaderboard',
+    },
     shop: {
         shop: '/shop',
     },
@@ -50,6 +53,7 @@ export const PATH = {
         },
     },
     shop: PATH_PATTERNS.shop,
+    economy: PATH_PATTERNS.economy,
     fightClub: {
         ...PATH_PATTERNS.fightClub,
         href: {

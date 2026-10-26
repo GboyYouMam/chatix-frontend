@@ -9,6 +9,7 @@ import { useUserSocket } from './hooks/useUserSocket.ts';
 import { AdminLayout } from './components/admin/AdminLayout.tsx';
 import { useEffect } from 'react';
 import { startSessionSync } from './lib/sessionSync.ts';
+import { useDailyStimulus } from './hooks/economy/useDailyStimulus.ts';
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,13 @@ const router = createBrowserRouter([
                 },
             },
             { path: PATH.rooms.rooms, element: <Rooms /> },
+            {
+                path: PATH.economy.leaderboard,
+                lazy: async () => {
+                    const { Leaderboard } = await import('./pages/Leaderboard/Leaderboard.tsx');
+                    return { Component: Leaderboard };
+                },
+            },
 
             {
                 element: <ProtectedRoute />,
@@ -75,6 +83,13 @@ const router = createBrowserRouter([
                         lazy: async () => {
                             const { EditProfile } = await import('./pages/Profile/EditProfile.tsx');
                             return { Component: EditProfile };
+                        },
+                    },
+                    {
+                        path: PATH.shop.shop,
+                        lazy: async () => {
+                            const { Shop } = await import('./pages/Shop/Shop.tsx');
+                            return { Component: Shop };
                         },
                     },
                 ],
@@ -132,6 +147,7 @@ function App() {
     useEffect(() => startSessionSync(), []);
     useSessionBootstrap();
     useUserSocket();
+    useDailyStimulus();
     return <RouterProvider router={router} />;
 }
 
