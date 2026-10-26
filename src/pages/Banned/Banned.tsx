@@ -14,7 +14,6 @@ import {
 import { PATH } from '../../utils/pathList.ts';
 import styles from './Banned.module.css';
 
-const initialNow = Date.now();
 const marqueeText = BAN_TAUNTS.join('  ✦  ');
 
 export function Banned() {
@@ -22,7 +21,7 @@ export function Banned() {
     const logout = useAuthStore((state) => state.logout);
     const clearBan = useAuthStore((state) => state.clearBan);
     const navigate = useNavigate();
-    const [now, setNow] = useState(initialNow);
+    const [now, setNow] = useState(() => Date.now());
     const [taunt, setTaunt] = useState<string>(BAN_TAUNTS[0]);
     const [appealNotice, setAppealNotice] = useState('');
 
