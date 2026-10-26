@@ -31,25 +31,25 @@ const router = createBrowserRouter([
             return { Component: Profile };
         },
     },
-    {
-        path: PATH.fightClub.lobby,
-        lazy: async () => {
-            const { Lobby } = await import('./pages/Fight-Club/Lobby.tsx');
-            return { Component: Lobby };
-        },
-    },
-    {
-        path: PATH.fightClub.duel,
-        lazy: async () => {
-            const { Duel } = await import('./pages/Fight-Club/Duel.tsx');
-            return { Component: Duel };
-        },
-    },
     { path: PATH.rooms.rooms, element: <Rooms /> },
 
     {
         element: <ProtectedRoute />,
         children: [
+            {
+                path: PATH.fightClub.lobby,
+                lazy: async () => {
+                    const { Lobby } = await import('./pages/Fight-Club/Lobby.tsx');
+                    return { Component: Lobby };
+                },
+            },
+            {
+                path: PATH.fightClub.duel,
+                lazy: async () => {
+                    const { Duel } = await import('./pages/Fight-Club/Duel.tsx');
+                    return { Component: Duel };
+                },
+            },
             {
                 path: PATH.rooms.room,
                 lazy: async () => {

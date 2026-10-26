@@ -56,8 +56,11 @@ export const useRoomSocket = (roomId: string | undefined) => {
             });
         });
         newSocket.on('messageDeleted', ({ id }: { id: string }) => queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(['messages', roomId], (old) => old && ({ ...old, pages: old.pages.map((page) => ({ ...page, items: page.items.filter((message) => message.id !== id) })) })));
-        newSocket.on('roomQuarantined', ({ roomId: affectedRoomId }: { roomId: string }) => {
-            if (affectedRoomId === roomId) { notify.info('this room got quarantined. read-only now.'); queryClient.invalidateQueries({ queryKey: ['room', roomId] }); }
+        newSocket.on('roomQuarantined', ({ roomId: affectedRoomId, quarantined }: { roomId: string; quarantined: boolean }) => {
+            if (affectedRoomId === roomId) {
+                if (quarantined) notify.info('this room got quarantined. read-only now.');
+                queryClient.invalidateQueries({ queryKey: ['room', roomId] });
+            }
         });
 
         return () => {

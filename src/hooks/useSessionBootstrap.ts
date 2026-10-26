@@ -7,6 +7,6 @@ export function useSessionBootstrap() {
         const { token, setSessionStatus, setUser } = useAuthStore.getState();
         if (!token) { setSessionStatus('ready'); return; }
         setSessionStatus('checking');
-        authService.getMe().then(setUser).catch(() => {}).finally(() => setSessionStatus('ready'));
+        authService.getMe().then(setUser).catch(() => useAuthStore.setState({ user: null })).finally(() => setSessionStatus('ready'));
     }, []);
 }
