@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminAuditFeed } from '../../components/admin/AdminAuditFeed.tsx';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
@@ -80,6 +80,7 @@ export const AdminDashboard = () => {
         to: '',
     });
     const [auditPage, setAuditPage] = useState(1);
+    const [reviewSheetId, setReviewSheetId] = useState<string | null>(null);
 
     const usersState = useAdminUsers({ page: usersPage, search: usersSearch });
     const roomsState = useAdminRooms({ page: roomsPage, search: roomsSearch });
@@ -100,6 +101,16 @@ export const AdminDashboard = () => {
     const stats = useAdminStats();
     const queue = useModerationQueue();
     const quarantineQueueRoom = roomsState.quarantineRoom.mutate;
+    const reviewSheetRoom = queue.data?.find((room) => room.id === reviewSheetId);
+
+    useEffect(() => {
+        if (!reviewSheetRoom) return;
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setReviewSheetId(null);
+        };
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [reviewSheetRoom]);
 
     const applyUsersSearch = useCallback((nextSearch: string) => {
         setUsersPage(1);
@@ -130,6 +141,7 @@ export const AdminDashboard = () => {
             await api.patch(`/admin/rooms/${encodeURIComponent(roomId)}/approve`);
             notify.success('room approved. let them cook.');
             await queue.refetch();
+            setReviewSheetId(null);
         } catch {
             notify.error('could not approve this room.');
         }
@@ -144,6 +156,7 @@ export const AdminDashboard = () => {
             });
             notify.success('room rejected.');
             await queue.refetch();
+            setReviewSheetId(null);
         } catch {
             notify.error('could not reject this room.');
         }
@@ -184,17 +197,91 @@ export const AdminDashboard = () => {
                             {room.creator?.username ?? 'unknown creator'}
                             <small>{room.topic ?? 'no topic'}</small>
                         </span>
+                        <div className={styles.reviewActions}>
+                            <button
+                                className={styles.actionBtnSafe}
+                                type="button"
+                                onClick={() => void approveRoom(room.id)}
+                            >
+                                approve
+                            </button>
+                            <button
+                                className={styles.actionBtnDanger}
+                                type="button"
+                                onClick={() => void rejectRoom(room.id)}
+                            >
+                                reject
+                            </button>
+                            <button
+                                className={styles.actionBtnWarning}
+                                type="button"
+                                onClick={() => {
+                                    const reason = window.prompt('why is this room quarantined?');
+                                    if (!reason?.trim()) return;
+                                    quarantineQueueRoom(
+                                        { roomId: room.id, reason: reason.trim() },
+                                        {
+                                            onSuccess: () => {
+                                                setReviewSheetId(null);
+                                                void queue.refetch();
+                                            },
+                                        },
+                                    );
+                                }}
+                            >
+                                quarantine
+                            </button>
+                        </div>
+                        <button
+                            className={styles.mobileReviewTrigger}
+                            type="button"
+                            onClick={() => setReviewSheetId(room.id)}
+                        >
+                            review actions
+                        </button>
+                    </div>
+                ))}
+                {(queue.data?.length ?? 0) === 0 && (
+                    <p className={styles.placeholderText}>
+                        no rooms waiting. the queue is cooked clean.
+                    </p>
+                )}
+            </section>
+            {reviewSheetRoom && (
+                <>
+                    <button
+                        aria-label="close room actions"
+                        className={styles.reviewSheetBackdrop}
+                        onClick={() => setReviewSheetId(null)}
+                        type="button"
+                    />
+                    <section
+                        aria-label={`actions for ${reviewSheetRoom.title}`}
+                        aria-modal="true"
+                        className={styles.reviewSheet}
+                        role="dialog"
+                    >
+                        <div className={styles.reviewSheetHeader}>
+                            <h2 className={styles.panelTitle}>{reviewSheetRoom.title}</h2>
+                            <button
+                                className={styles.actionBtnSafe}
+                                type="button"
+                                onClick={() => setReviewSheetId(null)}
+                            >
+                                close
+                            </button>
+                        </div>
                         <button
                             className={styles.actionBtnSafe}
                             type="button"
-                            onClick={() => void approveRoom(room.id)}
+                            onClick={() => void approveRoom(reviewSheetRoom.id)}
                         >
                             approve
                         </button>
                         <button
                             className={styles.actionBtnDanger}
                             type="button"
-                            onClick={() => void rejectRoom(room.id)}
+                            onClick={() => void rejectRoom(reviewSheetRoom.id)}
                         >
                             reject
                         </button>
@@ -205,21 +292,21 @@ export const AdminDashboard = () => {
                                 const reason = window.prompt('why is this room quarantined?');
                                 if (!reason?.trim()) return;
                                 quarantineQueueRoom(
-                                    { roomId: room.id, reason: reason.trim() },
-                                    { onSuccess: () => void queue.refetch() },
+                                    { roomId: reviewSheetRoom.id, reason: reason.trim() },
+                                    {
+                                        onSuccess: () => {
+                                            setReviewSheetId(null);
+                                            void queue.refetch();
+                                        },
+                                    },
                                 );
                             }}
                         >
                             quarantine
                         </button>
-                    </div>
-                ))}
-                {(queue.data?.length ?? 0) === 0 && (
-                    <p className={styles.placeholderText}>
-                        no rooms waiting. the queue is cooked clean.
-                    </p>
-                )}
-            </section>
+                    </section>
+                </>
+            )}
 
             <div className={styles.statusGrid} aria-label="audit filters">
                 <select
