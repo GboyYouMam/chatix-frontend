@@ -14,11 +14,15 @@ export const AdminMessagesPage = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
+    const [roomFilter, setRoomFilter] = useState('');
+    const [userFilter, setUserFilter] = useState('');
     const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const { messages, pagination, isFetching, isInitialLoading, deleteMessage } = useAdminMessages({
         page,
         search,
+        room: roomFilter,
+        user: userFilter,
     });
     const deleteMessageMutate = deleteMessage.mutate;
     const selectedMessage = messages.find((message) => message.id === selectedMessageId) ?? null;
@@ -37,6 +41,13 @@ export const AdminMessagesPage = () => {
         setSelectedMessageId(null);
         setSearch(nextSearch);
     }, []);
+
+    const applyNameFilter = (kind: 'room' | 'user', value: string) => {
+        setPage(1);
+        setSelectedMessageId(null);
+        if (kind === 'room') setRoomFilter(value);
+        else setUserFilter(value);
+    };
 
     const changePage = useCallback((nextPage: number) => {
         setPage(nextPage);
@@ -77,6 +88,49 @@ export const AdminMessagesPage = () => {
                     </div>
 
                     <AdminSidebarSearch activeTab="messages" onApplySearch={applySearch} />
+
+                    <div className={styles.messageFilters}>
+                        <label className={styles.fieldLabel}>
+                            room title
+                            <input
+                                className={styles.textInput}
+                                value={roomFilter}
+                                onChange={(event) => applyNameFilter('room', event.target.value)}
+                                placeholder="search room title"
+                            />
+                        </label>
+                        <label className={styles.fieldLabel}>
+                            username
+                            <input
+                                className={styles.textInput}
+                                value={userFilter}
+                                onChange={(event) => applyNameFilter('user', event.target.value)}
+                                placeholder="search username"
+                            />
+                        </label>
+                        {(roomFilter || userFilter) && (
+                            <div className={styles.filterChips} aria-label="active message filters">
+                                {roomFilter && (
+                                    <button
+                                        className={styles.filterChip}
+                                        type="button"
+                                        onClick={() => applyNameFilter('room', '')}
+                                    >
+                                        room: {roomFilter} ×
+                                    </button>
+                                )}
+                                {userFilter && (
+                                    <button
+                                        className={styles.filterChip}
+                                        type="button"
+                                        onClick={() => applyNameFilter('user', '')}
+                                    >
+                                        user: {userFilter} ×
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
 
                     <AdminEntityList
                         activeTab="messages"

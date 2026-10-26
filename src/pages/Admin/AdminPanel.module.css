@@ -360,6 +360,29 @@
     gap: 0.5rem;
 }
 
+.messageFilters {
+    display: grid;
+    gap: 0.65rem;
+}
+.filterChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.filterChip {
+    min-height: 40px;
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    padding: 0.45rem 0.75rem;
+    background: rgba(250, 77, 152, 0.1);
+    color: var(--primary);
+    font:
+        0.78rem 'Courier New',
+        monospace;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
 .searchPanel {
     grid-template-columns: minmax(0, 1fr) auto;
 }
