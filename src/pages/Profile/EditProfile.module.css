@@ -148,7 +148,9 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition:
+        border-color 0.2s,
+        background-color 0.2s;
     border-radius: 8px;
 }
 
@@ -159,7 +161,7 @@
 
 .sideBannerSize {
     width: 100px;
-    height: 280px;
+    aspect-ratio: 11 / 32;
 }
 
 .upperBannerSize {
@@ -245,7 +247,9 @@
     font-weight: bold;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
     margin-top: 1rem;
 }
 

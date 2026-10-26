@@ -1,5 +1,10 @@
 import { create } from 'zustand';
-import type { DuelStatus, FightChallenge, StakeFilter } from '../api/fight-club/types.ts';
+import type {
+    DuelStatus,
+    FightChallenge,
+    FightState,
+    StakeFilter,
+} from '../api/fight-club/types.ts';
 
 export interface DuelState {
     p1Hp: number;
@@ -7,6 +12,8 @@ export interface DuelState {
     p1Combo: number;
     p2Combo: number;
     currentKey: string;
+    promptId: string;
+    matchState: FightState | null;
     status: DuelStatus;
     isStunned: boolean;
     error: string | null;
@@ -35,6 +42,8 @@ const initialDuel: DuelState = {
     p1Combo: 0,
     p2Combo: 0,
     currentKey: '',
+    promptId: '',
+    matchState: null,
     status: 'waiting',
     isStunned: false,
     error: null,

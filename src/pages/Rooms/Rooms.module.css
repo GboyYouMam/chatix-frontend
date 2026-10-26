@@ -145,6 +145,35 @@
     color: var(--muted);
     font-size: 0.9rem;
     margin-right: 1rem;
+    cursor: default;
+}
+
+.glitch {
+    animation: pinkGlitch 600ms steps(2, end);
+}
+
+@keyframes pinkGlitch {
+    0%,
+    100% {
+        transform: none;
+        filter: none;
+    }
+    20% {
+        transform: translateX(3px);
+        filter: drop-shadow(-3px 0 #00ffff) drop-shadow(3px 0 var(--primary));
+    }
+    40% {
+        transform: translateX(-2px);
+    }
+    60% {
+        filter: drop-shadow(3px 0 #00ffff) drop-shadow(-3px 0 var(--primary));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .glitch {
+        animation: none;
+    }
 }
 
 .searchBtn {
@@ -175,7 +204,9 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 }
 
 .card:hover {

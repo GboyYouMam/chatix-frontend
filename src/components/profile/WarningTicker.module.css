@@ -1,0 +1,46 @@
+.ticker {
+    height: 32px;
+    overflow: hidden;
+    border: 1px solid var(--primary);
+    background: repeating-linear-gradient(135deg, var(--bg) 0 10px, var(--primary) 10px 20px);
+    color: var(--text);
+    font:
+        700 0.8rem/30px 'Courier New',
+        Courier,
+        monospace;
+    text-transform: uppercase;
+}
+
+.track {
+    display: flex;
+    width: max-content;
+    animation: ticker linear infinite;
+}
+
+.track span {
+    padding: 0 1rem;
+    white-space: nowrap;
+    text-shadow: 1px 1px var(--bg);
+}
+
+.ticker:hover .track {
+    animation-play-state: paused;
+}
+
+@keyframes ticker {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker {
+        overflow-x: auto;
+    }
+    .track {
+        animation: none;
+    }
+    .track span[aria-hidden='true'] {
+        display: none;
+    }
+}

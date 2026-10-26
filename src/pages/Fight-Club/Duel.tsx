@@ -6,16 +6,23 @@ import duelBackdrop from '../../assets/fight-duel-face.png';
 import styles from './Duel.module.css';
 
 export const Duel = () => {
-    const { duel, players, matchId, stakeType, stakeAmount, hit, goLobby } = useFightDuel();
+    const { duel, players, matchId, stakeType, stakeAmount, goLobby } = useFightDuel();
 
     return (
         <div className={styles.layout}>
-            <img className={`${styles.backgroundImage} ${styles.duelBackdrop}`} src={duelBackdrop} alt="" aria-hidden="true" />
+            <img
+                className={`${styles.backgroundImage} ${styles.duelBackdrop}`}
+                src={duelBackdrop}
+                alt=""
+                aria-hidden="true"
+            />
             <header className={styles.header}>
                 <button onClick={goLobby}>back to lobby</button>
                 <div>
                     <span>match {matchId || 'missing'}</span>
-                    <strong>{stakeAmount} {stakeType}</strong>
+                    <strong>
+                        {stakeAmount} {stakeType}
+                    </strong>
                 </div>
             </header>
 
@@ -26,9 +33,7 @@ export const Duel = () => {
                 <DuelCommandDeck
                     currentKey={duel.currentKey}
                     isStunned={duel.isStunned}
-                    status={duel.status}
                     lastHit={duel.lastHit}
-                    onHit={hit}
                 />
                 <DuelPlayerPanel {...players.enemy} align="right" />
             </main>

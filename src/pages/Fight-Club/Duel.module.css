@@ -161,18 +161,13 @@
     font-family: 'Times New Roman', Times, serif;
     font-size: 8rem;
     font-weight: 900;
-    cursor: pointer;
+    cursor: default;
 }
 
 .targetStunned {
     border-color: #ff7b7b;
     color: #ff7b7b;
     filter: blur(1px);
-}
-
-.target:disabled,
-.targetStunned:disabled {
-    cursor: not-allowed;
 }
 
 .hint {
@@ -241,9 +236,12 @@
     background:
         radial-gradient(circle at 50% 42%, rgba(250, 77, 152, 0.12), transparent 30rem),
         linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        #08080d;
-    background-size: auto, 42px 42px, 42px 42px, auto;
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px), #08080d;
+    background-size:
+        auto,
+        42px 42px,
+        42px 42px,
+        auto;
 }
 
 .layout::before,
@@ -264,7 +262,9 @@
     z-index: 1;
 }
 
-.layout::after { display: none; }
+.layout::after {
+    display: none;
+}
 
 .layout > .backgroundImage {
     position: absolute;
@@ -320,7 +320,10 @@
 .overlay button {
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(255, 255, 255, 0.06);
-    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
 .header button:hover,
@@ -363,7 +366,9 @@
     overflow: hidden;
     border-color: rgba(255, 255, 255, 0.12);
     background: linear-gradient(145deg, rgba(35, 35, 43, 0.92), rgba(15, 15, 21, 0.92));
-    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.32), inset 0 1px rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 22px 70px rgba(0, 0, 0, 0.32),
+        inset 0 1px rgba(255, 255, 255, 0.06);
     animation: riseIn 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -385,7 +390,9 @@
 .commandDeck {
     z-index: 1;
     animation-delay: 50ms;
-    box-shadow: 0 0 0 1px rgba(250, 77, 152, 0.06), 0 25px 90px rgba(250, 77, 152, 0.14);
+    box-shadow:
+        0 0 0 1px rgba(250, 77, 152, 0.06),
+        0 25px 90px rgba(250, 77, 152, 0.14);
 }
 
 .player h2,
@@ -412,7 +419,9 @@
 
 .combo,
 .comboOn {
-    transition: transform 180ms ease, background 180ms ease;
+    transition:
+        transform 180ms ease,
+        background 180ms ease;
 }
 
 .comboOn {
@@ -439,18 +448,14 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     font-size: clamp(3.25rem, 10vw, 7.5rem);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 35px rgba(250, 77, 152, 0.12), inset 0 0 30px rgba(250, 77, 152, 0.05);
-    transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-}
-
-.target:not(:disabled):hover {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 5px rgba(250, 77, 152, 0.08), 0 0 55px rgba(250, 77, 152, 0.3), inset 0 0 35px rgba(250, 77, 152, 0.12);
-    transform: translateY(-4px) scale(1.02);
-}
-
-.target:not(:disabled):active {
-    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 0 35px rgba(250, 77, 152, 0.12),
+        inset 0 0 30px rgba(250, 77, 152, 0.05);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
 }
 
 .target {
@@ -485,49 +490,99 @@
 }
 
 @keyframes riseIn {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes titlePop {
-    from { opacity: 0; transform: scale(0.86); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.86);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes comboPulse {
-    from { box-shadow: 0 0 8px rgba(250, 77, 152, 0.35); }
-    to { box-shadow: 0 0 22px rgba(250, 77, 152, 0.9); }
+    from {
+        box-shadow: 0 0 8px rgba(250, 77, 152, 0.35);
+    }
+    to {
+        box-shadow: 0 0 22px rgba(250, 77, 152, 0.9);
+    }
 }
 
 @keyframes stunShake {
-    from { transform: translateX(-3px); }
-    to { transform: translateX(3px); }
+    from {
+        transform: translateX(-3px);
+    }
+    to {
+        transform: translateX(3px);
+    }
 }
 
 @keyframes keyReveal {
-    from { opacity: 0.2; transform: scale(0.86) rotate(-3deg); }
-    65% { transform: scale(1.04) rotate(1deg); }
-    to { opacity: 1; transform: scale(1) rotate(0); }
+    from {
+        opacity: 0.2;
+        transform: scale(0.86) rotate(-3deg);
+    }
+    65% {
+        transform: scale(1.04) rotate(1deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
 }
 
 @keyframes statusPop {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes damagePulse {
-    from { filter: brightness(1.8); transform: scaleY(1.25); }
-    to { filter: brightness(1); transform: scaleY(1); }
+    from {
+        filter: brightness(1.8);
+        transform: scaleY(1.25);
+    }
+    to {
+        filter: brightness(1);
+        transform: scaleY(1);
+    }
 }
 
 @media (max-width: 900px) {
@@ -536,11 +591,19 @@
         padding: 1.5rem 1rem 3rem;
     }
 
-    .commandDeck { order: 2; }
-    .player { order: 1; }
-    .playerRight { order: 3; }
+    .commandDeck {
+        order: 2;
+    }
+    .player {
+        order: 1;
+    }
+    .playerRight {
+        order: 3;
+    }
     .target,
-    .targetStunned { width: min(220px, 68vw); }
+    .targetStunned {
+        width: min(220px, 68vw);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -554,5 +617,7 @@
     .target,
     .targetStunned,
     .statusLine,
-    .hpFill { animation: none; }
+    .hpFill {
+        animation: none;
+    }
 }

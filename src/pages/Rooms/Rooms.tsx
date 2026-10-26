@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { CreateRoomModal } from '../../components/rooms/CreateRoomModal.tsx';
@@ -11,16 +11,32 @@ import { useRooms } from '../../hooks/rooms/useRooms.ts';
 import { RoomCard } from '../../components/rooms/RoomCard.tsx';
 import { type RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
+import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.ts';
+import { notify } from '../../lib/toast.ts';
 
 export const Rooms = () => {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
+    const token = useAuthStore((state) => state.token);
     const queryClient = useQueryClient();
     const { searchRoomByName } = useRooms();
 
     const [roomType, setRoomType] = useState<'public' | 'private'>('public');
     const [searchQuery, setSearchQuery] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isGlitching, setIsGlitching] = useState(false);
+    const tripleClick = useRef(createTripleClickDetector());
+
+    const triggerEasterEgg = () => {
+        if (!token) {
+            notify.error('login first, chud');
+            navigate(PATH.authAndUser.login);
+            return;
+        }
+        setIsGlitching(true);
+        notify.info("we don't talk about it.");
+        window.setTimeout(() => navigate(PATH.fightClub.lobby), 600);
+    };
 
     const { data: rooms, isLoading } = useQuery({
         queryKey: ['rooms', roomType],
@@ -87,7 +103,7 @@ export const Rooms = () => {
     };
 
     return (
-        <div className={styles.layout}>
+        <div className={clsx(styles.layout, isGlitching && styles.glitch)}>
             <header className={styles.header}>
                 <div className={styles.toggleContainer}>
                     <button
@@ -162,10 +178,20 @@ export const Rooms = () => {
                             className={styles.searchInput}
                             placeholder="find your place"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) => {
+                                const query = e.target.value;
+                                setSearchQuery(query);
+                                if (isSecretQuery(query)) triggerEasterEgg();
+                            }}
                             onKeyDown={(e) => e.key === 'Enter' && handleBackendSearch()}
                         />
-                        <span className={styles.searchLmao}>lmao</span>
+                        <span
+                            className={styles.searchLmao}
+                            aria-hidden="true"
+                            onClick={() => tripleClick.current(Date.now()) && triggerEasterEgg()}
+                        >
+                            lmao
+                        </span>
                         <button
                             className={styles.searchBtn}
                             onClick={handleBackendSearch}
