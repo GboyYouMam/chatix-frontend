@@ -1,4 +1,3 @@
-import { humanizeKey } from '../shop/shopFormat.ts';
 import { previewFor } from '../shop/shopPreview.ts';
 
 export const BACKGROUND_PATTERNS = [
@@ -19,24 +18,20 @@ export const backgroundPatternOf = (value: string | null | undefined): Backgroun
         : null;
 };
 
-export const cosmeticTitleText = (value: string | null | undefined): string | null => {
-    if (!value) return null;
-    return value.startsWith('title_') ? humanizeKey(value.slice('title_'.length)) : value;
-};
-
 // Title precedence: admin forcedTitle > active fight title > equipped shop title.
+// The backend sends the shop title as an item key; the caller maps it to the catalog name.
 // A forced title is already rendered next to the name, so the line under the name is empty then.
 export const pickProfileTitle = ({
     forcedTitle,
     fightTitle,
-    cosmeticTitle,
+    cosmeticTitleName,
 }: {
     forcedTitle?: string | null;
     fightTitle?: string | null;
-    cosmeticTitle?: string | null;
+    cosmeticTitleName?: string | null;
 }): string | null => {
     if (forcedTitle) return null;
-    return fightTitle || cosmeticTitleText(cosmeticTitle);
+    return fightTitle || cosmeticTitleName || null;
 };
 
 // Sticker and name icon values can arrive as item keys or as ready-made glyphs.

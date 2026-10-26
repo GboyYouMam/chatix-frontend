@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
     canAfford,
+    equipErrorMessage,
     formatPrice,
     humanizeKey,
     purchaseErrorMessage,
@@ -31,6 +32,13 @@ test('maps purchase error codes to in-voice copy and ignores unknown codes', () 
     assert.equal(purchaseErrorMessage('LOCKED'), 'locked. go earn the thing first.');
     assert.equal(purchaseErrorMessage('SOMETHING_ELSE'), null);
     assert.equal(purchaseErrorMessage(null), null);
+});
+
+test('maps equip error codes to in-voice copy', () => {
+    assert.equal(equipErrorMessage('NOT_OWNED'), "u don't own that, chud.");
+    assert.equal(equipErrorMessage('WRONG_SLOT'), "that doesn't go there. nice try.");
+    assert.equal(equipErrorMessage('UNKNOWN_ITEM'), 'never heard of that one, chud.');
+    assert.equal(equipErrorMessage('BROKE'), null);
 });
 
 test('humanizes item keys for display without raw ids', () => {

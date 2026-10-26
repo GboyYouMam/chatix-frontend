@@ -150,9 +150,10 @@ export const Profile = () => {
 
     const comments = profileData.comments ?? [];
     const cosmetics = profileData.cosmetics;
-    const accentStyle = cosmetics?.accent
-        ? ({ '--profile-accent': resolveAccentColor(cosmetics.accent) } as CSSProperties)
-        : undefined;
+    // A null accent means the free default hot_pink, so the variable is always set.
+    const accentStyle = {
+        '--profile-accent': resolveAccentColor(cosmetics?.accent),
+    } as CSSProperties;
     const backgroundPattern = backgroundPatternOf(cosmetics?.background);
 
     return (
