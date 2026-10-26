@@ -4,6 +4,8 @@ import { createSocket } from '../../lib/socket.ts';
 import type {
     FightGameOverPayload,
     FightChallenge,
+    FightStartPayload,
+    FightState,
     FightUpdatePayload,
     StakeType,
 } from '../../api/fight-club/types.ts';
@@ -15,7 +17,7 @@ type LobbySocketOptions = {
     addChallenge: (challenge: FightChallenge) => void;
     setChallenges: (challenges: FightChallenge[]) => void;
     removeChallenge: (matchId: string) => void;
-    startDuel: (challenge: FightChallenge, isCreator?: boolean) => void;
+    startDuel: (challenge: FightChallenge) => void;
 };
 
 export const useFightLobbySocket = ({
@@ -42,7 +44,7 @@ export const useFightLobbySocket = ({
             addChallenge(challenge);
             if (pendingCreateRef.current && challenge.creatorId === userId) {
                 pendingCreateRef.current = false;
-                startDuel(challenge, true);
+                startDuel(challenge);
             }
         });
         socket.on('fight:challenge_removed', ({ matchId }: { matchId: string }) =>
@@ -69,9 +71,6 @@ export const useFightLobbySocket = ({
 type DuelSocketOptions = {
     token: string | null;
     matchId: string;
-    opponentId?: string;
-    stakeType: StakeType;
-    stakeAmount: number;
     userId?: string;
     resetDuel: () => void;
     setDuel: (duel: Partial<DuelState>) => void;
@@ -85,9 +84,6 @@ const getMessage = (payload: unknown) =>
 export const useFightDuelSocket = ({
     token,
     matchId,
-    opponentId,
-    stakeType,
-    stakeAmount,
     userId,
     resetDuel,
     setDuel,
@@ -106,26 +102,33 @@ export const useFightDuelSocket = ({
         socketRef.current = socket;
 
         socket.on('connect', () => {
-            socket.emit('fight:join', { matchId, opponentId, stakeType, stakeAmount });
+            socket.emit('fight:join', { matchId });
         });
-        socket.on('fight:start', ({ firstKey }: { firstKey: string }) => {
+        socket.on('fight:state', (matchState: FightState) =>
             setDuel({
-                currentKey: firstKey,
+                matchState,
+                status: matchState.status === 'fighting' ? 'fighting' : 'waiting',
+            }),
+        );
+        socket.on('fight:start', ({ prompt }: FightStartPayload) => {
+            setDuel({
+                currentKey: prompt.key,
+                promptId: prompt.promptId,
                 status: 'fighting',
                 error: null,
                 lastHit: 'The bell rang. Press the key before your aura files a complaint.',
             });
         });
         socket.on('fight:update', (payload: FightUpdatePayload) => {
+            const opponentId = Object.keys(payload.hp).find((id) => id !== userId);
             setDuel({
-                p1Hp: payload.p1Hp,
-                p2Hp: payload.p2Hp,
-                p1Combo: payload.p1Combo,
-                p2Combo: payload.p2Combo,
-                currentKey: payload.nextKey,
-                lastHit: payload.isCrit
-                    ? `Critical ${payload.damage ?? 5}. Looksmaxxing department approved.`
-                    : `Hit landed for ${payload.damage ?? 1}.`,
+                p1Hp: userId ? (payload.hp[userId] ?? 0) : 0,
+                p2Hp: opponentId ? (payload.hp[opponentId] ?? 0) : 0,
+                p1Combo: userId ? (payload.combo[userId] ?? 0) : 0,
+                p2Combo: opponentId ? (payload.combo[opponentId] ?? 0) : 0,
+                currentKey: payload.prompt.key,
+                promptId: payload.prompt.promptId,
+                lastHit: 'Hit landed. Looksmaxxing department approved.',
             });
         });
         socket.on('fight:stun', ({ stunDuration }: { stunDuration: number }) => {
@@ -157,7 +160,7 @@ export const useFightDuelSocket = ({
             socket.disconnect();
             if (socketRef.current === socket) socketRef.current = null;
         };
-    }, [matchId, opponentId, resetDuel, setDuel, stakeAmount, stakeType, token, userId]);
+    }, [matchId, resetDuel, setDuel, token, userId]);
 
     return socketRef;
 };

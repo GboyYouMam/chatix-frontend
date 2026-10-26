@@ -21,24 +21,11 @@ export const useFightLobby = () => {
     const setChallenges = useFightClubStore((state) => state.setChallenges);
     const removeChallenge = useFightClubStore((state) => state.removeChallenge);
     const startDuel = useCallback(
-        (challenge: FightChallenge, isCreator: boolean = false) => {
-            const creator = isCreator || challenge.creatorId === user?.id;
-            const params = new URLSearchParams({
-                matchId: challenge.id,
-                opponentId: challenge.creatorId,
-                opponent: challenge.creator,
-                stakeType: challenge.stakeType,
-                stakeAmount: String(challenge.stakeAmount),
-                role: creator ? 'creator' : 'challenger',
-            });
-            if (creator) {
-                params.delete('opponentId');
-                params.delete('opponent');
-            }
-
+        (challenge: FightChallenge) => {
+            const params = new URLSearchParams({ matchId: challenge.id });
             navigate(PATH.fightClub.href.duel(params));
         },
-        [navigate, user?.id],
+        [navigate],
     );
     const goRooms = useCallback(() => navigate(PATH.rooms.rooms), [navigate]);
 
