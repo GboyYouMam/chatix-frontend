@@ -9,7 +9,7 @@ import { addDuration, formatDate, getWarnCount } from '../../components/admin/ad
 import { useAdminUser } from '../../hooks/admin/users/useAdminUser.ts';
 import { useAdminWarnings } from '../../hooks/admin/useAdminWarnings.ts';
 import type { UpdateModifiersPayload } from '../../api/admin/types.ts';
-import styles from './AdminPanel.module.css';
+import styles from './AdminUserPage.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { AdminConfirmDialog } from '../../components/admin/AdminConfirmDialog.tsx';
 import { getUserBadges, getWarnBadge } from '../../components/admin/adminBadges.ts';

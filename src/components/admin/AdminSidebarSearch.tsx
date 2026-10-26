@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminSidebarSearch.module.css';
 import type { AdminTabKey } from './adminPanelTypes.ts';
 
 interface AdminSidebarSearchProps {

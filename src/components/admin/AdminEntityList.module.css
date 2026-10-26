@@ -1,0 +1,150 @@
+.listItem,
+.selectedItem {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.entityList {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.listItem,
+.selectedItem {
+    width: 100%;
+    text-align: left;
+    padding: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    min-height: 44px;
+}
+
+.listItem:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.selectedItem {
+    border-color: var(--primary);
+    background: rgba(250, 77, 152, 0.12);
+    color: var(--primary);
+}
+
+.itemLabel {
+    display: block;
+    flex: 1 1 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.emptyList {
+    color: var(--muted);
+}
+
+.rowAvatar,
+.rowAvatarFallback {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg);
+}
+.rowAvatarFallback {
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+}
+.userBadge,
+.warnBadge {
+    white-space: nowrap;
+    font:
+        0.68rem 'Courier New',
+        monospace;
+}
+.userBadge {
+    color: var(--primary);
+}
+.warnBadge {
+    color: var(--muted);
+}
+.warm {
+    color: color-mix(in srgb, var(--primary) 55%, var(--text));
+}
+.hot,
+.cooked {
+    color: var(--primary);
+    animation: warnPulse 1.2s ease-in-out infinite alternate;
+}
+.rowStats {
+    margin-left: auto;
+    white-space: nowrap;
+    font:
+        0.75rem 'Courier New',
+        monospace;
+}
+.fetchingBar {
+    position: absolute;
+    z-index: 1;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--primary);
+    animation: fetchPulse 1s ease-in-out infinite alternate;
+}
+.skeletonRow {
+    height: 46px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--surface), var(--border), var(--surface));
+    background-size: 200% 100%;
+    animation: fetchPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes fetchPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@keyframes warnPulse {
+    to {
+        text-shadow: 0 0 8px var(--primary);
+    }
+}
+
+@keyframes logEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .listItem,
+    .selectedItem {
+        min-height: 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeletonRow,
+    .fetchingBar,
+    .cooked {
+        animation: none;
+    }
+}

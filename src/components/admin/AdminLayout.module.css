@@ -1,0 +1,112 @@
+.adminLayout {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.adminNav {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem 1rem;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.adminBrand {
+    color: var(--text);
+    font:
+        700 1rem 'Times New Roman',
+        serif;
+    letter-spacing: 4px;
+    text-decoration: none;
+    text-shadow: 0 0 12px rgba(250, 77, 152, 0.55);
+}
+
+.adminBrand span {
+    color: var(--primary);
+}
+
+.adminNavLinks {
+    display: grid;
+    gap: 0.4rem;
+}
+.navLink,
+.navActive {
+    padding: 0.7rem 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: lowercase;
+}
+.navLink:hover {
+    color: var(--text);
+    background: rgba(250, 250, 250, 0.04);
+}
+.navActive {
+    color: var(--primary);
+    background: rgba(250, 77, 152, 0.1);
+    box-shadow: inset 2px 0 0 var(--primary);
+}
+.adminContent {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
+}
+@keyframes fetchPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@keyframes warnPulse {
+    to {
+        text-shadow: 0 0 8px var(--primary);
+    }
+}
+
+@keyframes logEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 767px) {
+    .adminLayout {
+        grid-template-columns: 1fr;
+    }
+    .adminNav {
+        position: static;
+        height: auto;
+        gap: 0.75rem;
+        padding: 0.8rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .adminNavLinks {
+        display: flex;
+        overflow-x: auto;
+    }
+    .navLink,
+    .navActive {
+        flex: 0 0 auto;
+    }
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}

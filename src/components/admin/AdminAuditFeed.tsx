@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminAuditFeed.module.css';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 import type { AuditFeedProps } from './adminPanelTypes.ts';
 import { auditSentence } from './auditSentence.ts';

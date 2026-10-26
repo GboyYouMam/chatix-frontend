@@ -9,7 +9,7 @@ import { useAdminAuditLogs } from '../../hooks/admin/useAdminAuditLogs.ts';
 import { useAdminRooms } from '../../hooks/admin/rooms/useAdminRooms.ts';
 import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import type { PaginationMeta } from '../../api/admin/types.ts';
-import styles from './AdminPanel.module.css';
+import styles from './AdminDashboard.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { useAdminStats, useModerationQueue } from '../../hooks/admin/useAdminStats.ts';
 import { StatTile } from '../../components/admin/ui/StatTile.tsx';

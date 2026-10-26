@@ -1,0 +1,162 @@
+.warningSection {
+    display: flex;
+    flex-direction: column;
+}
+
+.actionBtnWarning,
+.smallDangerButton {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.textArea {
+    width: 85%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.textArea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.textArea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.actionBtnWarning,
+.smallDangerButton {
+    padding: 0.75rem 0.9rem;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.inlineHeader,
+.warningMeta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.sectionNote,
+.warningMeta,
+.revokedText {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.placeholderText {
+    color: var(--muted);
+}
+@keyframes fetchPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@keyframes warnPulse {
+    to {
+        text-shadow: 0 0 8px var(--primary);
+    }
+}
+
+@keyframes logEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.revokedWarning {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.warningSection {
+    gap: 0.75rem;
+}
+
+.controlCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+}
+
+.actionBtnWarning {
+    color: color-mix(in srgb, var(--primary) 55%, var(--text));
+}
+
+.actionBtnWarning:hover {
+    border-color: color-mix(in srgb, var(--primary) 55%, var(--text));
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.smallDangerButton {
+    color: var(--primary);
+}
+
+.smallDangerButton:hover {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 16%, transparent);
+}
+
+.fieldLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    color: var(--text);
+    font-size: 0.88rem;
+}
+
+.subTitle {
+    color: var(--text);
+}
+
+.warningCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+}
+
+.warningReason {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.smallDangerButton {
+    align-self: flex-start;
+}
+
+@media (max-width: 767px) {
+    .inlineHeader,
+    .warningMeta {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}

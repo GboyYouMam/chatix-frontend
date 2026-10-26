@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminTimeModifierControl.module.css';
 import type { DurationUnit, TimeModifierControlProps } from '../adminPanelTypes.ts';
 import { formatDate } from '../adminPanelUtils.ts';
 

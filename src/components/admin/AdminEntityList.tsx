@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminEntityList.module.css';
 import type { AdminEntity, AdminTabKey } from './adminPanelTypes.ts';
 import { getEntityLabel } from './adminPanelUtils.ts';
 import { getUserBadges, getWarnBadge } from './adminBadges.ts';

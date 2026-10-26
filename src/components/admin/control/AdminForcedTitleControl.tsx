@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminForcedTitleControl.module.css';
 import type { ForcedTitleControlProps } from '../adminPanelTypes.ts';
 
 export const AdminForcedTitleControl = memo(({ selectedUser, onSave }: ForcedTitleControlProps) => {

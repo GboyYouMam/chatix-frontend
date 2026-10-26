@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminMessageActions.module.css';
 import type { MessageActionsProps } from '../adminPanelTypes.ts';
 import { formatDate } from '../adminPanelUtils.ts';
 

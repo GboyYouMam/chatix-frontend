@@ -1,0 +1,84 @@
+.panelTitle {
+    margin: 0;
+    color: var(--text);
+}
+
+.actionBtnSafe,
+.actionBtnDanger {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.actionBtnSafe,
+.actionBtnDanger {
+    padding: 0.75rem 0.9rem;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+.dialogBackdrop {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.72);
+}
+.confirmDialog {
+    width: min(100%, 420px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 1.25rem;
+    box-shadow: 0 0 32px rgba(250, 77, 152, 0.16);
+}
+.dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+@keyframes fetchPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@keyframes warnPulse {
+    to {
+        text-shadow: 0 0 8px var(--primary);
+    }
+}
+
+@keyframes logEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.actionBtnSafe:hover {
+    border-color: var(--primary);
+    background: rgba(250, 77, 152, 0.12);
+    color: var(--primary);
+}
+
+.actionBtnDanger {
+    color: var(--primary);
+}
+
+.actionBtnDanger:hover {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 16%, transparent);
+}

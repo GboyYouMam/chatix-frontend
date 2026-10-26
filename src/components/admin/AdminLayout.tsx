@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminLayout.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { useAdminSocket } from '../../hooks/admin/useAdminSocket.ts';
 

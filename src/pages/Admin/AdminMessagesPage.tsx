@@ -5,7 +5,7 @@ import { AdminListPagination } from '../../components/admin/AdminListPagination.
 import { AdminSidebarSearch } from '../../components/admin/AdminSidebarSearch.tsx';
 import { AdminMessageActions } from '../../components/admin/actions/AdminMessageActions.tsx';
 import { useAdminMessages } from '../../hooks/admin/useAdminMessages.ts';
-import styles from './AdminPanel.module.css';
+import styles from './AdminMessagesPage.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { AdminConfirmDialog } from '../../components/admin/AdminConfirmDialog.tsx';
 import { CopyId } from '../../components/admin/ui/CopyId.tsx';

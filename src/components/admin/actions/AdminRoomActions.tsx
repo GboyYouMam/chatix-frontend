@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminRoomActions.module.css';
 import type { RoomActionsProps } from '../adminPanelTypes.ts';
 import { AdminConfirmDialog } from '../AdminConfirmDialog.tsx';
 

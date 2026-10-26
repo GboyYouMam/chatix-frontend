@@ -5,7 +5,7 @@ import { formatDate } from '../../components/admin/adminPanelUtils.ts';
 import { useAdminRoom } from '../../hooks/admin/rooms/useAdminRoom.ts';
 import { useAdminRooms } from '../../hooks/admin/rooms/useAdminRooms.ts';
 import type { AdminRoomStatus } from '../../api/admin/types.ts';
-import styles from './AdminPanel.module.css';
+import styles from './AdminRoomPage.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { CopyId } from '../../components/admin/ui/CopyId.tsx';
 import { StatusPill } from '../../components/rooms/StatusPill.tsx';

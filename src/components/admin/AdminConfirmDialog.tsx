@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminConfirmDialog.module.css';
 
 interface AdminConfirmDialogProps {
     title: string;
