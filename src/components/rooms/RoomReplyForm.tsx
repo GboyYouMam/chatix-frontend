@@ -50,8 +50,8 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             setNewMessage('');
             setAttachments([]);
             if (fileInputRef.current) fileInputRef.current.value = '';
-        } catch {
-            notify.error('Failed to send message.');
+        } catch (error) {
+            notify.error(error);
         } finally {
             setIsSending(false);
         }

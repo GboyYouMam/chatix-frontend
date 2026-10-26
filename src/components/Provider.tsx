@@ -19,7 +19,7 @@ export const Provider = ({ children }: { children: ReactNode }) => {
                         borderLeft: '4px solid var(--primary)',
                         fontFamily: 'Courier New, monospace',
                     },
-                    error: { duration: 5000, style: { borderLeft: '4px solid var(--primary)' } },
+                    error: { duration: 5000, style: { borderLeft: '4px solid var(--danger)' } },
                     success: { style: { borderLeft: '4px solid var(--primary)' } },
                 }}
             />
