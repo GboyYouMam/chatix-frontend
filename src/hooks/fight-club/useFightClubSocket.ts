@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { io, type Socket } from 'socket.io-client';
+import { type Socket } from 'socket.io-client';
+import { createSocket } from '../../lib/socket.ts';
 import type {
     FightGameOverPayload,
     FightChallenge,
@@ -8,7 +9,6 @@ import type {
 } from '../../api/fight-club/types.ts';
 import type { DuelState } from '../../store/fightClubStore.ts';
 
-const fightClubUrl = `${import.meta.env.VITE_API_URL}/fight-club`;
 
 type LobbySocketOptions = {
     token: string | null;
@@ -36,7 +36,7 @@ export const useFightLobbySocket = ({
             return;
         }
 
-        const socket = io(fightClubUrl, { auth: { token } });
+        const socket = createSocket('/fight-club');
         socketRef.current = socket;
         socket.on('fight:challenges', setChallenges);
         socket.on('fight:challenge_created', (challenge: FightChallenge) => {
@@ -103,7 +103,7 @@ export const useFightDuelSocket = ({
             return;
         }
 
-        const socket = io(fightClubUrl, { auth: { token } });
+        const socket = createSocket('/fight-club');
         socketRef.current = socket;
 
         socket.on('connect', () => {
