@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminWarningManager.module.css';
 import type { AdminWarning } from '../../api/admin/types.ts';
 import type { WarningManagerProps } from './adminPanelTypes.ts';
 import { formatDate } from './adminPanelUtils.ts';

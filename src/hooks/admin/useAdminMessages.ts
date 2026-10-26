@@ -4,24 +4,38 @@ import type { AdminMessage } from '../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
     getErrorMessage,
-    getPaginated,
     type AdminListOptions,
 } from '../../utils/adminQueryUtils.ts';
 import { adminApi } from '../../api/admin/admin.service.ts';
 import { adminKeys } from './adminKeys.ts';
+import { api } from '../../api/client.ts';
+import type { PaginatedResponse } from '../../api/admin/types.ts';
 
 export const useAdminMessages = ({
     page,
     limit = 25,
     search,
+    room,
+    user,
     enabled = true,
-}: AdminListOptions) => {
+}: AdminListOptions & { room?: string; user?: string }) => {
     const queryClient = useQueryClient();
-    const listParams = { page, limit, search };
+    const listParams = { page, limit, search, room, user };
 
     const messagesQuery = useQuery({
         queryKey: adminKeys.messages(listParams),
-        queryFn: () => getPaginated<AdminMessage>('/admin/messages', listParams),
+        queryFn: async () =>
+            (
+                await api.get<PaginatedResponse<AdminMessage>>('/admin/messages', {
+                    params: {
+                        page,
+                        limit,
+                        search: search.trim() || undefined,
+                        room: room?.trim() || undefined,
+                        user: user?.trim() || undefined,
+                    },
+                })
+            ).data,
         enabled,
         placeholderData: keepPreviousData,
         staleTime: 10_000,

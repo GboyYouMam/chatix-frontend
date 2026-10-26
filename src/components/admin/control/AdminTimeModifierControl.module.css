@@ -1,0 +1,133 @@
+.actionBtnWarning,
+.actionBtnDanger,
+.numberInput,
+.selectInput {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.durationRow {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.durationRow {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.durationRow {
+    grid-template-columns: 88px 120px minmax(0, 1fr);
+    align-items: center;
+}
+
+.numberInput,
+.selectInput {
+    width: 85%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.numberInput:focus,
+.selectInput:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.actionBtnWarning,
+.actionBtnDanger {
+    padding: 0.75rem 0.9rem;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.inlineHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.sectionNote {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+@keyframes fetchPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@keyframes warnPulse {
+    to {
+        text-shadow: 0 0 8px var(--primary);
+    }
+}
+
+@keyframes logEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.controlCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+}
+
+.actionBtnWarning {
+    color: color-mix(in srgb, var(--primary) 55%, var(--text));
+}
+
+.actionBtnWarning:hover {
+    border-color: color-mix(in srgb, var(--primary) 55%, var(--text));
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.actionBtnDanger {
+    color: var(--primary);
+}
+
+.actionBtnDanger:hover {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 16%, transparent);
+}
+
+.subTitle {
+    color: var(--text);
+}
+
+@media (max-width: 767px) {
+    .durationRow {
+        grid-template-columns: 1fr;
+    }
+
+    .inlineHeader {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}

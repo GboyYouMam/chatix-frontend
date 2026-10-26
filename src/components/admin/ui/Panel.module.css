@@ -1,0 +1,15 @@
+.panel {
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 1rem;
+    position: relative;
+}
+.panel::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}

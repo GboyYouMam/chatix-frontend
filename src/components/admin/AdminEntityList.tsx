@@ -1,8 +1,9 @@
 import { memo, useEffect, useState } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminEntityList.module.css';
 import type { AdminEntity, AdminTabKey } from './adminPanelTypes.ts';
 import { getEntityLabel } from './adminPanelUtils.ts';
 import { getUserBadges, getWarnBadge } from './adminBadges.ts';
+import { StatusPill } from '../rooms/StatusPill.tsx';
 
 interface AdminEntityListProps {
     activeTab: AdminTabKey;
@@ -58,6 +59,30 @@ const AdminEntityListItem = memo(
                                 <span className={styles.rowStats}>
                                     {user.aura ?? 0} / {user.debt ?? 0}
                                 </span>
+                            </>
+                        );
+                    })()
+                ) : activeTab === 'rooms' ? (
+                    (() => {
+                        const room = entity as Extract<AdminEntity, { title: string }>;
+                        return (
+                            <>
+                                {room.creator?.pfp_url ? (
+                                    <img
+                                        alt=""
+                                        className={styles.rowAvatar}
+                                        src={room.creator.pfp_url}
+                                    />
+                                ) : (
+                                    <span className={styles.rowAvatarFallback}>
+                                        {room.creator?.username?.slice(0, 1) ?? 'R'}
+                                    </span>
+                                )}
+                                <span className={styles.itemLabel}>
+                                    {room.title}
+                                    <small>{room.creator?.username ?? 'unknown creator'}</small>
+                                </span>
+                                {room.status && <StatusPill status={room.status} />}
                             </>
                         );
                     })()

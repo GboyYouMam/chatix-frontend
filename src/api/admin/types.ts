@@ -7,6 +7,7 @@ export const AdminRoomStatus = {
     checkout: 'checkout',
     banned: 'banned',
     quarantined: 'quarantined',
+    rejected: 'rejected',
 } as const;
 export type AdminRoomStatus = (typeof AdminRoomStatus)[keyof typeof AdminRoomStatus];
 
@@ -43,11 +44,13 @@ export interface AdminUser {
     forcedTitle?: string | null;
 }
 
-export interface AdminRoom extends RoomDetails {
+export interface AdminRoom extends Omit<RoomDetails, 'creator'> {
+    creator: RoomDetails['creator'] & { pfp_url?: string | null };
     status?: AdminRoomStatus;
     quarantineReason?: string | null;
     quarantinedUntil?: string | Date | null;
     messagesCount?: number;
+    recentMessages?: AdminMessage[];
 }
 
 export interface AdminMessage extends MessageData {
@@ -68,16 +71,25 @@ export interface AdminAuditLog {
     id: string;
     adminId?: string | null;
     action: string;
+    actionKey?: string;
     method: string;
     path: string;
     targetType?: string | null;
     targetId?: string | null;
+    targetLabel?: string | null;
     statusCode: number;
     success: boolean;
     durationMs: number;
     details?: Record<string, unknown>;
     createdAt: string | Date;
     admin?: UserData;
+}
+
+export interface AdminStats {
+    roomsInReview: number;
+    activeBans: number;
+    warnsToday: number;
+    autobansThisWeek: number;
 }
 
 export interface UpdateModifiersPayload {

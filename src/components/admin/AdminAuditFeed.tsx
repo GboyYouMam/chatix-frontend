@@ -1,13 +1,13 @@
 import { memo } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminAuditFeed.module.css';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 import type { AuditFeedProps } from './adminPanelTypes.ts';
-import { getLogSummary } from './adminPanelUtils.ts';
+import { auditSentence } from './auditSentence.ts';
 import { formatDate } from '../../utils/date.ts';
 
 const AdminAuditLogEntry = memo(({ log }: { log: AdminAuditLog }) => {
     const formattedCreatedAt = formatDate(log.createdAt);
-    const summary = getLogSummary(log);
+    const sentence = auditSentence(log);
 
     return (
         <div className={styles.logEntry}>
@@ -15,7 +15,10 @@ const AdminAuditLogEntry = memo(({ log }: { log: AdminAuditLog }) => {
             <span className={log.success ? styles.logSuccess : styles.logError}>
                 {log.statusCode}
             </span>
-            <span className={styles.logAction}>{summary}</span>
+            <span className={styles.logAction}>
+                <strong>{sentence.actor}</strong> {sentence.verb} <strong>{sentence.target}</strong>
+                {sentence.detail ? ` — ${sentence.detail}` : ''}
+            </span>
         </div>
     );
 });

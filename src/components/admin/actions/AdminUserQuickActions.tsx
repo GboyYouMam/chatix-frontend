@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import styles from '../../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminUserQuickActions.module.css';
 import type { UserQuickActionsProps } from '../adminPanelTypes.ts';
 import { getAdminGlazeMode, getCanChangeProfile } from '../adminPanelUtils.ts';
 

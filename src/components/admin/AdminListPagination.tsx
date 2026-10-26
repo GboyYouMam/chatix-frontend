@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import styles from '../../pages/Admin/AdminPanel.module.css';
+import styles from './AdminListPagination.module.css';
 import type { PaginationMeta } from '../../api/admin/types.ts';
 
 interface AdminListPaginationProps {

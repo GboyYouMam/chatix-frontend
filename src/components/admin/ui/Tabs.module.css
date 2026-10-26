@@ -1,0 +1,22 @@
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+}
+.tabs button {
+    min-height: 40px;
+    flex: 0 0 auto;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    text-transform: lowercase;
+    cursor: pointer;
+}
+.tabs button[aria-selected='true'],
+.active {
+    border-bottom-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
