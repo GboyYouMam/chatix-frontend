@@ -72,7 +72,7 @@ export interface RapSheetEntry {
 }
 
 export interface ProfileWidgetData {
-    nowPlaying: { provider: 'spotify' | 'soundcloud'; embedUrl: string } | null;
+    nowPlaying: { provider: 'spotify' | 'soundcloud'; embedUrl: string; url: string } | null;
     auraChart: Array<{ day: string; aura: number | string }>;
     fightRecord: {
         wins: number;

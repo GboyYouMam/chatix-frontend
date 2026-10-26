@@ -37,7 +37,7 @@ export const WidgetEditor = ({ profile }: WidgetEditorProps) => {
     );
     const [savingLayout, setSavingLayout] = useState(false);
 
-    const [trackUrl, setTrackUrl] = useState('');
+    const [trackUrl, setTrackUrl] = useState(profile.widgets?.data.nowPlaying?.url ?? '');
     const [trackTouched, setTrackTouched] = useState(false);
     const [statusText, setStatusText] = useState(profile.widgets?.data.status?.text ?? '');
     const [statusTouched, setStatusTouched] = useState(false);
