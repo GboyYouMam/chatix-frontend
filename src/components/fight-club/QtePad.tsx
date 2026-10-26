@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { buildPadKeys } from '../../hooks/fight-club/qtePad.ts';
 import styles from '../../pages/Fight-Club/Duel.module.css';
 
@@ -13,7 +13,10 @@ export const QtePad = ({ promptId, correct, disabled, onPress }: QtePadProps) =>
     const [isCoarse, setIsCoarse] = useState(
         () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
     );
-    const [keys, setKeys] = useState<string[]>([]);
+    const keys = useMemo(
+        () => (promptId && correct ? buildPadKeys(correct, Math.random) : []),
+        [correct, promptId],
+    );
 
     useEffect(() => {
         const query = window.matchMedia('(pointer: coarse)');
@@ -22,10 +25,6 @@ export const QtePad = ({ promptId, correct, disabled, onPress }: QtePadProps) =>
         return () => query.removeEventListener('change', update);
     }, []);
 
-    useEffect(() => {
-        setKeys(promptId && correct ? buildPadKeys(correct, Math.random) : []);
-    }, [correct, promptId]);
-
     if (!isCoarse) return null;
 
     return (
@@ -33,7 +32,12 @@ export const QtePad = ({ promptId, correct, disabled, onPress }: QtePadProps) =>
             <p>tap the matching key. fast.</p>
             <div>
                 {keys.map((key) => (
-                    <button key={key} type="button" disabled={disabled} onClick={() => onPress(key)}>
+                    <button
+                        key={key}
+                        type="button"
+                        disabled={disabled}
+                        onClick={() => onPress(key)}
+                    >
                         {key}
                     </button>
                 ))}

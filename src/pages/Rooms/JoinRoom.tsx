@@ -54,7 +54,6 @@ export const JoinRoom = () => {
 
                 <button
                     onClick={() => navigate(PATH.root.home)}
-                    className={styles.backBtn}
                     className={`${styles.backBtn} ${styles.joinBack}`}
                 >
                     {'← abort and return'}
