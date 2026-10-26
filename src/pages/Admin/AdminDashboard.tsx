@@ -72,6 +72,7 @@ export const AdminDashboard = () => {
     const [usersSearch, setUsersSearch] = useState('');
     const [roomsSearch, setRoomsSearch] = useState('');
     const [auditFilter, setAuditFilter] = useState({
+        adminId: '',
         actionKey: '',
         targetType: '',
         success: '',
@@ -87,6 +88,7 @@ export const AdminDashboard = () => {
         limit: 25,
         search: '',
         filters: {
+            adminId: auditFilter.adminId || undefined,
             actionKey: auditFilter.actionKey || undefined,
             targetType: auditFilter.targetType || undefined,
             success: auditFilter.success ? auditFilter.success === 'true' : undefined,
@@ -94,6 +96,7 @@ export const AdminDashboard = () => {
             to: auditFilter.to || undefined,
         },
     });
+    const { auditLogs: auditActors } = useAdminAuditLogs({ page: 1, limit: 50, search: '' });
     const stats = useAdminStats();
     const queue = useModerationQueue();
     const quarantineQueueRoom = roomsState.quarantineRoom.mutate;
@@ -219,6 +222,27 @@ export const AdminDashboard = () => {
             </section>
 
             <div className={styles.statusGrid} aria-label="audit filters">
+                <select
+                    className={styles.selectInput}
+                    aria-label="filter audit admin"
+                    value={auditFilter.adminId}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({ ...current, adminId: event.target.value }))
+                    }
+                >
+                    <option value="">all admins</option>
+                    {[
+                        ...new Map(
+                            auditActors
+                                .filter((log) => log.adminId && log.admin?.username)
+                                .map((log) => [log.adminId!, log.admin!.username]),
+                        ).entries(),
+                    ].map(([id, username]) => (
+                        <option key={id} value={id}>
+                            {username}
+                        </option>
+                    ))}
+                </select>
                 <select
                     className={styles.selectInput}
                     aria-label="filter audit action"
