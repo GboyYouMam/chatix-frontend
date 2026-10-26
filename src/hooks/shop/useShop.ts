@@ -4,7 +4,11 @@ import type { ShopEquipSlot, ShopMe } from '../../api/shop/types.ts';
 import { parseApiError } from '../../api/errors.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
 import { notify } from '../../lib/toast.ts';
-import { formatAmount, purchaseErrorMessage } from '../../components/shop/shopFormat.ts';
+import {
+    equipErrorMessage,
+    formatAmount,
+    purchaseErrorMessage,
+} from '../../components/shop/shopFormat.ts';
 import { useAuthStore } from '../../store/authStore.ts';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
@@ -59,10 +63,15 @@ export const useShopEquip = () => {
     return useMutation({
         mutationFn: ({ slot, itemKey }: { slot: ShopEquipSlot; itemKey: string | null }) =>
             shopApi.equip(slot, itemKey),
-        onSuccess: () => {
-            void queryClient.invalidateQueries({ queryKey: queryKeys.shopMe() });
+        onSuccess: (response) => {
+            queryClient.setQueryData<ShopMe>(queryKeys.shopMe(), (previous) =>
+                previous ? { ...previous, equipped: response.equipped } : previous,
+            );
             void queryClient.invalidateQueries({ queryKey: ['profile'] });
         },
-        onError: (error) => notify.error(error),
+        onError: (error) => {
+            const { code, message } = parseApiError(error);
+            notify.error(equipErrorMessage(code) ?? message);
+        },
     });
 };

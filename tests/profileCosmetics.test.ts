@@ -10,7 +10,7 @@ test('title precedence is forced > fight > equipped shop title', () => {
         pickProfileTitle({
             forcedTitle: 'admin says',
             fightTitle: 'duelist',
-            cosmeticTitle: 'title_aura_merchant',
+            cosmeticTitleName: 'certified yapper',
         }),
         null,
     );
@@ -18,7 +18,7 @@ test('title precedence is forced > fight > equipped shop title', () => {
         pickProfileTitle({
             forcedTitle: null,
             fightTitle: 'duelist',
-            cosmeticTitle: 'title_aura_merchant',
+            cosmeticTitleName: 'certified yapper',
         }),
         'duelist',
     );
@@ -26,9 +26,9 @@ test('title precedence is forced > fight > equipped shop title', () => {
         pickProfileTitle({
             forcedTitle: null,
             fightTitle: null,
-            cosmeticTitle: 'title_aura_merchant',
+            cosmeticTitleName: 'certified yapper',
         }),
-        'aura merchant',
+        'certified yapper',
     );
     assert.equal(pickProfileTitle({}), null);
 });

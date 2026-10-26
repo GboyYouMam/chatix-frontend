@@ -1,5 +1,11 @@
 import { api } from '../client.ts';
-import type { ShopCatalogItem, ShopEquipSlot, ShopMe, ShopPurchaseResponse } from './types.ts';
+import type {
+    ShopCatalogItem,
+    ShopEquipped,
+    ShopEquipSlot,
+    ShopMe,
+    ShopPurchaseResponse,
+} from './types.ts';
 
 export const shopApi = {
     getCatalog: async (): Promise<ShopCatalogItem[]> => (await api.get('/shop/catalog')).data,
@@ -9,7 +15,9 @@ export const shopApi = {
     purchase: async (itemKey: string): Promise<ShopPurchaseResponse> =>
         (await api.post('/shop/purchase', { itemKey })).data,
 
-    equip: async (slot: ShopEquipSlot, itemKey: string | null): Promise<void> => {
-        await api.patch('/shop/equip', { slot, itemKey });
-    },
+    equip: async (
+        slot: ShopEquipSlot,
+        itemKey: string | null,
+    ): Promise<{ equipped: ShopEquipped }> =>
+        (await api.patch('/shop/equip', { slot, itemKey })).data,
 };

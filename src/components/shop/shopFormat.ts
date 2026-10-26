@@ -17,3 +17,12 @@ const PURCHASE_ERROR_MESSAGES: Record<string, string> = {
 
 export const purchaseErrorMessage = (code: string | null | undefined): string | null =>
     code ? (PURCHASE_ERROR_MESSAGES[code] ?? null) : null;
+
+const EQUIP_ERROR_MESSAGES: Record<string, string> = {
+    UNKNOWN_ITEM: 'never heard of that one, chud.',
+    WRONG_SLOT: "that doesn't go there. nice try.",
+    NOT_OWNED: "u don't own that, chud.",
+};
+
+export const equipErrorMessage = (code: string | null | undefined): string | null =>
+    code ? (EQUIP_ERROR_MESSAGES[code] ?? null) : null;

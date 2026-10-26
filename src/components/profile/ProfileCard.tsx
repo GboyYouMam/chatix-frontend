@@ -7,6 +7,7 @@ import { NyanCat } from '../cosmetics/NyanCat.tsx';
 import { VerifiedCheck } from '../cosmetics/VerifiedCheck.tsx';
 import { VineBoomButton } from '../cosmetics/VineBoomButton.tsx';
 import { pickProfileTitle } from '../cosmetics/profileCosmetics.ts';
+import { useShopCatalog } from '../../hooks/shop/useShop.ts';
 
 interface ProfileCardProps {
     profileData: ProfileData;
@@ -19,10 +20,15 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
     const isClown = profileData.is_clown ?? profileData.isClown;
     const adminGlazeMode = profileData.admin_glaze_mode ?? profileData.adminGlazeMode;
     const cosmetics = profileData.cosmetics;
+    const { data: shopCatalog = [] } = useShopCatalog();
+    const titleKey = cosmetics?.title;
+    const cosmeticTitleName = titleKey
+        ? (shopCatalog.find((item) => item.key === titleKey)?.name ?? null)
+        : null;
     const shopTitle = pickProfileTitle({
         forcedTitle: profileData.forcedTitle,
         fightTitle: profileData.fightTitle,
-        cosmeticTitle: cosmetics?.title,
+        cosmeticTitleName,
     });
 
     return (
