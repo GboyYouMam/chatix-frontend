@@ -8,5 +8,6 @@ export const notify = {
             typeof errOrMessage === 'string' ? errOrMessage : parseApiError(errOrMessage).message;
         return toast.error(message, { id: id ?? message });
     },
-    info: (message: string, id = message) => toast(message, { id }),
+    info: (message: string, id = message) =>
+        toast(message, { id, style: { borderLeft: '4px solid var(--muted)' } }),
 };
