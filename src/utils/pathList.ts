@@ -4,6 +4,7 @@ const PATH_PATTERNS = {
     root: {
         home: "/",
         notFound: "*",
+        banned: "/banned",
     },
     authAndUser: {
         login: "/login",

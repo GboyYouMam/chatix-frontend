@@ -1,0 +1,8 @@
+.page { min-height: 100vh; box-sizing: border-box; overflow: hidden; background: var(--bg); color: var(--text); text-align: center; padding: 8vh 20px; font-family: 'Courier New', monospace; }
+.title { color: var(--primary); font: bold clamp(3rem, 10vw, 7rem) 'Times New Roman', serif; letter-spacing: 4px; text-shadow: 0 0 24px var(--primary); margin: 1rem 0; }
+.count { font-size: clamp(1.4rem, 5vw, 3rem); margin: 3rem 0; }
+.actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.actions button { padding: 12px 24px; color: var(--text); background: var(--surface); border: 1px solid var(--primary); cursor: pointer; font: inherit; }
+.marquee { color: var(--primary); white-space: nowrap; margin: 2rem -20px; animation: drift 24s linear infinite; }
+@keyframes drift { to { transform: translateX(-20%); } }
+@media (prefers-reduced-motion: reduce) { .marquee { animation: none; white-space: normal; } }

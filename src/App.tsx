@@ -2,8 +2,13 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { Rooms } from './pages/Rooms/Rooms';
 import { ProtectedRoute } from './components/ProtectedRouter';
 import { PATH } from './utils/pathList.ts';
+import { useSessionBootstrap } from './hooks/useSessionBootstrap.ts';
+import { BanGate } from './components/BanGate.tsx';
+import { Banned } from './pages/Banned/Banned.tsx';
+import { useUserSocket } from './hooks/useUserSocket.ts';
 
 const router = createBrowserRouter([
+    { path: '/', element: <BanGate />, children: [
     { path: PATH.root.home, element: <Navigate to={PATH.rooms.rooms} replace /> },
     {
         path: PATH.authAndUser.login,
@@ -104,9 +109,13 @@ const router = createBrowserRouter([
     },
 
     { path: PATH.root.notFound, element: <Navigate to={PATH.rooms.rooms} replace /> },
+    { path: PATH.root.banned, element: <Banned /> },
+    ] },
 ]);
 
 function App() {
+    useSessionBootstrap();
+    useUserSocket();
     return <RouterProvider router={router} />;
 }
 
