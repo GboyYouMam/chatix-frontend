@@ -20,3 +20,13 @@
     border-bottom-color: var(--primary) !important;
     color: var(--primary) !important;
 }
+@media (max-width: 600px) {
+    .tabs {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+    .tabs button {
+        flex: 1 1 calc(50% - 0.25rem);
+        text-align: center;
+    }
+}
