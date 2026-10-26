@@ -39,6 +39,6 @@ export const useAuthStore = create<AuthState>()(
             name: 'chatix-auth',
 
             partialize: (state) => ({ token: state.token, user: state.user, ban: state.ban }),
-        }
-    )
+        },
+    ),
 );

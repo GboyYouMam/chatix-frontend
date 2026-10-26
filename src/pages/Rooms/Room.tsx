@@ -35,24 +35,43 @@ export const Room = () => {
         enabled: !!id,
     });
 
-    const { data: messagePages, isLoading: messagesLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    const {
+        data: messagePages,
+        isLoading: messagesLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ['messages', id],
-        queryFn: ({ pageParam }) => messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
+        queryFn: ({ pageParam }) =>
+            messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
         initialPageParam: null as string | null,
         getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
     useLayoutEffect(() => {
         if (previousScroll.current) {
-            window.scrollTo(0, previousScroll.current.top + document.documentElement.scrollHeight - previousScroll.current.height);
+            window.scrollTo(
+                0,
+                previousScroll.current.top +
+                    document.documentElement.scrollHeight -
+                    previousScroll.current.height,
+            );
             previousScroll.current = null;
         }
     }, [messagePages?.pages.length]);
     const loadOlder = () => {
-        previousScroll.current = { top: window.scrollY, height: document.documentElement.scrollHeight };
+        previousScroll.current = {
+            top: window.scrollY,
+            height: document.documentElement.scrollHeight,
+        };
         void fetchNextPage();
     };
-    const messages = messagePages?.pages.slice().reverse().flatMap((page) => page.items) ?? [];
+    const messages =
+        messagePages?.pages
+            .slice()
+            .reverse()
+            .flatMap((page) => page.items) ?? [];
 
     if (roomLoading || messagesLoading)
         return <div className={styles.loading}>Loading thread...</div>;
@@ -98,10 +117,16 @@ export const Room = () => {
 
             <main className={styles.threadContainer}>
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
-                {hasNextPage && <button disabled={isFetchingNextPage} onClick={loadOlder} className={styles.backBtn}>load older (if u dare)</button>}
-                <RoomReplies messages={messages}
-                    roomCreatorUsername={room.creator.username}
-                />
+                {hasNextPage && (
+                    <button
+                        disabled={isFetchingNextPage}
+                        onClick={loadOlder}
+                        className={styles.backBtn}
+                    >
+                        load older (if u dare)
+                    </button>
+                )}
+                <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
             </main>
 
             <RoomReplyForm roomId={id!} authorId={user?.id} onSendMessage={sendMessage} />

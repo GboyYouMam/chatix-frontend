@@ -16,7 +16,7 @@ export const useRooms = () => {
         },
         onError: (error) => {
             notify.error(error);
-        }
+        },
     });
 
     const searchRoomByName = useMutation({
@@ -28,12 +28,11 @@ export const useRooms = () => {
         },
         onError: () => {
             notify.error('Room not found. Maybe it got nuked? Or u just spell it wrong');
-        }
+        },
     });
 
     return {
         joinRoom,
         searchRoomByName,
     };
-}
-
+};

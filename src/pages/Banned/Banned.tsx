@@ -77,9 +77,7 @@ export function Banned() {
                 <section className={styles.countdownPanel} aria-live="polite">
                     <span className={styles.panelLabel}>time left on the bench</span>
                     <strong className={styles.countdown}>
-                        {countdown.permanent
-                            ? 'permanently cooked'
-                            : formatCountdown(countdown)}
+                        {countdown.permanent ? 'permanently cooked' : formatCountdown(countdown)}
                     </strong>
                 </section>
 

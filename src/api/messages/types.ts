@@ -1,4 +1,4 @@
-import type {UserData} from "../auth/types.ts";
+import type { UserData } from '../auth/types.ts';
 
 export interface MessageAttachment {
     id: string;
@@ -18,4 +18,7 @@ export interface MessageData {
     authorId?: string;
 }
 
-export interface MessagePage { items: MessageData[]; nextCursor: string | null }
+export interface MessagePage {
+    items: MessageData[];
+    nextCursor: string | null;
+}

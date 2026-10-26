@@ -1,20 +1,20 @@
 ﻿import { useNavigate, useParams } from 'react-router-dom';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
-import { useState } from "react";
-import { useAuthStore } from "../../store/authStore.ts";
+import { useState } from 'react';
+import { useAuthStore } from '../../store/authStore.ts';
 import { notify } from '../../lib/toast';
-import { usersApi } from "../../api/users/users.service.ts";
-import type { ProfileData } from "../../api/users/types.ts";
-import { ProfileEffectsOverlay } from "../../components/profile/ProfileEffectsOverlay.tsx";
-import { ProfileTopActions } from "../../components/profile/ProfileTopActions.tsx";
-import { ProfileSidebar } from "../../components/profile/ProfileSidebar.tsx";
-import { ProfileCard } from "../../components/profile/ProfileCard.tsx";
-import { ProfileModerationBar } from "../../components/profile/ProfileModerationBar.tsx";
-import { ProfileDescription } from "../../components/profile/ProfileDescription.tsx";
-import { ProfileCommentsSection } from "../../components/profile/ProfileCommentsSection.tsx";
-import { PATH } from "../../utils/pathList.ts";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { usersApi } from '../../api/users/users.service.ts';
+import type { ProfileData } from '../../api/users/types.ts';
+import { ProfileEffectsOverlay } from '../../components/profile/ProfileEffectsOverlay.tsx';
+import { ProfileTopActions } from '../../components/profile/ProfileTopActions.tsx';
+import { ProfileSidebar } from '../../components/profile/ProfileSidebar.tsx';
+import { ProfileCard } from '../../components/profile/ProfileCard.tsx';
+import { ProfileModerationBar } from '../../components/profile/ProfileModerationBar.tsx';
+import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
+import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
+import { PATH } from '../../utils/pathList.ts';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 type EffectMode = 'aura' | 'debt' | null;
 
@@ -24,10 +24,7 @@ export const Profile = () => {
     const { user: currentUser } = useAuthStore();
     const queryClient = useQueryClient();
 
-    const {
-        data: profileData,
-        isLoading,
-    } = useQuery({
+    const { data: profileData, isLoading } = useQuery({
         queryKey: ['profile', username],
         queryFn: () => usersApi.getProfile(username!),
         enabled: Boolean(username),
@@ -85,7 +82,8 @@ export const Profile = () => {
     };
 
     const handleRespect = async () => {
-        if (!username || !canInteractWithProfile || profileData?.hasRespected || isRespectLoading) return;
+        if (!username || !canInteractWithProfile || profileData?.hasRespected || isRespectLoading)
+            return;
 
         setIsRespectLoading(true);
 
@@ -102,7 +100,7 @@ export const Profile = () => {
                 respectCount: response.respectCount,
                 hasRespected: response.respected,
             }));
-            notify.success(response.alreadyRespected ? "respect already sent" : "respect sent");
+            notify.success(response.alreadyRespected ? 'respect already sent' : 'respect sent');
         } catch (error) {
             console.error('Failed to respect profile:', error);
             // Відкат у разі помилки
@@ -111,7 +109,7 @@ export const Profile = () => {
                 respectCount: Math.max((prev.respectCount ?? prev.respect_count ?? 1) - 1, 0),
                 hasRespected: false,
             }));
-            notify.error("could not send respect");
+            notify.error('could not send respect');
         } finally {
             setIsRespectLoading(false);
         }
@@ -124,9 +122,7 @@ export const Profile = () => {
     if (!profileData) {
         return (
             <div className={styles.layout}>
-                <div className={styles.statusBox}>
-                    Chud not found
-                </div>
+                <div className={styles.statusBox}>Chud not found</div>
                 <button className={styles.backBtn} onClick={() => navigate(PATH.rooms.rooms)}>
                     &lt;- go back
                 </button>
@@ -176,15 +172,17 @@ export const Profile = () => {
                         isMyProfile
                             ? 'farm aura'
                             : profileData.hasRespected
-                                ? 'respected'
-                                : isRespectLoading
-                                    ? 'sending...'
-                                    : 'give respect'
+                              ? 'respected'
+                              : isRespectLoading
+                                ? 'sending...'
+                                : 'give respect'
                     }
                     actionDisabled={
                         isMyProfile
                             ? activeEffect !== null
-                            : !canInteractWithProfile || profileData.hasRespected || isRespectLoading
+                            : !canInteractWithProfile ||
+                              profileData.hasRespected ||
+                              isRespectLoading
                     }
                     onAction={isMyProfile ? handleFarmAura : handleRespect}
                     bannerSrc={profileData.right_banner_url}
@@ -195,4 +193,3 @@ export const Profile = () => {
         </div>
     );
 };
-

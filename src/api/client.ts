@@ -18,7 +18,7 @@ api.interceptors.request.use(
         }
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -27,10 +27,16 @@ api.interceptors.response.use(
         if (error.response?.status === 401) {
             useAuthStore.getState().logout();
             queryClient.clear();
-            if (window.location.pathname !== PATH.authAndUser.login) window.location.assign(PATH.authAndUser.login);
+            if (window.location.pathname !== PATH.authAndUser.login)
+                window.location.assign(PATH.authAndUser.login);
         } else if (error.response?.status === 403 && error.response.data?.code === 'BANNED') {
-            useAuthStore.getState().setBan({ bannedUntil: error.response.data.bannedUntil ?? null, banReason: error.response.data.banReason ?? null });
+            useAuthStore
+                .getState()
+                .setBan({
+                    bannedUntil: error.response.data.bannedUntil ?? null,
+                    banReason: error.response.data.banReason ?? null,
+                });
         }
         return Promise.reject(error);
-    }
+    },
 );

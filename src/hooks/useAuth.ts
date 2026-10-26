@@ -27,9 +27,21 @@ export const useAuth = () => {
                 notify.error('Failed to parse your profile profile.');
             }
         },
-        onError: (error: AxiosError<{ message: string; code?: string; bannedUntil?: string; banReason?: string }>) => {
+        onError: (
+            error: AxiosError<{
+                message: string;
+                code?: string;
+                bannedUntil?: string;
+                banReason?: string;
+            }>,
+        ) => {
             if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
-                useAuthStore.getState().setBan({ bannedUntil: error.response.data.bannedUntil ?? null, banReason: error.response.data.banReason ?? null });
+                useAuthStore
+                    .getState()
+                    .setBan({
+                        bannedUntil: error.response.data.bannedUntil ?? null,
+                        banReason: error.response.data.banReason ?? null,
+                    });
                 return;
             }
             const msg = error.response?.data?.message || 'Invalid credentials, chud';
@@ -51,9 +63,21 @@ export const useAuth = () => {
                 notify.error('Registration passed, but profile failed to load.');
             }
         },
-        onError: (error: AxiosError<{ message: string | string[]; code?: string; bannedUntil?: string; banReason?: string }>) => {
+        onError: (
+            error: AxiosError<{
+                message: string | string[];
+                code?: string;
+                bannedUntil?: string;
+                banReason?: string;
+            }>,
+        ) => {
             if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
-                useAuthStore.getState().setBan({ bannedUntil: error.response.data.bannedUntil ?? null, banReason: error.response.data.banReason ?? null });
+                useAuthStore
+                    .getState()
+                    .setBan({
+                        bannedUntil: error.response.data.bannedUntil ?? null,
+                        banReason: error.response.data.banReason ?? null,
+                    });
                 return;
             }
             const message = error.response?.data?.message;
@@ -74,7 +98,6 @@ export const useAuth = () => {
         register: registerMutation.mutate,
         isLoggingIn: loginMutation.isPending,
         isRegistering: registerMutation.isPending,
-        logout: handleLogout
+        logout: handleLogout,
     };
 };
-

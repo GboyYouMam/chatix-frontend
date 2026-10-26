@@ -1,32 +1,32 @@
-import { href } from "react-router-dom";
+import { href } from 'react-router-dom';
 
 const PATH_PATTERNS = {
     root: {
-        home: "/",
-        notFound: "*",
-        banned: "/banned",
+        home: '/',
+        notFound: '*',
+        banned: '/banned',
     },
     authAndUser: {
-        login: "/login",
-        register: "/register",
-        chat: "/chat",
-        profile: "/profile/:username",
-        editProfile: "/settings",
+        login: '/login',
+        register: '/register',
+        chat: '/chat',
+        profile: '/profile/:username',
+        editProfile: '/settings',
     },
     rooms: {
-        rooms: "/rooms",
-        room: "/room/:id",
-        joinRoom: "/room/:id/join",
+        rooms: '/rooms',
+        room: '/room/:id',
+        joinRoom: '/room/:id/join',
     },
     fightClub: {
-        lobby: "/lobby",
-        duel: "/duel",
+        lobby: '/lobby',
+        duel: '/duel',
     },
     admin: {
-        adminDashboard: "/admin",
-        adminUserPanel: "/admin/users/:userId",
-        adminRoomPanel: "/admin/rooms/:roomId",
-        adminMessagePanel: "/admin/messages",
+        adminDashboard: '/admin',
+        adminUserPanel: '/admin/users/:userId',
+        adminRoomPanel: '/admin/rooms/:roomId',
+        adminMessagePanel: '/admin/messages',
     },
 } as const;
 
@@ -42,13 +42,15 @@ export const PATH = {
         ...PATH_PATTERNS.rooms,
         href: {
             room: (id: string | number) => href(PATH_PATTERNS.rooms.room, { id: String(id) }),
-            joinRoom: (id: string | number) => href(PATH_PATTERNS.rooms.joinRoom, { id: String(id) }),
+            joinRoom: (id: string | number) =>
+                href(PATH_PATTERNS.rooms.joinRoom, { id: String(id) }),
         },
     },
     fightClub: {
         ...PATH_PATTERNS.fightClub,
         href: {
-            duel: (params: URLSearchParams) => `${PATH_PATTERNS.fightClub.duel}?${params.toString()}`,
+            duel: (params: URLSearchParams) =>
+                `${PATH_PATTERNS.fightClub.duel}?${params.toString()}`,
         },
     },
     admin: {

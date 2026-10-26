@@ -7,7 +7,7 @@ import {
     getPaginated,
     type AdminListOptions,
 } from '../../utils/adminQueryUtils.ts';
-import {adminApi} from "../../api/admin/admin.service.ts";
+import { adminApi } from '../../api/admin/admin.service.ts';
 
 export const useAdminMessages = ({
     page,
@@ -24,8 +24,10 @@ export const useAdminMessages = ({
         enabled,
     });
 
-    const invalidateMessages = () => queryClient.invalidateQueries({ queryKey: ['admin', 'messages'] });
-    const invalidateAuditLogs = () => queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
+    const invalidateMessages = () =>
+        queryClient.invalidateQueries({ queryKey: ['admin', 'messages'] });
+    const invalidateAuditLogs = () =>
+        queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
 
     const deleteMessage = useMutation({
         mutationFn: (messageId: string) => adminApi.deleteMessage(messageId),
@@ -44,4 +46,3 @@ export const useAdminMessages = ({
         deleteMessage,
     };
 };
-

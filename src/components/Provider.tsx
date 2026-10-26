@@ -12,7 +12,13 @@ export const Provider = ({ children }: { children: ReactNode }) => {
                 containerStyle={{ zIndex: 10000 }}
                 toastOptions={{
                     duration: 3500,
-                    style: { background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', borderLeft: '4px solid var(--primary)', fontFamily: 'Courier New, monospace' },
+                    style: {
+                        background: 'var(--surface)',
+                        color: 'var(--text)',
+                        border: '1px solid var(--border)',
+                        borderLeft: '4px solid var(--primary)',
+                        fontFamily: 'Courier New, monospace',
+                    },
                     error: { duration: 5000, style: { borderLeft: '4px solid var(--primary)' } },
                     success: { style: { borderLeft: '4px solid var(--primary)' } },
                 }}

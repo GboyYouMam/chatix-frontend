@@ -33,7 +33,7 @@ export const EditProfile = () => {
     const handleFileChange = (
         e: React.ChangeEvent<HTMLInputElement>,
         setFileState: (f: File) => void,
-        setPreviewState: (url: string) => void
+        setPreviewState: (url: string) => void,
     ) => {
         if (e.target.files && e.target.files[0]) {
             const selectedFile = e.target.files[0];
@@ -60,7 +60,9 @@ export const EditProfile = () => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            navigate(user?.username ? PATH.authAndUser.href.profile(user.username) : PATH.rooms.rooms);
+            navigate(
+                user?.username ? PATH.authAndUser.href.profile(user.username) : PATH.rooms.rooms,
+            );
             notify.success('profile visuals ascended');
         } catch (error) {
             console.error('Failed to update profile:', error);
@@ -79,50 +81,129 @@ export const EditProfile = () => {
         <div className={styles.layout}>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <button className={styles.backBtn} onClick={() => navigate(-1)}>← cancel</button>
+                    <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                        ← cancel
+                    </button>
                     <h1 className={styles.title}>Edit Profile</h1>
-                    <button className={styles.logoutBtn} onClick={handleLogout}>logout</button>
+                    <button className={styles.logoutBtn} onClick={handleLogout}>
+                        logout
+                    </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-
                     <div className={styles.visualsEditor}>
-                        <div className={`${styles.previewBox} ${styles.sideBannerSize}`} onClick={() => leftInputRef.current?.click()}>
-                            {leftPreview ? <img src={leftPreview} className={styles.previewImage} alt="left" /> : <span className={styles.placeholderText}>LEFT BANNER</span>}
+                        <div
+                            className={`${styles.previewBox} ${styles.sideBannerSize}`}
+                            onClick={() => leftInputRef.current?.click()}
+                        >
+                            {leftPreview ? (
+                                <img src={leftPreview} className={styles.previewImage} alt="left" />
+                            ) : (
+                                <span className={styles.placeholderText}>LEFT BANNER</span>
+                            )}
                             <div className={styles.overlay}>✎ edit</div>
                         </div>
 
                         <div className={styles.centerVisuals}>
-                            <div className={`${styles.previewBox} ${styles.upperBannerSize}`} onClick={() => upperInputRef.current?.click()}>
-                                {upperPreview ? <img src={upperPreview} className={styles.previewImage} alt="upper" /> : <span className={styles.placeholderText}>UPPER BANNER</span>}
+                            <div
+                                className={`${styles.previewBox} ${styles.upperBannerSize}`}
+                                onClick={() => upperInputRef.current?.click()}
+                            >
+                                {upperPreview ? (
+                                    <img
+                                        src={upperPreview}
+                                        className={styles.previewImage}
+                                        alt="upper"
+                                    />
+                                ) : (
+                                    <span className={styles.placeholderText}>UPPER BANNER</span>
+                                )}
                                 <div className={styles.overlay}>✎ edit</div>
                             </div>
 
-                            <div className={`${styles.previewBox} ${styles.avatarSize}`} onClick={() => fileInputRef.current?.click()}>
-                                {previewUrl ? <img src={previewUrl} className={styles.previewImage} alt="avatar" /> : <span className={styles.placeholderText}>AVATAR</span>}
+                            <div
+                                className={`${styles.previewBox} ${styles.avatarSize}`}
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                {previewUrl ? (
+                                    <img
+                                        src={previewUrl}
+                                        className={styles.previewImage}
+                                        alt="avatar"
+                                    />
+                                ) : (
+                                    <span className={styles.placeholderText}>AVATAR</span>
+                                )}
                                 <div className={styles.overlay}>✎ edit</div>
                             </div>
                         </div>
 
-                        <div className={`${styles.previewBox} ${styles.sideBannerSize}`} onClick={() => rightInputRef.current?.click()}>
-                            {rightPreview ? <img src={rightPreview} className={styles.previewImage} alt="right" /> : <span className={styles.placeholderText}>RIGHT BANNER</span>}
+                        <div
+                            className={`${styles.previewBox} ${styles.sideBannerSize}`}
+                            onClick={() => rightInputRef.current?.click()}
+                        >
+                            {rightPreview ? (
+                                <img
+                                    src={rightPreview}
+                                    className={styles.previewImage}
+                                    alt="right"
+                                />
+                            ) : (
+                                <span className={styles.placeholderText}>RIGHT BANNER</span>
+                            )}
                             <div className={styles.overlay}>✎ edit</div>
                         </div>
 
-                        <input type="file" accept="image/*" ref={leftInputRef} style={{ display: 'none' }} onChange={(e) => handleFileChange(e, setLeftBanner, setLeftPreview)} />
-                        <input type="file" accept="image/*" ref={upperInputRef} style={{ display: 'none' }} onChange={(e) => handleFileChange(e, setUpperBanner, setUpperPreview)} />
-                        <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={(e) => handleFileChange(e, setFile, setPreviewUrl)} />
-                        <input type="file" accept="image/*" ref={rightInputRef} style={{ display: 'none' }} onChange={(e) => handleFileChange(e, setRightBanner, setRightPreview)} />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={leftInputRef}
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleFileChange(e, setLeftBanner, setLeftPreview)}
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={upperInputRef}
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleFileChange(e, setUpperBanner, setUpperPreview)}
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleFileChange(e, setFile, setPreviewUrl)}
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={rightInputRef}
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleFileChange(e, setRightBanner, setRightPreview)}
+                        />
                     </div>
 
                     <div className={styles.inputGroup}>
                         <label>Vibe (Status)</label>
-                        <input type="text" value={vibe} onChange={(e) => setVibe(e.target.value)} placeholder="e.g. chill af / unbothered" maxLength={50} />
+                        <input
+                            type="text"
+                            value={vibe}
+                            onChange={(e) => setVibe(e.target.value)}
+                            placeholder="e.g. chill af / unbothered"
+                            maxLength={50}
+                        />
                     </div>
 
                     <div className={styles.inputGroup}>
                         <label>Description</label>
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="tell them about u kiddo" rows={5} maxLength={300} />
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="tell them about u kiddo"
+                            rows={5}
+                            maxLength={300}
+                        />
                     </div>
 
                     <button type="submit" className={styles.saveBtn} disabled={isLoading}>
@@ -133,4 +214,3 @@ export const EditProfile = () => {
         </div>
     );
 };
-

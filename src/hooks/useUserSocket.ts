@@ -17,7 +17,11 @@ export function useUserSocket() {
             useAuthStore.getState().setUser(data);
         };
         socket.on('user:updated', refresh);
-        socket.on('user:banned', (ban: { bannedUntil: string | null; banReason: string | null }) => useAuthStore.getState().setBan(ban));
-        return () => { socket.disconnect(); };
+        socket.on('user:banned', (ban: { bannedUntil: string | null; banReason: string | null }) =>
+            useAuthStore.getState().setBan(ban),
+        );
+        return () => {
+            socket.disconnect();
+        };
     }, [token, ban]);
 }

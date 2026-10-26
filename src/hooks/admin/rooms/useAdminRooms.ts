@@ -62,4 +62,3 @@ export const useAdminRooms = ({ page, limit = 25, search, enabled = true }: Admi
         setRoomStatus,
     };
 };
-

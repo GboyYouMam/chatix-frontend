@@ -6,7 +6,11 @@ import { getAttachmentSelectionError, MAX_ATTACHMENTS } from './attachments.ts';
 interface RoomReplyFormProps {
     roomId: string;
     authorId: string | undefined;
-    onSendMessage: (payload: { roomId: string; text: string; attachments: File[] }) => Promise<void>;
+    onSendMessage: (payload: {
+        roomId: string;
+        text: string;
+        attachments: File[];
+    }) => Promise<void>;
 }
 
 export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyFormProps) => {
@@ -58,12 +62,17 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             {attachments.length > 0 && (
                 <div className={styles.selectedFiles}>
                     {attachments.map((file, index) => (
-                        <span className={styles.selectedFile} key={`${file.name}-${file.lastModified}`}>
+                        <span
+                            className={styles.selectedFile}
+                            key={`${file.name}-${file.lastModified}`}
+                        >
                             {file.name}
                             <button
                                 type="button"
                                 aria-label={`Remove ${file.name}`}
-                                onClick={() => setAttachments((files) => files.filter((_, i) => i !== index))}
+                                onClick={() =>
+                                    setAttachments((files) => files.filter((_, i) => i !== index))
+                                }
                             >
                                 x
                             </button>

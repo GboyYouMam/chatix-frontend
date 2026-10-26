@@ -1,8 +1,7 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../../api/rooms/rooms.service.ts';
 import { notify } from '../../lib/toast';
-import type { CreateRoomDTO } from "../../api/rooms/types.ts";
-
+import type { CreateRoomDTO } from '../../api/rooms/types.ts';
 
 export const useCreateRoom = () => {
     const queryClient = useQueryClient();
@@ -15,10 +14,10 @@ export const useCreateRoom = () => {
         },
         onError: (error) => {
             notify.error(error);
-        }
+        },
     });
 
     return {
-        createRoom
+        createRoom,
     };
-}
+};

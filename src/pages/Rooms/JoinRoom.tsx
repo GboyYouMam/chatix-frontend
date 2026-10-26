@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { notify } from '../../lib/toast';
 import styles from './Room.module.css';
 import { PATH } from '../../utils/pathList.ts';
-import {useRooms} from "../../hooks/rooms/useRooms.ts";
+import { useRooms } from '../../hooks/rooms/useRooms.ts';
 
 export const JoinRoom = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,7 +21,7 @@ export const JoinRoom = () => {
         try {
             await joinRoom.mutateAsync({
                 roomId: id,
-                password: password
+                password: password,
             });
             notify.success('ACCESS GRANTED.');
 
@@ -35,13 +35,21 @@ export const JoinRoom = () => {
 
     return (
         <div className={styles.layout} style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <div className={styles.replyBlock} style={{ width: '400px', textAlign: 'center', padding: '2rem' }}>
-                <h1 className={styles.boardTitle} style={{ marginBottom: '1rem' }}>RESTRICTED AREA</h1>
+            <div
+                className={styles.replyBlock}
+                style={{ width: '400px', textAlign: 'center', padding: '2rem' }}
+            >
+                <h1 className={styles.boardTitle} style={{ marginBottom: '1rem' }}>
+                    RESTRICTED AREA
+                </h1>
                 <p style={{ color: '#888', marginBottom: '2rem' }}>
                     This room is private, like and ISLAND of someone extremely RICH.
                 </p>
 
-                <form onSubmit={handleJoin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <form
+                    onSubmit={handleJoin}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+                >
                     <input
                         type="password"
                         className={styles.replyInput}
@@ -66,4 +74,3 @@ export const JoinRoom = () => {
         </div>
     );
 };
-

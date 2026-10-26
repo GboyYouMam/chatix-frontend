@@ -50,18 +50,46 @@ export const useRoomSocket = (roomId: string | undefined) => {
         newSocket.on('errorMessage', showErrorMessage);
 
         newSocket.on('newMessage', (msg: MessageData) => {
-            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(['messages', roomId], (old) => {
-                if (!old || old.pages.some((page) => page.items.some((item) => item.id === msg.id))) return old;
-                return { ...old, pages: [{ ...old.pages[0], items: [...old.pages[0].items, msg] }, ...old.pages.slice(1)] };
-            });
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', roomId],
+                (old) => {
+                    if (
+                        !old ||
+                        old.pages.some((page) => page.items.some((item) => item.id === msg.id))
+                    )
+                        return old;
+                    return {
+                        ...old,
+                        pages: [
+                            { ...old.pages[0], items: [...old.pages[0].items, msg] },
+                            ...old.pages.slice(1),
+                        ],
+                    };
+                },
+            );
         });
-        newSocket.on('messageDeleted', ({ id }: { id: string }) => queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(['messages', roomId], (old) => old && ({ ...old, pages: old.pages.map((page) => ({ ...page, items: page.items.filter((message) => message.id !== id) })) })));
-        newSocket.on('roomQuarantined', ({ roomId: affectedRoomId, quarantined }: { roomId: string; quarantined: boolean }) => {
-            if (affectedRoomId === roomId) {
-                if (quarantined) notify.info('this room got quarantined. read-only now.');
-                queryClient.invalidateQueries({ queryKey: ['room', roomId] });
-            }
-        });
+        newSocket.on('messageDeleted', ({ id }: { id: string }) =>
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', roomId],
+                (old) =>
+                    old && {
+                        ...old,
+                        pages: old.pages.map((page) => ({
+                            ...page,
+                            items: page.items.filter((message) => message.id !== id),
+                        })),
+                    },
+            ),
+        );
+        newSocket.on(
+            'roomQuarantined',
+            ({ roomId: affectedRoomId, quarantined }: { roomId: string; quarantined: boolean }) => {
+                if (affectedRoomId === roomId) {
+                    if (quarantined) notify.info('this room got quarantined. read-only now.');
+                    queryClient.invalidateQueries({ queryKey: ['room', roomId] });
+                }
+            },
+        );
 
         return () => {
             newSocket.off('connect_error', showSocketError);
@@ -72,10 +100,30 @@ export const useRoomSocket = (roomId: string | undefined) => {
         };
     }, [roomId, queryClient]);
 
-    const sendMessage = useCallback(async (payload: SendMessagePayload) => {
-        const message = await messagesApi.sendMessage({ roomId: payload.roomId, cipherText: payload.text, attachments: payload.attachments });
-        queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(['messages', payload.roomId], (old) => old && (old.pages.some((page) => page.items.some((item) => item.id === message.id)) ? old : { ...old, pages: [{ ...old.pages[0], items: [...old.pages[0].items, message] }, ...old.pages.slice(1)] }));
-    }, [queryClient]);
+    const sendMessage = useCallback(
+        async (payload: SendMessagePayload) => {
+            const message = await messagesApi.sendMessage({
+                roomId: payload.roomId,
+                cipherText: payload.text,
+                attachments: payload.attachments,
+            });
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', payload.roomId],
+                (old) =>
+                    old &&
+                    (old.pages.some((page) => page.items.some((item) => item.id === message.id))
+                        ? old
+                        : {
+                              ...old,
+                              pages: [
+                                  { ...old.pages[0], items: [...old.pages[0].items, message] },
+                                  ...old.pages.slice(1),
+                              ],
+                          }),
+            );
+        },
+        [queryClient],
+    );
 
     const clearSocketError = useCallback(() => setSocketError(null), []);
 

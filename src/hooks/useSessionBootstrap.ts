@@ -5,8 +5,15 @@ import { useAuthStore } from '../store/authStore.ts';
 export function useSessionBootstrap() {
     useEffect(() => {
         const { token, setSessionStatus, setUser } = useAuthStore.getState();
-        if (!token) { setSessionStatus('ready'); return; }
+        if (!token) {
+            setSessionStatus('ready');
+            return;
+        }
         setSessionStatus('checking');
-        authService.getMe().then(setUser).catch(() => useAuthStore.setState({ user: null })).finally(() => setSessionStatus('ready'));
+        authService
+            .getMe()
+            .then(setUser)
+            .catch(() => useAuthStore.setState({ user: null }))
+            .finally(() => setSessionStatus('ready'));
     }, []);
 }

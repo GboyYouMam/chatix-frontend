@@ -9,7 +9,6 @@ import type {
 } from '../../api/fight-club/types.ts';
 import type { DuelState } from '../../store/fightClubStore.ts';
 
-
 type LobbySocketOptions = {
     token: string | null;
     userId?: string;

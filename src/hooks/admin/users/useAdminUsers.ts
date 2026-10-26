@@ -57,4 +57,3 @@ export const useAdminUsers = ({ page, limit = 25, search, enabled = true }: Admi
         updateModifiers,
     };
 };
-

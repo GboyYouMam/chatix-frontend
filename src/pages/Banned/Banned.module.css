@@ -8,8 +8,7 @@
     overflow: hidden;
     padding: clamp(2rem, 7vh, 5rem) 1rem 5rem;
     background:
-        radial-gradient(ellipse at 50% 15%, rgb(250 77 152 / 12%), transparent 42%),
-        var(--bg);
+        radial-gradient(ellipse at 50% 15%, rgb(250 77 152 / 12%), transparent 42%), var(--bg);
     color: var(--text);
     font-family: 'Courier New', monospace;
     text-align: center;
@@ -33,10 +32,14 @@
 .title {
     margin: 0.75rem 0 0;
     color: var(--primary);
-    font: bold clamp(2.8rem, 11vw, 6.5rem) 'Times New Roman', serif;
+    font:
+        bold clamp(2.8rem, 11vw, 6.5rem) 'Times New Roman',
+        serif;
     letter-spacing: clamp(0.08em, 1vw, 0.16em);
     line-height: 0.95;
-    text-shadow: 0 0 12px rgb(250 77 152 / 80%), 0 0 36px rgb(250 77 152 / 45%);
+    text-shadow:
+        0 0 12px rgb(250 77 152 / 80%),
+        0 0 36px rgb(250 77 152 / 45%);
 }
 
 .intro {
@@ -74,7 +77,9 @@
     padding: clamp(1rem, 4vw, 1.75rem);
     border: 1px solid var(--border);
     background: linear-gradient(180deg, #111114, var(--surface));
-    box-shadow: inset 0 0 24px rgb(250 77 152 / 8%), 0 0 22px rgb(250 77 152 / 10%);
+    box-shadow:
+        inset 0 0 24px rgb(250 77 152 / 8%),
+        0 0 22px rgb(250 77 152 / 10%);
 }
 
 .countdown {
@@ -111,7 +116,10 @@
     color: var(--text);
     cursor: pointer;
     font: inherit;
-    transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        transform 150ms ease;
 }
 
 .actions button:hover {
@@ -185,22 +193,44 @@
 }
 
 @keyframes marquee {
-    to { transform: translateX(-50%); }
+    to {
+        transform: translateX(-50%);
+    }
 }
 
 @keyframes taunt-in {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 420px) {
-    .page { padding-right: 1rem; padding-left: 1rem; }
-    .actions { gap: 0.5rem; }
-    .actions button { padding-right: 0.8rem; padding-left: 0.8rem; }
+    .page {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+    .actions {
+        gap: 0.5rem;
+    }
+    .actions button {
+        padding-right: 0.8rem;
+        padding-left: 0.8rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .marqueeTrack { animation: none; }
-    .taunt { animation: none; }
-    .actions button { transition: none; }
+    .marqueeTrack {
+        animation: none;
+    }
+    .taunt {
+        animation: none;
+    }
+    .actions button {
+        transition: none;
+    }
 }
