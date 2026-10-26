@@ -41,13 +41,17 @@
     color: var(--muted);
 }
 
-.soon {
-    margin: 0;
-    color: var(--muted);
+.panel[data-widget='guestbook'],
+.panel[data-widget='yap_stats'] {
+    grid-column: 1 / -1;
 }
 
 @media (max-width: 600px) {
     .grid {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel[data-widget] {
+        grid-column: auto;
     }
 }

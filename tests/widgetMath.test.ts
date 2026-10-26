@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
     auraTrend,
+    isPlayableNowPlaying,
+    isSafeEmbedUrl,
     debtPercent,
     moveItem,
     padVisitor,
@@ -50,4 +52,31 @@ test('relativeAgo turns a timestamp into a short lowercase age', () => {
     assert.equal(relativeAgo('2026-10-27T09:00:00Z', now), '3h ago');
     assert.equal(relativeAgo('2026-10-24T12:00:00Z', now), '3d ago');
     assert.equal(relativeAgo('not a date', now), '');
+});
+
+test('only real spotify and soundcloud player urls render as iframes', () => {
+    assert.equal(
+        isSafeEmbedUrl('spotify', 'https://open.spotify.com/embed/track/abc123?theme=0'),
+        true,
+    );
+    assert.equal(
+        isSafeEmbedUrl('soundcloud', 'https://w.soundcloud.com/player/?url=x&auto_play=false'),
+        true,
+    );
+    assert.equal(
+        isSafeEmbedUrl('spotify', 'https://open.spotify.com.evil.com/embed/track/abc'),
+        false,
+    );
+    assert.equal(isSafeEmbedUrl('spotify', 'javascript:alert(1)'), false);
+    assert.equal(isSafeEmbedUrl('spotify', 'http://open.spotify.com/embed/track/abc'), false);
+    assert.equal(isSafeEmbedUrl('spotify', 'https://open.spotify.com/track/abc'), false);
+    assert.equal(isSafeEmbedUrl('soundcloud', 'https://open.spotify.com/embed/track/abc'), false);
+    assert.equal(isPlayableNowPlaying(null), false);
+    assert.equal(
+        isPlayableNowPlaying({
+            provider: 'spotify',
+            embedUrl: 'https://open.spotify.com/embed/track/abc',
+        }),
+        true,
+    );
 });

@@ -42,3 +42,27 @@ export const relativeAgo = (iso: string, now = Date.now()): string => {
     if (hours < 24) return `${hours}h ago`;
     return `${Math.floor(hours / 24)}d ago`;
 };
+
+export type MusicProvider = 'spotify' | 'soundcloud';
+
+// The backend builds the embed url; the client still refuses anything that is not
+// an https player on the expected host, so a bad value never reaches an iframe src.
+export const isSafeEmbedUrl = (provider: MusicProvider, url: string): boolean => {
+    try {
+        const parsed = new URL(url);
+        if (parsed.protocol !== 'https:') return false;
+        if (provider === 'spotify') {
+            return parsed.hostname === 'open.spotify.com' && parsed.pathname.startsWith('/embed/');
+        }
+        return parsed.hostname === 'w.soundcloud.com' && parsed.pathname.startsWith('/player/');
+    } catch {
+        return false;
+    }
+};
+
+export const isPlayableNowPlaying = (
+    nowPlaying: { provider: MusicProvider; embedUrl: string } | null | undefined,
+): boolean => Boolean(nowPlaying && isSafeEmbedUrl(nowPlaying.provider, nowPlaying.embedUrl));
+
+export const embedHeight = (provider: MusicProvider): number =>
+    provider === 'spotify' ? 152 : 166;
