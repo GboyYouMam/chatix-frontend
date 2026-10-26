@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AdminWarningManager } from '../../components/admin/AdminWarningManager.tsx';
 import { AdminUserQuickActions } from '../../components/admin/actions/AdminUserQuickActions.tsx';
@@ -7,23 +7,27 @@ import { AdminTimeModifierControl } from '../../components/admin/control/AdminTi
 import type { DurationUnit } from '../../components/admin/adminPanelTypes.ts';
 import { addDuration, formatDate, getWarnCount } from '../../components/admin/adminPanelUtils.ts';
 import { useAdminUser } from '../../hooks/admin/users/useAdminUser.ts';
-import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import { useAdminWarnings } from '../../hooks/admin/useAdminWarnings.ts';
 import type { UpdateModifiersPayload } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
+import { AdminConfirmDialog } from '../../components/admin/AdminConfirmDialog.tsx';
+import { getUserBadges, getWarnBadge } from '../../components/admin/adminBadges.ts';
 
 export const AdminUserPage = () => {
     const { userId } = useParams();
     const navigate = useNavigate();
     const [warningsPaging, setWarningsPaging] = useState({ userId: '', page: 1 });
+    const [banReason, setBanReason] = useState('');
+    const [now, setNow] = useState(0);
+    const [confirmDialog, setConfirmDialog] = useState<{
+        title: string;
+        body: string;
+        confirmLabel: string;
+        onConfirm: () => void;
+    } | null>(null);
     const warningsPage = warningsPaging.userId === (userId ?? '') ? warningsPaging.page : 1;
-    const { user, isLoading, isError } = useAdminUser(userId);
-    const { updateModifiers, vaporizeUser } = useAdminUsers({
-        page: 1,
-        search: '',
-        enabled: false,
-    });
+    const { user, isLoading, isError, updateModifiers, vaporizeUser } = useAdminUser(userId);
     const updateModifiersMutate = updateModifiers.mutate;
     const {
         warnings,
@@ -37,13 +41,20 @@ export const AdminUserPage = () => {
         search: '',
         enabled: Boolean(userId),
     });
-    const addWarningMutate = addWarning.mutate;
+    const addWarningMutate = addWarning.mutateAsync;
     const revokeWarningMutate = revokeWarning.mutate;
+
+    useEffect(() => {
+        const updateNow = () => setNow(Date.now());
+        updateNow();
+        const intervalId = window.setInterval(updateNow, 60_000);
+        return () => window.clearInterval(intervalId);
+    }, []);
 
     const updateUserModifiers = useCallback(
         (data: UpdateModifiersPayload) => {
             if (!userId) return;
-            updateModifiersMutate({ userId, data });
+            updateModifiersMutate(data);
         },
         [updateModifiersMutate, userId],
     );
@@ -52,9 +63,20 @@ export const AdminUserPage = () => {
         (amount: number, unit: DurationUnit) => {
             if (!Number.isFinite(amount) || amount <= 0) return;
             const nextValue = addDuration(amount, unit);
-            updateUserModifiers({ bannedUntil: nextValue });
+            setConfirmDialog({
+                title: 'this mf is about to be cooked',
+                body: 'set a reason before the ban lands.',
+                confirmLabel: 'do it',
+                onConfirm: () => {
+                    updateUserModifiers({
+                        bannedUntil: nextValue,
+                        banReason: banReason.trim() || null,
+                    });
+                    setConfirmDialog(null);
+                },
+            });
         },
-        [updateUserModifiers],
+        [banReason, updateUserModifiers],
     );
 
     const updateYapCooldown = useCallback(
@@ -75,8 +97,8 @@ export const AdminUserPage = () => {
 
     const addUserWarning = useCallback(
         (reason: string) => {
-            if (!userId || reason.trim().length < 3) return;
-            addWarningMutate({ userId, reason: reason.trim() });
+            if (!userId || reason.trim().length < 3) return Promise.resolve(undefined);
+            return addWarningMutate({ userId, reason: reason.trim() });
         },
         [addWarningMutate, userId],
     );
@@ -98,11 +120,15 @@ export const AdminUserPage = () => {
 
     const vaporizeSelectedUser = () => {
         if (!user) return;
-        if (window.confirm(`Vaporize ${user.username}?`)) {
-            vaporizeUser.mutate(user.id, {
-                onSuccess: () => navigate(PATH.admin.adminDashboard),
-            });
-        }
+        setConfirmDialog({
+            title: 'vaporize this bum?',
+            body: `this deletes ${user.username} for good.`,
+            confirmLabel: 'do it',
+            onConfirm: () =>
+                vaporizeUser.mutate(undefined, {
+                    onSuccess: () => navigate(PATH.admin.adminDashboard),
+                }),
+        });
     };
 
     if (isLoading) {
@@ -141,10 +167,10 @@ export const AdminUserPage = () => {
             </header>
 
             <section className={styles.profileCard}>
-                {user.pfp_url ? (
+                {user.pfpUrl ? (
                     <img
                         className={styles.profileAvatar}
-                        src={user.pfp_url}
+                        src={user.pfpUrl}
                         alt={`${user.username} avatar`}
                     />
                 ) : (
@@ -156,9 +182,24 @@ export const AdminUserPage = () => {
                 <div className={styles.profileSummary}>
                     <span className={styles.eyebrow}>{user.role}</span>
                     <h2 className={styles.panelTitle}>{user.username}</h2>
-                    <span className={styles.sectionNote}>
-                        Joined {formatDate(user.createdAt ?? user.created_at)}
-                    </span>
+                    <div className={styles.badgeRow}>
+                        {getUserBadges(user, now).map((badge) => (
+                            <span className={styles.userBadge} key={badge}>
+                                {badge}
+                            </span>
+                        ))}
+                        <span
+                            className={`${styles.warnBadge} ${styles[getWarnBadge(getWarnCount(user)).level]}`}
+                        >
+                            {getWarnBadge(getWarnCount(user)).label}
+                        </span>
+                    </div>
+                    {user.isAutoBanned && user.banReason && (
+                        <p className={styles.banNotice}>
+                            AUTOBANNED · {user.banReason} · {formatDate(user.bannedUntil)}
+                        </p>
+                    )}
+                    <span className={styles.sectionNote}>Joined {formatDate(user.createdAt)}</span>
                 </div>
 
                 <div className={styles.statGrid}>
@@ -200,6 +241,33 @@ export const AdminUserPage = () => {
                         submitLabel="Apply ban"
                         onSubmit={updateBanDuration}
                     />
+                    <label className={styles.fieldLabel}>
+                        ban reason (be creative)
+                        <input
+                            className={styles.textInput}
+                            value={banReason}
+                            onChange={(event) => setBanReason(event.target.value)}
+                        />
+                    </label>
+                    {user.bannedUntil && new Date(user.bannedUntil).getTime() > now && (
+                        <button
+                            className={styles.actionBtnSafe}
+                            type="button"
+                            onClick={() =>
+                                setConfirmDialog({
+                                    title: 'let him yap?',
+                                    body: 'remove the active ban and its reason.',
+                                    confirmLabel: 'unban',
+                                    onConfirm: () => {
+                                        updateUserModifiers({ bannedUntil: null, banReason: null });
+                                        setConfirmDialog(null);
+                                    },
+                                })
+                            }
+                        >
+                            unban
+                        </button>
+                    )}
 
                     <AdminTimeModifierControl
                         currentValue={user.yapCooldown}
@@ -210,9 +278,19 @@ export const AdminUserPage = () => {
                         submitLabel="Apply cooldown"
                         onSubmit={updateYapCooldown}
                     />
+                    {user.yapCooldown && (
+                        <button
+                            className={styles.actionBtnSafe}
+                            type="button"
+                            onClick={() => updateUserModifiers({ yapCooldown: null })}
+                        >
+                            let him yap
+                        </button>
+                    )}
 
                     <AdminWarningManager
                         warnings={warnings}
+                        activeWarningCount={getWarnCount(user)}
                         warningsLoading={warningsLoading}
                         warningsPage={warningsPage}
                         warningsPagination={warningsPagination}
@@ -230,6 +308,9 @@ export const AdminUserPage = () => {
                     </button>
                 </div>
             </main>
+            {confirmDialog && (
+                <AdminConfirmDialog {...confirmDialog} onCancel={() => setConfirmDialog(null)} />
+            )}
         </div>
     );
 };
