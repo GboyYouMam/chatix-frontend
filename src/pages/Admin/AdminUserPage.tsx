@@ -19,6 +19,9 @@ import type { AdminAuditLog, AdminMessage, PaginatedResponse } from '../../api/a
 import { Tabs } from '../../components/admin/ui/Tabs.tsx';
 import { auditSentence } from '../../components/admin/auditSentence.ts';
 import { CopyId } from '../../components/admin/ui/CopyId.tsx';
+import { useQueryClient } from '@tanstack/react-query';
+import { adminApi } from '../../api/admin/admin.service.ts';
+import { notify } from '../../lib/toast.ts';
 
 type DossierTab = 'moderation' | 'warnings' | 'history' | 'messages';
 
@@ -40,6 +43,7 @@ const AdminUserPageContent = () => {
         confirmLabel: string;
         onConfirm: () => void;
     } | null>(null);
+    const queryClient = useQueryClient();
     const { user, isLoading, isError, updateModifiers, vaporizeUser } = useAdminUser(userId);
     const updateModifiersMutate = updateModifiers.mutate;
     const {
@@ -186,7 +190,6 @@ const AdminUserPageContent = () => {
                 >
                     Back to Dashboard
                 </button>
-                <CopyId id={user.id} />
                 <p className={styles.placeholderText}>User was not found.</p>
             </div>
         );
@@ -206,6 +209,7 @@ const AdminUserPageContent = () => {
                 >
                     Back to Dashboard
                 </button>
+                <CopyId id={user.id} />
             </header>
 
             <section className={styles.profileCard}>
@@ -397,6 +401,37 @@ const AdminUserPageContent = () => {
                             <span className={styles.sectionNote}>
                                 {formatDate(message.createdAt)}
                             </span>
+                            <button
+                                className={styles.actionBtnDanger}
+                                type="button"
+                                onClick={() =>
+                                    setConfirmDialog({
+                                        title: 'delete this message?',
+                                        body: 'this message is gone for good.',
+                                        confirmLabel: 'do it',
+                                        onConfirm: async () => {
+                                            try {
+                                                await adminApi.deleteMessage(message.id);
+                                                notify.success('message deleted.');
+                                                await queryClient.invalidateQueries({
+                                                    queryKey: [
+                                                        'admin',
+                                                        'users',
+                                                        userId,
+                                                        'messages',
+                                                    ],
+                                                });
+                                            } catch {
+                                                notify.error('could not delete this message.');
+                                            } finally {
+                                                setConfirmDialog(null);
+                                            }
+                                        },
+                                    })
+                                }
+                            >
+                                delete
+                            </button>
                         </article>
                     ))}
                 </section>

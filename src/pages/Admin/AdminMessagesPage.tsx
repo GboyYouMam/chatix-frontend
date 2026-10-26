@@ -8,6 +8,7 @@ import { useAdminMessages } from '../../hooks/admin/useAdminMessages.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
 import { AdminConfirmDialog } from '../../components/admin/AdminConfirmDialog.tsx';
+import { CopyId } from '../../components/admin/ui/CopyId.tsx';
 
 export const AdminMessagesPage = () => {
     const navigate = useNavigate();
@@ -94,6 +95,7 @@ export const AdminMessagesPage = () => {
                                 selectedMessage={selectedMessage}
                                 onDelete={deleteSelectedMessage}
                             />
+                            <CopyId id={selectedMessage.id} />
                         </>
                     ) : (
                         <p className={styles.placeholderText}>Select a message to moderate it.</p>

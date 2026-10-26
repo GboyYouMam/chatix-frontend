@@ -71,12 +71,32 @@ export const AdminDashboard = () => {
     const [roomsPage, setRoomsPage] = useState(1);
     const [usersSearch, setUsersSearch] = useState('');
     const [roomsSearch, setRoomsSearch] = useState('');
+    const [auditFilter, setAuditFilter] = useState({
+        actionKey: '',
+        targetType: '',
+        success: '',
+        from: '',
+        to: '',
+    });
+    const [auditPage, setAuditPage] = useState(1);
 
     const usersState = useAdminUsers({ page: usersPage, search: usersSearch });
     const roomsState = useAdminRooms({ page: roomsPage, search: roomsSearch });
-    const { auditLogs } = useAdminAuditLogs({ page: 1, limit: 25, search: '' });
+    const { auditLogs } = useAdminAuditLogs({
+        page: auditPage,
+        limit: 25,
+        search: '',
+        filters: {
+            actionKey: auditFilter.actionKey || undefined,
+            targetType: auditFilter.targetType || undefined,
+            success: auditFilter.success ? auditFilter.success === 'true' : undefined,
+            from: auditFilter.from || undefined,
+            to: auditFilter.to || undefined,
+        },
+    });
     const stats = useAdminStats();
     const queue = useModerationQueue();
+    const quarantineQueueRoom = roomsState.quarantineRoom.mutate;
 
     const applyUsersSearch = useCallback((nextSearch: string) => {
         setUsersPage(1);
@@ -106,7 +126,7 @@ export const AdminDashboard = () => {
         try {
             await api.patch(`/admin/rooms/${encodeURIComponent(roomId)}/approve`);
             notify.success('room approved. let them cook.');
-            await Promise.all([roomsState.refetch?.(), queue.refetch()]);
+            await queue.refetch();
         } catch {
             notify.error('could not approve this room.');
         }
@@ -120,7 +140,7 @@ export const AdminDashboard = () => {
                 reason: reason.trim(),
             });
             notify.success('room rejected.');
-            await Promise.all([roomsState.refetch?.(), queue.refetch()]);
+            await queue.refetch();
         } catch {
             notify.error('could not reject this room.');
         }
@@ -175,6 +195,20 @@ export const AdminDashboard = () => {
                         >
                             reject
                         </button>
+                        <button
+                            className={styles.actionBtnWarning}
+                            type="button"
+                            onClick={() => {
+                                const reason = window.prompt('why is this room quarantined?');
+                                if (!reason?.trim()) return;
+                                quarantineQueueRoom(
+                                    { roomId: room.id, reason: reason.trim() },
+                                    { onSuccess: () => void queue.refetch() },
+                                );
+                            }}
+                        >
+                            quarantine
+                        </button>
                     </div>
                 ))}
                 {(queue.data?.length ?? 0) === 0 && (
@@ -184,7 +218,78 @@ export const AdminDashboard = () => {
                 )}
             </section>
 
+            <div className={styles.statusGrid} aria-label="audit filters">
+                <select
+                    className={styles.selectInput}
+                    aria-label="filter audit action"
+                    value={auditFilter.actionKey}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({ ...current, actionKey: event.target.value }))
+                    }
+                >
+                    <option value="">all actions</option>
+                    <option value="user.ban">user.ban</option>
+                    <option value="user.warn">user.warn</option>
+                    <option value="user.modifiers">user.modifiers</option>
+                    <option value="room.approve">room.approve</option>
+                    <option value="room.reject">room.reject</option>
+                    <option value="message.delete">message.delete</option>
+                </select>
+                <select
+                    className={styles.selectInput}
+                    aria-label="filter audit target"
+                    value={auditFilter.targetType}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({
+                            ...current,
+                            targetType: event.target.value,
+                        }))
+                    }
+                >
+                    <option value="">all targets</option>
+                    <option value="user">users</option>
+                    <option value="room">rooms</option>
+                    <option value="message">messages</option>
+                </select>
+                <select
+                    className={styles.selectInput}
+                    aria-label="filter audit result"
+                    value={auditFilter.success}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({ ...current, success: event.target.value }))
+                    }
+                >
+                    <option value="">all results</option>
+                    <option value="true">success</option>
+                    <option value="false">failed</option>
+                </select>
+                <input
+                    className={styles.textInput}
+                    aria-label="audit from date"
+                    type="date"
+                    value={auditFilter.from}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({ ...current, from: event.target.value }))
+                    }
+                />
+                <input
+                    className={styles.textInput}
+                    aria-label="audit to date"
+                    type="date"
+                    value={auditFilter.to}
+                    onChange={(event) =>
+                        setAuditFilter((current) => ({ ...current, to: event.target.value }))
+                    }
+                />
+            </div>
             <AdminAuditFeed logs={auditLogs} />
+            <button
+                className={styles.paginationButton}
+                type="button"
+                onClick={() => setAuditPage((page) => page + 1)}
+            >
+                load older events
+            </button>
 
             <div className={styles.dashboardGrid}>
                 <AdminDashboardList

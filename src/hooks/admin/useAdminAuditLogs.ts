@@ -1,23 +1,36 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
-import {
-    EMPTY_PAGINATION,
-    getPaginated,
-    type AdminListOptions,
-} from '../../utils/adminQueryUtils.ts';
+import { EMPTY_PAGINATION, type AdminListOptions } from '../../utils/adminQueryUtils.ts';
 import { adminKeys } from './adminKeys.ts';
+import { api } from '../../api/client.ts';
+import type { PaginatedResponse } from '../../api/admin/types.ts';
+
+export interface AdminAuditFilters {
+    adminId?: string;
+    actionKey?: string;
+    targetType?: string;
+    success?: boolean;
+    from?: string;
+    to?: string;
+}
 
 export const useAdminAuditLogs = ({
     page,
     limit = 25,
     search,
+    filters,
     enabled = true,
-}: AdminListOptions) => {
-    const listParams = { page, limit, search };
+}: AdminListOptions & { filters?: AdminAuditFilters }) => {
+    const listParams = { page, limit, search, ...filters };
 
     const auditLogsQuery = useQuery({
         queryKey: adminKeys.auditLogs(listParams),
-        queryFn: () => getPaginated<AdminAuditLog>('/admin/audit-logs', listParams),
+        queryFn: async () =>
+            (
+                await api.get<PaginatedResponse<AdminAuditLog>>('/admin/audit-logs', {
+                    params: listParams,
+                })
+            ).data,
         enabled,
         placeholderData: keepPreviousData,
         staleTime: 10_000,

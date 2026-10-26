@@ -817,6 +817,33 @@ button:disabled {
     }
 }
 
+@media (max-width: 600px) {
+    .adminPageShell {
+        padding: 0.75rem;
+    }
+    .listItem,
+    .selectedItem {
+        min-height: 44px;
+    }
+    .profileCard,
+    .listPanel,
+    .logsPanel,
+    .actionsPanel {
+        padding: 0.75rem;
+    }
+    .dashboardHeader,
+    .listPanelHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .messageModerationLayout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .messageBody {
+        min-width: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .logEntry,
     .skeletonRow,

@@ -45,12 +45,6 @@ export function getEntityLabel(
     }
 }
 
-export function getLogSummary(log: AdminAuditLog) {
-    const actor = log.admin?.username ?? log.adminId ?? 'unknown';
-    const target = [log.targetType, log.targetId].filter(Boolean).join(':') || log.path;
-    return `${actor} → ${log.action} → ${target}`;
-}
-
 export function addDuration(amount: number, unit: 'minutes' | 'hours' | 'days') {
     const value = Number.isFinite(amount) ? amount : 0;
     const now = Date.now();

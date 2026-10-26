@@ -44,11 +44,13 @@ export interface AdminUser {
     forcedTitle?: string | null;
 }
 
-export interface AdminRoom extends RoomDetails {
+export interface AdminRoom extends Omit<RoomDetails, 'creator'> {
+    creator: RoomDetails['creator'] & { pfp_url?: string | null };
     status?: AdminRoomStatus;
     quarantineReason?: string | null;
     quarantinedUntil?: string | Date | null;
     messagesCount?: number;
+    recentMessages?: AdminMessage[];
 }
 
 export interface AdminMessage extends MessageData {
