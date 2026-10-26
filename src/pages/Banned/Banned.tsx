@@ -8,12 +8,14 @@ import { APPEAL_DENIALS, BAN_TAUNTS, formatCountdown, getBanCountdown, pickNext 
 import { PATH } from '../../utils/pathList.ts';
 import styles from './Banned.module.css';
 
+const initialNow = Date.now();
+
 export function Banned() {
     const ban = useAuthStore((state) => state.ban);
     const logout = useAuthStore((state) => state.logout);
     const clearBan = useAuthStore((state) => state.clearBan);
     const navigate = useNavigate();
-    const [now, setNow] = useState(0);
+    const [now, setNow] = useState(initialNow);
     const [taunt, setTaunt] = useState<string>(BAN_TAUNTS[0]);
     const [appeal, setAppeal] = useState<string>(APPEAL_DENIALS[0]);
     useEffect(() => { const id = window.setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);

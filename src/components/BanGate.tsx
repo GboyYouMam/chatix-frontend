@@ -4,8 +4,10 @@ import { useAuthStore } from '../store/authStore.ts';
 import { getBanCountdown } from '../utils/banScreen.ts';
 import { PATH } from '../utils/pathList.ts';
 
+const initialNow = Date.now();
+
 export function BanGate() {
-    const [now, setNow] = useState(0);
+    const [now, setNow] = useState(initialNow);
     useEffect(() => { const id = window.setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
     const ban = useAuthStore((state) => state.ban);
     const location = useLocation();
