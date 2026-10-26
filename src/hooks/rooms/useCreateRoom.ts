@@ -22,7 +22,7 @@ export const useCreateRoom = () => {
             )
                 notify.error('this name is taken. be original, chud.');
             else if (parseApiError(error).code === 'THEME_LOCKED')
-                notify.error('locked. buy that theme in the soap market first.');
+                notify.error('locked. buy that theme in the mogger mart first.');
             else notify.error(error);
         },
     });

@@ -20,7 +20,7 @@ export const DuelResultOverlay = memo(({ status, onLobby }: DuelResultOverlayPro
                     ? "You are Jack's immaculate combo meter."
                     : status === 'cancelled'
                       ? 'opponent bailed. no stakes moved.'
-                      : 'The soap market remains undefeated.'}
+                      : 'the soap cartel remains undefeated.'}
             </p>
             <button onClick={onLobby}>return to lobby</button>
         </div>

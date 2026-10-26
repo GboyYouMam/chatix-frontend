@@ -1,7 +1,7 @@
 export const RARE_HINTS = [
     'one of these rooms is hiding a basement.',
     "first rule: you don't type the first rule. or do you",
-    'the soap market has a door nobody mentions.',
+    'the soap cartel has a door nobody mentions.',
     'somewhere, a duel is waiting for a witness.',
 ] as const;
 
