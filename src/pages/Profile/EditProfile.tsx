@@ -9,6 +9,7 @@ import { achievementsApi } from '../../api/achievements/achievements.service.ts'
 import { useQuery } from '@tanstack/react-query';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileData } from '../../api/users/types.ts';
+import { DripEditor } from '../../components/shop/DripEditor.tsx';
 
 export const EditProfile = () => {
     const navigate = useNavigate();
@@ -249,6 +250,8 @@ export const EditProfile = () => {
                         />
                         <span>{description.length}/500</span>
                     </div>
+
+                    <DripEditor />
 
                     <fieldset className={styles.inputGroup} disabled={savingFeatured}>
                         <legend>featured medals (up to 3)</legend>

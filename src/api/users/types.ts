@@ -18,6 +18,7 @@ export interface ProfileComment {
 }
 
 export interface ProfileData extends User {
+    cosmetics?: ProfileCosmetics | null;
     achievements?: Array<{ key: string; unlockedAt: string }>;
     featuredAchievements?: string[];
     fightTitle?: string | null;
@@ -49,4 +50,17 @@ export interface RespectProfileResponse {
 export interface CreateProfileCommentResponse {
     message?: string;
     comment_id: string;
+}
+
+export interface ProfileCosmetics {
+    accent?: string | null;
+    background?: string | null;
+    title?: string | null;
+    nameColor?: string | null;
+    nameIcon?: string | null;
+    quoteStyle?: string | null;
+    nyanCat?: boolean;
+    verified?: boolean;
+    stickers?: Array<string | null>;
+    vineBoom?: boolean;
 }

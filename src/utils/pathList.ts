@@ -18,6 +18,9 @@ const PATH_PATTERNS = {
         room: '/room/:id',
         joinRoom: '/room/:id/join',
     },
+    shop: {
+        shop: '/shop',
+    },
     fightClub: {
         lobby: '/lobby',
         duel: '/duel',
@@ -46,6 +49,7 @@ export const PATH = {
                 href(PATH_PATTERNS.rooms.joinRoom, { id: String(id) }),
         },
     },
+    shop: PATH_PATTERNS.shop,
     fightClub: {
         ...PATH_PATTERNS.fightClub,
         href: {

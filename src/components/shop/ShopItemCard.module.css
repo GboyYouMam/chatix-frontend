@@ -1,0 +1,154 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+}
+
+.card:hover {
+    border-color: var(--primary);
+}
+
+.equipped {
+    border-color: var(--primary);
+    box-shadow: 0 0 18px rgb(250 77 152 / 25%);
+}
+
+.preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 88px;
+    border-radius: 8px;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.swatch {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 0 22px rgb(250 77 152 / 40%);
+}
+
+.glyph {
+    font-size: 2.6rem;
+    line-height: 1;
+}
+
+.text {
+    font-size: 1rem;
+    text-align: center;
+    padding: 0 0.5rem;
+    overflow-wrap: anywhere;
+}
+
+.serif {
+    font-family: 'Times New Roman', Times, serif;
+    letter-spacing: 1px;
+    color: var(--text);
+}
+
+.mono {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.4rem;
+}
+
+.quote {
+    font-family: 'Courier New', Courier, monospace;
+    color: #4ade80;
+    text-shadow: 0 0 8px rgb(74 222 128 / 60%);
+}
+
+.button {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--warn);
+}
+
+.name {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.35;
+    flex: 1;
+}
+
+.locked,
+.odds {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: var(--warn);
+}
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.price {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    color: var(--text);
+    margin-right: auto;
+}
+
+.badge {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+}
+
+.buyBtn {
+    min-height: 40px;
+    min-width: 64px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 1rem;
+    background: var(--primary);
+    color: var(--bg);
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
+}
+
+.buyBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.buyBtn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.buyBtn:disabled {
+    background: var(--border);
+    color: var(--muted);
+    cursor: default;
+}

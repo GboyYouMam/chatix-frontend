@@ -148,25 +148,34 @@ export const Rooms = () => {
 
                 <h1 className={styles.logo}>CHATIX</h1>
 
-                <button
-                    className={styles.profileBtn}
-                    aria-label="Profile"
-                    onClick={handleGoToMyProfile}
-                >
-                    <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                <div className={styles.headerRight}>
+                    <button
+                        type="button"
+                        className={styles.shopLink}
+                        onClick={() => navigate(PATH.shop.shop)}
                     >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </button>
+                        soap market
+                    </button>
+                    <button
+                        className={styles.profileBtn}
+                        aria-label="Profile"
+                        onClick={handleGoToMyProfile}
+                    >
+                        <svg
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                </div>
             </header>
 
             <img src={bannerPng} alt="Chatix Banner" className={styles.banner} />

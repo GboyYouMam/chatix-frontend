@@ -1,4 +1,6 @@
 .layout {
+    position: relative;
+    isolation: isolate;
     min-height: 100vh;
     background-color: var(--bg);
     display: flex;
@@ -22,8 +24,9 @@
 }
 
 .mainBanner {
+    position: relative;
     background-color: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid var(--profile-accent, var(--border));
     border-radius: 8px;
     height: 120px;
     display: flex;

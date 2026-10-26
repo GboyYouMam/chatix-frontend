@@ -1,0 +1,102 @@
+/* Nyan cat sprite drawn with gradients only. Rainbow trail is a gradient, not an image. */
+.nyan {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 44px;
+    margin-bottom: 0.25rem;
+}
+
+.trail {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 84px;
+    height: 10px;
+    transform: translateY(-50%);
+    border-radius: 6px 0 0 6px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        #ef4444 20%,
+        #f59e0b 35%,
+        #facc15 50%,
+        #22c55e 65%,
+        #3b82f6 80%,
+        #a855f7 100%
+    );
+    transform-origin: right center;
+}
+
+.cat {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 44px;
+    height: 34px;
+    transform: translateY(-50%);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fbcfe8 0%, #f9a8d4 60%, #f472b6 100%);
+    box-shadow: 0 0 12px rgb(250 77 152 / 45%);
+}
+
+.cat::before,
+.cat::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 9px solid #f9a8d4;
+}
+
+.cat::before {
+    left: 6px;
+}
+
+.cat::after {
+    right: 6px;
+}
+
+.face {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 11px;
+    height: 12px;
+    background:
+        radial-gradient(circle, #111 2px, transparent 2.5px) 4px 2px / 9px 9px no-repeat,
+        radial-gradient(circle, #111 2px, transparent 2.5px) 22px 2px / 9px 9px no-repeat;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .trail {
+        animation: trailPulse 0.6s ease-in-out infinite alternate;
+    }
+
+    .cat {
+        animation: nyanBob 0.5s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes trailPulse {
+    from {
+        transform: translateY(-50%) scaleX(1);
+    }
+
+    to {
+        transform: translateY(-50%) scaleX(0.82);
+    }
+}
+
+@keyframes nyanBob {
+    from {
+        transform: translateY(-62%);
+    }
+
+    to {
+        transform: translateY(-38%);
+    }
+}

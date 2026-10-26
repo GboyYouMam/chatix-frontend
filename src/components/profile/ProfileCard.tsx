@@ -3,6 +3,10 @@ import { formatDate } from '../../utils/date.ts';
 import type { ProfileData } from '../../api/users/types.ts';
 import { MedalRack } from '../achievements/MedalRack.tsx';
 import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
+import { NyanCat } from '../cosmetics/NyanCat.tsx';
+import { VerifiedCheck } from '../cosmetics/VerifiedCheck.tsx';
+import { VineBoomButton } from '../cosmetics/VineBoomButton.tsx';
+import { pickProfileTitle } from '../cosmetics/profileCosmetics.ts';
 
 interface ProfileCardProps {
     profileData: ProfileData;
@@ -14,6 +18,12 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
     const respectCount = profileData.respectCount ?? profileData.respect_count ?? 0;
     const isClown = profileData.is_clown ?? profileData.isClown;
     const adminGlazeMode = profileData.admin_glaze_mode ?? profileData.adminGlazeMode;
+    const cosmetics = profileData.cosmetics;
+    const shopTitle = pickProfileTitle({
+        forcedTitle: profileData.forcedTitle,
+        fightTitle: profileData.fightTitle,
+        cosmeticTitle: cosmetics?.title,
+    });
 
     return (
         <div className={styles.profileCard}>
@@ -27,12 +37,18 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
 
             <div className={styles.userInfo}>
                 <div className={styles.nameRow}>
-                    <h2 className={styles.username}>{profileData.username}</h2>
+                    {cosmetics?.nyanCat && <NyanCat />}
                     {profileData.forcedTitle && (
                         <span className={styles.forcedTitle}>[{profileData.forcedTitle}]</span>
                     )}
+                    <div className={styles.nameLine}>
+                        <h2 className={styles.username}>{profileData.username}</h2>
+                        {cosmetics?.verified && <VerifiedCheck />}
+                    </div>
+                    {shopTitle && <p className={styles.shopTitle}>{shopTitle}</p>}
                 </div>
                 <p className={styles.vibe}>{profileData.vibe || 'no vibe detected'}</p>
+                {cosmetics?.vineBoom && <VineBoomButton />}
                 <MedalRack
                     unlocked={profileData.achievements ?? []}
                     catalog={medalCatalog}

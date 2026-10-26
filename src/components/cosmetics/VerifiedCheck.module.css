@@ -1,0 +1,15 @@
+.check {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--bg);
+    font-size: 0.85rem;
+    font-weight: 900;
+    box-shadow: 0 0 12px rgb(250 77 152 / 60%);
+    cursor: help;
+}

@@ -16,6 +16,27 @@
     background: #fa4d98;
 }
 
+.quoteNeon {
+    color: #39ff88;
+    text-decoration: none;
+    text-shadow:
+        0 0 6px rgb(57 255 136 / 80%),
+        0 0 14px rgb(57 255 136 / 40%);
+}
+
+.quoteGreentext {
+    color: #789922;
+    font-family: 'Courier New', Courier, monospace;
+    text-decoration: none;
+}
+
+.quoteRedacted:not(:hover):not(:focus-visible) {
+    color: #000;
+    background: #000;
+    text-decoration: none;
+    border-radius: 2px;
+}
+
 .quotePopup {
     position: absolute;
     bottom: 120%;
