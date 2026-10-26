@@ -5,6 +5,8 @@ import { notify } from '../../lib/toast.ts';
 import type { MessageData, MessagePage } from '../../api/messages/types.ts';
 import type { InfiniteData } from '@tanstack/react-query';
 import { messagesApi } from '../../api/messages/messages.service.ts';
+import { appendMessageToPages, markMessageDeleted } from './messageCache.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 type SendMessagePayload = {
     roomId: string;
@@ -42,7 +44,14 @@ export const useRoomSocket = (roomId: string | undefined) => {
 
         const showErrorMessage = (payload: SocketErrorPayload) => showSocketError(payload);
 
-        newSocket.emit('joinRoom', roomId);
+        let hasConnected = false;
+        const onConnect = () => {
+            if (hasConnected)
+                queryClient.invalidateQueries({ queryKey: queryKeys.messages(roomId) });
+            hasConnected = true;
+            newSocket.emit('joinRoom', { roomId });
+        };
+        newSocket.on('connect', onConnect);
 
         newSocket.on('connect_error', showSocketError);
         newSocket.on('error', showSocketError);
@@ -51,34 +60,14 @@ export const useRoomSocket = (roomId: string | undefined) => {
 
         newSocket.on('newMessage', (msg: MessageData) => {
             queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
-                ['messages', roomId],
-                (old) => {
-                    if (
-                        !old ||
-                        old.pages.some((page) => page.items.some((item) => item.id === msg.id))
-                    )
-                        return old;
-                    return {
-                        ...old,
-                        pages: [
-                            { ...old.pages[0], items: [...old.pages[0].items, msg] },
-                            ...old.pages.slice(1),
-                        ],
-                    };
-                },
+                queryKeys.messages(roomId),
+                (old) => appendMessageToPages(old, msg),
             );
         });
         newSocket.on('messageDeleted', ({ id }: { id: string }) =>
             queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
-                ['messages', roomId],
-                (old) =>
-                    old && {
-                        ...old,
-                        pages: old.pages.map((page) => ({
-                            ...page,
-                            items: page.items.filter((message) => message.id !== id),
-                        })),
-                    },
+                queryKeys.messages(roomId),
+                (old) => markMessageDeleted(old, id),
             ),
         );
         newSocket.on(
@@ -86,12 +75,16 @@ export const useRoomSocket = (roomId: string | undefined) => {
             ({ roomId: affectedRoomId, quarantined }: { roomId: string; quarantined: boolean }) => {
                 if (affectedRoomId === roomId) {
                     if (quarantined) notify.info('this room got quarantined. read-only now.');
-                    queryClient.invalidateQueries({ queryKey: ['room', roomId] });
+                    queryClient.invalidateQueries({ queryKey: queryKeys.room(roomId) });
                 }
             },
         );
 
         return () => {
+            newSocket.off('connect', onConnect);
+            newSocket.off('newMessage');
+            newSocket.off('messageDeleted');
+            newSocket.off('roomQuarantined');
             newSocket.off('connect_error', showSocketError);
             newSocket.off('error', showSocketError);
             newSocket.off('exception', showSocketError);
@@ -108,18 +101,8 @@ export const useRoomSocket = (roomId: string | undefined) => {
                 attachments: payload.attachments,
             });
             queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
-                ['messages', payload.roomId],
-                (old) =>
-                    old &&
-                    (old.pages.some((page) => page.items.some((item) => item.id === message.id))
-                        ? old
-                        : {
-                              ...old,
-                              pages: [
-                                  { ...old.pages[0], items: [...old.pages[0].items, message] },
-                                  ...old.pages.slice(1),
-                              ],
-                          }),
+                queryKeys.messages(payload.roomId),
+                (old) => appendMessageToPages(old, message),
             );
         },
         [queryClient],
