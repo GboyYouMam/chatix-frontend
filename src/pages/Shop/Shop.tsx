@@ -5,6 +5,8 @@ import type { ShopCatalogItem, ShopCategory } from '../../api/shop/types.ts';
 import { Modal } from '../../components/ui/Modal.tsx';
 import { ShopItemCard } from '../../components/shop/ShopItemCard.tsx';
 import { MysterySoapReveal } from '../../components/shop/MysterySoapReveal.tsx';
+import { MART_TAGLINES, pickTagline } from '../../components/shop/martQuotes.ts';
+import { RotatingTagline } from '../../components/shop/RotatingTagline.tsx';
 import {
     canAfford,
     formatAmount,
@@ -34,6 +36,7 @@ export const Shop = () => {
     const [category, setCategory] = useState<ShopCategory>('profile');
     const [pendingItem, setPendingItem] = useState<ShopCatalogItem | null>(null);
     const [revealName, setRevealName] = useState<string | null>(null);
+    const [footnote, setFootnote] = useState<string>(MART_TAGLINES[0]);
 
     const catalog = useMemo(() => catalogQuery.data ?? [], [catalogQuery.data]);
     const me = meQuery.data;
@@ -58,6 +61,11 @@ export const Shop = () => {
                 }
             },
         });
+    };
+
+    const openPurchase = (item: ShopCatalogItem) => {
+        setFootnote(pickTagline(Math.floor(Math.random() * MART_TAGLINES.length)));
+        setPendingItem(item);
     };
 
     const pendingAffordable = pendingItem ? canAfford(aura, pendingItem.price) : false;
@@ -90,7 +98,7 @@ export const Shop = () => {
                 quantity={quantityByKey.get(item.key) ?? 0}
                 owned={quantityByKey.has(item.key) && item.kind === 'permanent'}
                 equipped={me ? isItemEquipped(me.equipped, item.key) : false}
-                onBuy={setPendingItem}
+                onBuy={openPurchase}
             />
         ));
     };
@@ -110,10 +118,7 @@ export const Shop = () => {
             <section className={styles.hero}>
                 <p className={styles.eyebrow}>est. hypergamy era</p>
                 <h1 className={styles.title}>MOGGER MART</h1>
-                <p className={styles.tagline}>
-                    nothing here is refundable except ur dignity. buy stuff. look cool. be
-                    insufferable.
-                </p>
+                <RotatingTagline className={styles.tagline} />
             </section>
 
             <nav className={styles.tabs} role="tablist" aria-label="shop categories">
@@ -149,6 +154,7 @@ export const Shop = () => {
                                 ? 'no refunds. no mercy. no take-backs.'
                                 : `u broke. go farm. you need ${formatAmount(pendingItem.price - aura)} more.`}
                         </p>
+                        <p className={styles.confirmFootnote}>{footnote}</p>
                         <div className={styles.confirmActions}>
                             <button
                                 type="button"
