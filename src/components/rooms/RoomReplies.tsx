@@ -8,6 +8,7 @@ import { PATH } from '../../utils/pathList.ts';
 import { formatAttachmentSize } from './attachments.ts';
 import { DELETED_MESSAGE } from '../../hooks/rooms/messageCache.ts';
 import { formatDate } from '../../utils/date.ts';
+import { FeaturedMedals } from '../achievements/FeaturedMedals.tsx';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -81,6 +82,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                 }
                             >
                                 {msg.author?.username || 'Anon'}
+                                <FeaturedMedals keys={msg.author?.featuredAchievements} />
 
                                 {msg.author?.username === roomCreatorUsername && (
                                     <span className={styles.opBadge}> [OP]</span>

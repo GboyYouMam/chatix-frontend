@@ -1,0 +1,74 @@
+.book {
+    background: var(--surface);
+    border: 1px solid var(--primary);
+    padding: 1rem;
+    min-width: min(80vw, 420px);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+.header h2 {
+    font:
+        bold 1.3rem 'Times New Roman',
+        serif;
+    letter-spacing: 3px;
+}
+.header button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.category h3 {
+    color: var(--primary);
+    font:
+        0.85rem 'Courier New',
+        monospace;
+    text-transform: uppercase;
+    margin: 1rem 0 0.5rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 0.5rem;
+}
+.medal {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 0;
+}
+.medal strong {
+    font:
+        0.8rem 'Courier New',
+        monospace;
+}
+.medal p {
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin: 0.25rem 0 0;
+}
+.icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    flex: none;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    color: white;
+    text-shadow: 0 1px 3px #000;
+}
+.locked {
+    opacity: 0.45;
+    filter: grayscale(1);
+}

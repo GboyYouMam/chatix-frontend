@@ -18,6 +18,7 @@ import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../../lib/queryKeys.ts';
 import { achievementsApi } from '../../api/achievements/achievements.service.ts';
+import { MedalBook } from '../../components/achievements/MedalBook.tsx';
 
 type EffectMode = 'aura' | 'debt' | null;
 
@@ -41,6 +42,7 @@ export const Profile = () => {
     });
 
     const [activeEffect, setActiveEffect] = useState<EffectMode>(null);
+    const [medalBookOpen, setMedalBookOpen] = useState(false);
     const [isRespectLoading, setIsRespectLoading] = useState(false);
 
     const isMyProfile = currentUser?.username === username;
@@ -145,6 +147,12 @@ export const Profile = () => {
 
     return (
         <div className={styles.layout}>
+            <MedalBook
+                isOpen={medalBookOpen}
+                onClose={() => setMedalBookOpen(false)}
+                catalog={medalCatalog}
+                unlockedKeys={(profileData.achievements ?? []).map(({ key }) => key)}
+            />
             <ProfileEffectsOverlay activeEffect={activeEffect} />
             <ProfileTopActions isMyProfile={isMyProfile} />
 
@@ -171,7 +179,7 @@ export const Profile = () => {
                     <ProfileCard
                         profileData={profileData}
                         medalCatalog={medalCatalog}
-                        onViewMedalBook={() => {}}
+                        onViewMedalBook={() => setMedalBookOpen(true)}
                     />
                     <ProfileModerationBar profileData={profileData} />
                     <ProfileDescription description={profileData.description} />

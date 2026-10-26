@@ -15,6 +15,7 @@ export interface User {
     upper_banner_url?: string | null;
     left_banner_url?: string | null;
     right_banner_url?: string | null;
+    featuredAchievements?: string[];
 }
 
 export interface UserData {
@@ -23,6 +24,7 @@ export interface UserData {
     isMogged?: boolean;
     is_mogged?: boolean;
     forcedTitle?: string;
+    featuredAchievements?: string[];
 }
 
 export interface AuthResponse {
