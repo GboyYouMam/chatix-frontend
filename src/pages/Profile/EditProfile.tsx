@@ -48,8 +48,8 @@ export const EditProfile = () => {
 
         try {
             const formData = new FormData();
-            if (vibe) formData.append('vibe', vibe);
-            if (description) formData.append('description', description);
+            formData.append('vibe', vibe);
+            formData.append('description', description);
 
             if (file) formData.append('file', file);
             if (upperBanner) formData.append('upper_banner', upperBanner);
@@ -65,8 +65,7 @@ export const EditProfile = () => {
             );
             notify.success('profile visuals ascended');
         } catch (error) {
-            console.error('Failed to update profile:', error);
-            notify.error('Could not update profile');
+            notify.error(error);
         } finally {
             setIsLoading(false);
         }
@@ -193,6 +192,7 @@ export const EditProfile = () => {
                             placeholder="e.g. chill af / unbothered"
                             maxLength={50}
                         />
+                        <span>{vibe.length}/50</span>
                     </div>
 
                     <div className={styles.inputGroup}>
@@ -202,8 +202,9 @@ export const EditProfile = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="tell them about u kiddo"
                             rows={5}
-                            maxLength={300}
+                            maxLength={500}
                         />
+                        <span>{description.length}/500</span>
                     </div>
 
                     <button type="submit" className={styles.saveBtn} disabled={isLoading}>

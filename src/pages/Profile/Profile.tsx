@@ -16,6 +16,7 @@ import { ProfileCommentsSection } from '../../components/profile/ProfileComments
 import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 type EffectMode = 'aura' | 'debt' | null;
 
@@ -26,7 +27,7 @@ export const Profile = () => {
     const queryClient = useQueryClient();
 
     const { data: profileData, isLoading } = useQuery({
-        queryKey: ['profile', username],
+        queryKey: queryKeys.profile(username),
         queryFn: () => usersApi.getProfile(username!),
         enabled: Boolean(username),
         retry: false,
@@ -39,13 +40,18 @@ export const Profile = () => {
     const canInteractWithProfile = Boolean(currentUser && !isMyProfile);
 
     const updateProfileCache = (updater: (prev: ProfileData) => ProfileData) => {
-        queryClient.setQueryData(['profile', username], (oldData: ProfileData | undefined) => {
-            if (!oldData) return oldData;
-            return updater(oldData);
-        });
+        queryClient.setQueryData(
+            queryKeys.profile(username),
+            (oldData: ProfileData | undefined) => {
+                if (!oldData) return oldData;
+                return updater(oldData);
+            },
+        );
     };
 
     const handleFarmAura = async () => {
+        if (!profileData) return;
+        const previous = profileData;
         setActiveEffect('aura');
 
         updateProfileCache((prev) => ({ ...prev, aura: Number(prev.aura) + 1 }));
@@ -54,8 +60,8 @@ export const Profile = () => {
             const response = await usersApi.farmAura();
             updateProfileCache((prev) => ({ ...prev, aura: response.aura }));
         } catch (error) {
-            console.error('Failed to farm aura:', error);
-            updateProfileCache((prev) => ({ ...prev, aura: Number(prev.aura) - 1 }));
+            updateProfileCache(() => previous);
+            notify.error(error);
         }
 
         setTimeout(() => setActiveEffect(null), 1200);
@@ -63,6 +69,7 @@ export const Profile = () => {
 
     const handlePayDebt = async () => {
         if (!profileData || profileData.debt <= 0) return;
+        const previous = profileData;
 
         setActiveEffect('debt');
 
@@ -75,8 +82,8 @@ export const Profile = () => {
                 debt: typeof response.debt === 'number' ? response.debt : prev.debt,
             }));
         } catch (error) {
-            console.error('Failed to pay debt:', error);
-            updateProfileCache((prev) => ({ ...prev, debt: Number(prev.debt) + 1 }));
+            updateProfileCache(() => previous);
+            notify.error(error);
         }
 
         setTimeout(() => setActiveEffect(null), 1200);
@@ -85,6 +92,8 @@ export const Profile = () => {
     const handleRespect = async () => {
         if (!username || !canInteractWithProfile || profileData?.hasRespected || isRespectLoading)
             return;
+        if (!profileData) return;
+        const previous = profileData;
 
         setIsRespectLoading(true);
 
@@ -103,14 +112,14 @@ export const Profile = () => {
             }));
             notify.success(response.alreadyRespected ? 'respect already sent' : 'respect sent');
         } catch (error) {
-            console.error('Failed to respect profile:', error);
+            updateProfileCache(() => previous);
             // Відкат у разі помилки
             updateProfileCache((prev) => ({
                 ...prev,
                 respectCount: Math.max((prev.respectCount ?? prev.respect_count ?? 1) - 1, 0),
                 hasRespected: false,
             }));
-            notify.error('could not send respect');
+            notify.error(error);
         } finally {
             setIsRespectLoading(false);
         }
