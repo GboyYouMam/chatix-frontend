@@ -9,6 +9,38 @@
     width: 100%;
 }
 
+.rightGroup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.shopBtn {
+    min-height: 40px;
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 0.8rem 1.25rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+    letter-spacing: 1px;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
+}
+
+.shopBtn:hover {
+    opacity: 0.85;
+}
+
+.shopBtn:active {
+    transform: scale(0.98);
+}
+
 .backBtn {
     background-color: #18181b;
     color: #fff;
@@ -19,7 +51,9 @@
     font-size: 1rem;
     cursor: pointer;
     font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
 }
 
 .backBtn:hover {
@@ -40,7 +74,9 @@
     font-size: 1rem;
     cursor: pointer;
     font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
 }
 
 .editBtn:hover {

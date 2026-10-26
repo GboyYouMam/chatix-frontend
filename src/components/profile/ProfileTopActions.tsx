@@ -14,16 +14,19 @@ export const ProfileTopActions = ({ isMyProfile }: ProfileTopActionsProps) => {
             <button className={styles.backBtn} onClick={() => navigate(PATH.rooms.rooms)}>
                 &lt;- back to rooms
             </button>
-            {isMyProfile ? (
-                <button
-                    className={styles.editBtn}
-                    onClick={() => navigate(PATH.authAndUser.editProfile)}
-                >
-                    edit profile
+            <div className={styles.rightGroup}>
+                <button className={styles.shopBtn} onClick={() => navigate(PATH.shop.shop)}>
+                    the soap market
                 </button>
-            ) : (
-                <div />
-            )}
+                {isMyProfile && (
+                    <button
+                        className={styles.editBtn}
+                        onClick={() => navigate(PATH.authAndUser.editProfile)}
+                    >
+                        edit profile
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

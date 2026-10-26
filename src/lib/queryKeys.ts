@@ -5,4 +5,6 @@ export const queryKeys = {
     myRooms: () => ['myRooms'] as const,
     messages: (roomId?: string) => ['messages', roomId] as const,
     profile: (username?: string) => ['profile', username] as const,
+    shopCatalog: () => ['shop', 'catalog'] as const,
+    shopMe: () => ['shop', 'me'] as const,
 };
