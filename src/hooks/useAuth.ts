@@ -22,12 +22,16 @@ export const useAuth = () => {
                 setAuth(data.access_token, user);
                 notify.success(`welcome back bum ${user.username}!`);
                 navigate(PATH.rooms.rooms);
-            } catch (err) {
+            } catch {
                 logoutStore();
                 notify.error('Failed to parse your profile profile.');
             }
         },
-        onError: (error: AxiosError<{ message: string }>) => {
+        onError: (error: AxiosError<{ message: string; code?: string; bannedUntil?: string; banReason?: string }>) => {
+            if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
+                useAuthStore.getState().setBan({ bannedUntil: error.response.data.bannedUntil ?? null, banReason: error.response.data.banReason ?? null });
+                return;
+            }
             const msg = error.response?.data?.message || 'Invalid credentials, chud';
             notify.error(msg);
         },
@@ -42,12 +46,16 @@ export const useAuth = () => {
                 setAuth(data.access_token, user);
                 notify.success('Ascension complete! Profile created');
                 navigate(PATH.rooms.rooms);
-            } catch (err) {
+            } catch {
                 logoutStore();
                 notify.error('Registration passed, but profile failed to load.');
             }
         },
-        onError: (error: AxiosError<{ message: string | string[] }>) => {
+        onError: (error: AxiosError<{ message: string | string[]; code?: string; bannedUntil?: string; banReason?: string }>) => {
+            if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
+                useAuthStore.getState().setBan({ bannedUntil: error.response.data.bannedUntil ?? null, banReason: error.response.data.banReason ?? null });
+                return;
+            }
             const message = error.response?.data?.message;
             const msg = Array.isArray(message) ? message[0] : message || 'Registration failed';
             notify.error(msg);
