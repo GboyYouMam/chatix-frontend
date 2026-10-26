@@ -11,6 +11,10 @@ import { useAdminUsers } from '../../hooks/admin/users/useAdminUsers.ts';
 import type { PaginationMeta } from '../../api/admin/types.ts';
 import styles from './AdminPanel.module.css';
 import { PATH } from '../../utils/pathList.ts';
+import { useAdminStats, useModerationQueue } from '../../hooks/admin/useAdminStats.ts';
+import { StatTile } from '../../components/admin/ui/StatTile.tsx';
+import { api } from '../../api/client.ts';
+import { notify } from '../../lib/toast.ts';
 
 interface AdminDashboardListProps {
     title: string;
@@ -71,6 +75,8 @@ export const AdminDashboard = () => {
     const usersState = useAdminUsers({ page: usersPage, search: usersSearch });
     const roomsState = useAdminRooms({ page: roomsPage, search: roomsSearch });
     const { auditLogs } = useAdminAuditLogs({ page: 1, limit: 25, search: '' });
+    const stats = useAdminStats();
+    const queue = useModerationQueue();
 
     const applyUsersSearch = useCallback((nextSearch: string) => {
         setUsersPage(1);
@@ -96,6 +102,30 @@ export const AdminDashboard = () => {
         [navigate],
     );
 
+    const approveRoom = async (roomId: string) => {
+        try {
+            await api.patch(`/admin/rooms/${encodeURIComponent(roomId)}/approve`);
+            notify.success('room approved. let them cook.');
+            await Promise.all([roomsState.refetch?.(), queue.refetch()]);
+        } catch {
+            notify.error('could not approve this room.');
+        }
+    };
+
+    const rejectRoom = async (roomId: string) => {
+        const reason = window.prompt('why is this room cooked?');
+        if (!reason?.trim()) return;
+        try {
+            await api.patch(`/admin/rooms/${encodeURIComponent(roomId)}/reject`, {
+                reason: reason.trim(),
+            });
+            notify.success('room rejected.');
+            await Promise.all([roomsState.refetch?.(), queue.refetch()]);
+        } catch {
+            notify.error('could not reject this room.');
+        }
+    };
+
     return (
         <div className={styles.adminPageShell}>
             <header className={styles.dashboardHeader}>
@@ -111,6 +141,48 @@ export const AdminDashboard = () => {
                     Open messages
                 </button>
             </header>
+
+            <section className={styles.statGrid} aria-label="moderation stats">
+                <StatTile label="rooms in review" value={stats.data?.roomsInReview ?? '—'} />
+                <StatTile label="active bans" value={stats.data?.activeBans ?? '—'} />
+                <StatTile label="warns today" value={stats.data?.warnsToday ?? '—'} />
+                <StatTile label="autobans this week" value={stats.data?.autobansThisWeek ?? '—'} />
+            </section>
+
+            <section className={styles.listPanel}>
+                <div className={styles.listPanelHeader}>
+                    <h2 className={styles.panelTitle}>rooms in review</h2>
+                    <span className={styles.sectionNote}>{queue.data?.length ?? 0} loaded</span>
+                </div>
+                {queue.data?.map((room) => (
+                    <div className={styles.listItem} key={room.id}>
+                        <span className={styles.itemLabel}>
+                            <strong>{room.title}</strong> ·{' '}
+                            {room.creator?.username ?? 'unknown creator'}
+                            <small>{room.topic ?? 'no topic'}</small>
+                        </span>
+                        <button
+                            className={styles.actionBtnSafe}
+                            type="button"
+                            onClick={() => void approveRoom(room.id)}
+                        >
+                            approve
+                        </button>
+                        <button
+                            className={styles.actionBtnDanger}
+                            type="button"
+                            onClick={() => void rejectRoom(room.id)}
+                        >
+                            reject
+                        </button>
+                    </div>
+                ))}
+                {(queue.data?.length ?? 0) === 0 && (
+                    <p className={styles.placeholderText}>
+                        no rooms waiting. the queue is cooked clean.
+                    </p>
+                )}
+            </section>
 
             <AdminAuditFeed logs={auditLogs} />
 
