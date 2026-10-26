@@ -109,7 +109,7 @@ export const WidgetEditor = ({ profile }: WidgetEditorProps) => {
                                 )}
                                 {locked && !shopLoading && (
                                     <Link className={styles.link} to={PATH.shop.shop}>
-                                        buy in the soap market
+                                        buy in the mogger mart
                                     </Link>
                                 )}
                                 {locked && shopLoading && (
