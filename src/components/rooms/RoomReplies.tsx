@@ -6,6 +6,7 @@ import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from '../../api/messages/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { formatAttachmentSize } from './attachments.ts';
+import { DELETED_MESSAGE } from '../../hooks/rooms/messageCache.ts';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -108,13 +109,18 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                             </span>
                         </div>
 
+                        {msg.ipTag && <div className={styles.ipAddress}>[HOST: {msg.ipTag}]</div>}
                         {msg.cipherText && (
                             <div className={styles.postBody}>
-                                <MessageFormatter
-                                    text={msg.cipherText}
-                                    allMessages={messages}
-                                    onQuoteClick={handleScrollToQuote}
-                                />
+                                {msg.isDeleted ? (
+                                    DELETED_MESSAGE
+                                ) : (
+                                    <MessageFormatter
+                                        text={msg.cipherText}
+                                        allMessages={messages}
+                                        onQuoteClick={handleScrollToQuote}
+                                    />
+                                )}
                             </div>
                         )}
 
@@ -151,10 +157,6 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
                                     </figure>
                                 ))}
                             </div>
-                        )}
-
-                        {msg.ipAddress && (
-                            <div className={styles.ipAddress}>[HOST: {msg.ipAddress}]</div>
                         )}
                     </div>
                 );

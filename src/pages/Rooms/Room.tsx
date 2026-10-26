@@ -14,6 +14,7 @@ import { RoomReplyForm } from '../../components/rooms/RoomReplyForm';
 import { RoomSocketErrorScream } from '../../components/rooms/RoomSocketErrorScream.tsx';
 
 import { useRoomSocket } from '../../hooks/rooms/useRoomSocket.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,7 +31,7 @@ export const Room = () => {
         isLoading: roomLoading,
         refetch: refetchRoom,
     } = useQuery({
-        queryKey: ['room', id],
+        queryKey: queryKeys.room(id),
         queryFn: () => roomApi.getRoomDetailed(id!),
         enabled: !!id,
     });
@@ -42,7 +43,7 @@ export const Room = () => {
         hasNextPage,
         isFetchingNextPage,
     } = useInfiniteQuery({
-        queryKey: ['messages', id],
+        queryKey: queryKeys.messages(id),
         queryFn: ({ pageParam }) =>
             messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
         initialPageParam: null as string | null,
