@@ -8,7 +8,7 @@
 
 .gridContainer {
     display: grid;
-    grid-template-columns: 280px 1fr 280px;
+    grid-template-columns: 220px minmax(0, 1fr) 220px;
     gap: 3.5rem;
     max-width: 1600px;
     margin: 0 auto;
@@ -59,7 +59,9 @@
     font-size: 1rem;
     cursor: pointer;
     font-family: inherit;
-    transition: opacity 0.2s, transform 0.1s;
+    transition:
+        opacity 0.2s,
+        transform 0.1s;
     margin: 2rem auto;
     display: block;
 }
@@ -70,4 +72,18 @@
 
 .backBtn:active {
     transform: scale(0.98);
+}
+
+@media (max-width: 900px) {
+    .layout {
+        padding: 2rem 1rem;
+    }
+    .gridContainer {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.5rem;
+    }
+    .gridContainer > :first-child,
+    .gridContainer > :last-child {
+        display: none;
+    }
 }
