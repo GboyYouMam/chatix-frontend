@@ -5,6 +5,7 @@ import { authService } from '../api/auth/auth.service.ts';
 import { useAuthStore } from '../store/authStore';
 import { AxiosError } from 'axios';
 import { PATH } from '../utils/pathList.ts';
+import { reportAppealDenial } from '../api/achievements/achievements.service.ts';
 
 export const useAuth = () => {
     const setAuth = useAuthStore((state) => state.setAuth);
@@ -20,6 +21,7 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
+                void reportAppealDenial().catch(() => undefined);
                 notify.success(`welcome back bum ${user.username}!`);
                 navigate(PATH.rooms.rooms);
             } catch {
@@ -50,6 +52,7 @@ export const useAuth = () => {
             try {
                 const user = await authService.getMe();
                 setAuth(data.access_token, user);
+                void reportAppealDenial().catch(() => undefined);
                 notify.success('Ascension complete! Profile created');
                 navigate(PATH.rooms.rooms);
             } catch {

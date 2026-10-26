@@ -11,3 +11,11 @@ export const achievementsApi = {
         await api.post('/achievements/discover', { key });
     },
 };
+
+const appealCountKey = 'chatix-appeal-presses';
+
+export async function reportAppealDenial() {
+    if (Number(localStorage.getItem(appealCountKey) ?? 0) < 10) return;
+    await achievementsApi.discover('appeal_denied');
+    localStorage.removeItem(appealCountKey);
+}
