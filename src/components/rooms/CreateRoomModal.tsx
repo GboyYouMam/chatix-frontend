@@ -1,10 +1,12 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './CreateRoomModal.module.css';
 import { PasswordInput } from './PasswordInput.tsx';
 import { useCreateRoom } from '../../hooks/rooms/useCreateRoom.ts';
 import { Modal } from '../ui/Modal.tsx';
+import { ThemePicker } from './ThemePicker.tsx';
+import { DEFAULT_ROOM_THEME, ROOM_THEME_KEYS } from '../../themes/roomThemes.ts';
 
 const createRoomScheme = z
     .object({
@@ -13,6 +15,7 @@ const createRoomScheme = z
         description: z.string().optional(),
         password: z.string().optional(),
         publicity: z.enum(['public', 'private']),
+        theme: z.enum(ROOM_THEME_KEYS),
     })
     .superRefine((data, ctx) => {
         if (data.publicity === 'private' && (!data.password || data.password.length < 6)) {
@@ -42,6 +45,7 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
             topic: '',
             description: '',
             publicity: 'public',
+            theme: DEFAULT_ROOM_THEME,
         },
     });
 
@@ -122,6 +126,14 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
                                 <span className={styles.radioText}>Private</span>
                             </label>
                         </div>
+
+                        <Controller
+                            name="theme"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <ThemePicker value={field.value} onChange={field.onChange} />
+                            )}
+                        />
 
                         <PasswordInput />
 

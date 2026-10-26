@@ -1,0 +1,100 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.option {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 40px;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--sw-bg);
+    color: var(--sw-text);
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.option:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.option:hover {
+    transform: translateY(-1px);
+}
+
+.selected {
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 12px rgba(250, 77, 152, 0.35);
+}
+
+.locked {
+    opacity: 0.6;
+}
+
+.preview {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    background: var(--sw-surface);
+    border-radius: 4px;
+}
+
+.previewTitle {
+    font-family: var(--sw-font);
+    color: var(--sw-accent);
+    font-weight: bold;
+    line-height: 1;
+}
+
+.previewBar {
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--sw-accent);
+}
+
+.name {
+    font-family: var(--sw-font);
+    font-weight: bold;
+    text-transform: lowercase;
+    font-size: 0.95rem;
+}
+
+.meta {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.shopLink {
+    color: var(--primary);
+}
