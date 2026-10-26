@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore.ts';
 import { PATH } from '../utils/pathList.ts';
