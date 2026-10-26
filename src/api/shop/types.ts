@@ -55,3 +55,24 @@ export type ShopEquipSlot =
     | 'sticker1'
     | 'sticker2'
     | 'sticker3';
+
+export type ShopUseItemKey =
+    | 'clown_stamp'
+    | 'rename_curse'
+    | 'aura_tax'
+    | 'spotlight'
+    | 'room_boost'
+    | 'fight_insurance'
+    | 'debt_forgiveness';
+
+export interface ShopUseBody {
+    itemKey: ShopUseItemKey;
+    targetUserId?: string;
+    roomId?: string;
+    messageId?: string;
+}
+
+export interface ShopUseResponse {
+    aura?: number;
+    inventory?: ShopInventoryEntry[];
+}

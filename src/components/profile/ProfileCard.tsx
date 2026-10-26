@@ -31,6 +31,10 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
         cosmeticTitleName,
     });
 
+    const effects = profileData.effects ?? [];
+    const clownStamp = effects.find((effect) => effect.kind === 'clown_stamp');
+    const nameCursed = effects.some((effect) => effect.kind === 'rename_curse');
+
     return (
         <div className={styles.profileCard}>
             <div className={styles.avatarBox}>
@@ -48,8 +52,19 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
                         <span className={styles.forcedTitle}>[{profileData.forcedTitle}]</span>
                     )}
                     <div className={styles.nameLine}>
-                        <h2 className={styles.username}>{profileData.username}</h2>
+                        <h2 className={styles.username}>
+                            {profileData.username}
+                            {nameCursed && ' (he/him/it/mogged)'}
+                        </h2>
                         {cosmetics?.verified && <VerifiedCheck />}
+                        {clownStamp && (
+                            <span
+                                className={styles.clownStamp}
+                                title={`stamped by @${clownStamp.appliedBy.username}`}
+                            >
+                                certified clown
+                            </span>
+                        )}
                     </div>
                     {shopTitle && <p className={styles.shopTitle}>{shopTitle}</p>}
                 </div>

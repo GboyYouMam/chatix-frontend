@@ -17,7 +17,14 @@ export interface ProfileComment {
     author?: ProfileCommentAuthor;
 }
 
+export interface ProfileEffect {
+    kind: 'clown_stamp' | 'rename_curse';
+    expiresAt: string;
+    appliedBy: { username: string };
+}
+
 export interface ProfileData extends User {
+    effects?: ProfileEffect[];
     cosmetics?: ProfileCosmetics | null;
     achievements?: Array<{ key: string; unlockedAt: string }>;
     featuredAchievements?: string[];

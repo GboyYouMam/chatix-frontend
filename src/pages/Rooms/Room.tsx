@@ -19,6 +19,8 @@ import { queryKeys } from '../../lib/queryKeys.ts';
 import { notify } from '../../lib/toast.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { StatusPill } from '../../components/rooms/StatusPill.tsx';
+import { SpotlightBanner } from '../../components/rooms/SpotlightBanner.tsx';
+import { RoomPerkActions } from '../../components/rooms/PerkActions.tsx';
 import { roomThemeOf, roomThemeStyle } from '../../themes/roomThemes.ts';
 
 export const Room = () => {
@@ -152,6 +154,11 @@ export const Room = () => {
             </header>
 
             <main className={styles.threadContainer}>
+                {room.sponsoredBy && (
+                    <p className={styles.sponsorLine}>sponsored by @{room.sponsoredBy.username}</p>
+                )}
+                <SpotlightBanner spotlight={room.spotlight} />
+                {isRoomCreator && <RoomPerkActions roomId={room.id} />}
                 {room.status && room.status !== 'active' && (
                     <div className={styles.error}>
                         <StatusPill status={room.status} />{' '}
@@ -173,7 +180,11 @@ export const Room = () => {
                         load older (if u dare)
                     </button>
                 )}
-                <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
+                <RoomReplies
+                    messages={messages}
+                    roomCreatorUsername={room.creator.username}
+                    roomId={room.id}
+                />
             </main>
 
             <RoomReplyForm
