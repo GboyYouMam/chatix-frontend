@@ -5,6 +5,7 @@ import type { RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { useMemo } from 'react';
 import { formatDate } from '../../utils/date.ts';
+import { FeaturedMedals } from '../achievements/FeaturedMedals.tsx';
 
 interface RoomOpPostProps {
     room: RoomDetails;
@@ -37,6 +38,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
                     onClick={() => navigate(PATH.authAndUser.href.profile(room.creator.username))}
                 >
                     {room.creator.username}
+                    <FeaturedMedals keys={room.creator.featuredAchievements} />
                 </span>
                 {(room.creator.isMogged || room.creator.is_mogged) && (
                     <span className={styles.moggedBadge}> [MOGGED]</span>

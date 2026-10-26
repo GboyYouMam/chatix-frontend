@@ -5,10 +5,48 @@ import { api } from '../../api/client';
 import styles from './EditProfile.module.css';
 import { notify } from '../../lib/toast';
 import { PATH } from '../../utils/pathList.ts';
+import { achievementsApi } from '../../api/achievements/achievements.service.ts';
+import { useQuery } from '@tanstack/react-query';
+import { usersApi } from '../../api/users/users.service.ts';
+import type { ProfileData } from '../../api/users/types.ts';
 
 export const EditProfile = () => {
     const navigate = useNavigate();
     const { user, logout } = useAuthStore();
+    const { data: catalog = [] } = useQuery({
+        queryKey: ['achievementCatalog'],
+        queryFn: achievementsApi.getCatalog,
+        staleTime: Infinity,
+    });
+    const { data: profile } = useQuery({
+        queryKey: ['profile', user?.username],
+        queryFn: () => usersApi.getProfile(user!.username) as Promise<ProfileData>,
+        enabled: Boolean(user?.username),
+    });
+    const [featured, setFeatured] = useState<string[]>(user?.featuredAchievements ?? []);
+    const [savingFeatured, setSavingFeatured] = useState(false);
+
+    const toggleFeatured = async (key: string) => {
+        const unlocked = new Set((profile?.achievements ?? []).map(({ key }) => key));
+        if (!unlocked.has(key)) return;
+        const next = featured.includes(key)
+            ? featured.filter((item) => item !== key)
+            : featured.length < 3
+              ? [...featured, key]
+              : featured;
+        if (next === featured) return;
+        setFeatured(next);
+        setSavingFeatured(true);
+        try {
+            await achievementsApi.setFeatured(next);
+            useAuthStore.getState().setUser({ ...user!, featuredAchievements: next });
+        } catch (error) {
+            setFeatured(featured);
+            notify.error(error);
+        } finally {
+            setSavingFeatured(false);
+        }
+    };
 
     const [vibe, setVibe] = useState(user?.vibe || '');
     const [description, setDescription] = useState(user?.description || '');
@@ -211,6 +249,35 @@ export const EditProfile = () => {
                         />
                         <span>{description.length}/500</span>
                     </div>
+
+                    <fieldset className={styles.inputGroup} disabled={savingFeatured}>
+                        <legend>featured medals (up to 3)</legend>
+                        <div className={styles.medalPicker}>
+                            {catalog.map((medal) => {
+                                const unlocked = (profile?.achievements ?? []).some(
+                                    (item) => item.key === medal.key,
+                                );
+                                return (
+                                    <label
+                                        key={medal.key}
+                                        className={!unlocked ? styles.lockedMedal : ''}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={featured.includes(medal.key)}
+                                            disabled={
+                                                !unlocked ||
+                                                (!featured.includes(medal.key) &&
+                                                    featured.length >= 3)
+                                            }
+                                            onChange={() => void toggleFeatured(medal.key)}
+                                        />
+                                        {medal.icon || '✦'} {medal.name}
+                                    </label>
+                                );
+                            })}
+                        </div>
+                    </fieldset>
 
                     <button type="submit" className={styles.saveBtn} disabled={isLoading}>
                         {isLoading ? 'uploading to matrix...' : 'updateprofilemaxxing'}

@@ -8,5 +8,10 @@ export const authService = {
     register: async (credentials: Record<'username' | 'password', string>): Promise<AuthResponse> =>
         (await api.post<AuthResponse>('/auth/register', credentials)).data,
 
-    getMe: async (): Promise<User> => (await api.get<User>('/users/me')).data,
+    getMe: async (): Promise<User> =>
+        (
+            await api.get<User>('/users/me', {
+                headers: { 'x-timezone': Intl.DateTimeFormat().resolvedOptions().timeZone },
+            })
+        ).data,
 };

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../api/client.ts';
 import { notify } from '../../lib/toast.ts';
 import { queryClient } from '../../lib/queryClient.ts';
 import { useAuthStore } from '../../store/authStore.ts';
@@ -13,6 +12,7 @@ import {
 } from '../../utils/banScreen.ts';
 import { PATH } from '../../utils/pathList.ts';
 import styles from './Banned.module.css';
+import { authService } from '../../api/auth/auth.service.ts';
 
 const marqueeText = BAN_TAUNTS.join('  ✦  ');
 
@@ -48,7 +48,7 @@ export function Banned() {
 
     const retry = async () => {
         try {
-            await api.get('/users/me');
+            await authService.getMe();
             clearBan();
             navigate(PATH.rooms.rooms);
         } catch {
@@ -57,6 +57,8 @@ export function Banned() {
     };
 
     const showAppealDenial = () => {
+        const key = 'chatix-appeal-presses';
+        localStorage.setItem(key, String(Number(localStorage.getItem(key) ?? 0) + 1));
         setAppealNotice((current) => pickNext(APPEAL_DENIALS, current));
     };
 

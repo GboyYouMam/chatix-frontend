@@ -15,6 +15,7 @@ import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.
 import { notify } from '../../lib/toast.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
 import { MyRooms } from '../../components/rooms/MyRooms.tsx';
+import { achievementsApi } from '../../api/achievements/achievements.service.ts';
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -32,13 +33,14 @@ export const Rooms = () => {
     );
     const tripleClick = useRef(createTripleClickDetector());
 
-    const triggerEasterEgg = () => {
+    const triggerEasterEgg = (key: 'first_rule' | 'found_the_basement') => {
         if (!token) {
             notify.error('login first, chud');
             navigate(PATH.authAndUser.login);
             return;
         }
         setIsGlitching(true);
+        void achievementsApi.discover(key).catch(() => undefined);
         notify.info("we don't talk about it.");
         window.setTimeout(() => navigate(PATH.fightClub.lobby), 600);
     };
@@ -200,14 +202,17 @@ export const Rooms = () => {
                             onChange={(e) => {
                                 const query = e.target.value;
                                 setSearchQuery(query);
-                                if (isSecretQuery(query)) triggerEasterEgg();
+                                if (isSecretQuery(query)) triggerEasterEgg('first_rule');
                             }}
                             onKeyDown={(e) => e.key === 'Enter' && handleBackendSearch()}
                         />
                         <span
                             className={styles.searchLmao}
                             aria-hidden="true"
-                            onClick={() => tripleClick.current(Date.now()) && triggerEasterEgg()}
+                            onClick={() =>
+                                tripleClick.current(Date.now()) &&
+                                triggerEasterEgg('found_the_basement')
+                            }
                         >
                             lmao
                         </span>

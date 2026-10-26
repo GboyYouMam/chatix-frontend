@@ -317,3 +317,23 @@
         min-height: 48px;
     }
 }
+
+.medalPicker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.5rem;
+    max-height: 220px;
+    overflow: auto;
+}
+.medalPicker label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text);
+    font:
+        0.75rem 'Courier New',
+        monospace;
+}
+.lockedMedal {
+    opacity: 0.45;
+}
