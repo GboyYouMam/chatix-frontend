@@ -79,3 +79,16 @@ test('formats contract audit actions without exposing ids', () => {
         'raw-uuid',
     );
 });
+
+test('roasts deleted admins as vaporized instead of unknown', () => {
+    assert.equal(
+        auditSentence(
+            item({
+                actionKey: 'user.unban',
+                targetLabel: 'tester777',
+                admin: null as unknown as AdminAuditLog['admin'],
+            }),
+        ).actor,
+        'a vaporized admin',
+    );
+});

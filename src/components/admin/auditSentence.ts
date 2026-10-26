@@ -1,7 +1,7 @@
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 
 export function auditSentence(item: AdminAuditLog) {
-    const actor = item.admin?.username ?? 'unknown admin';
+    const actor = item.admin?.username ?? 'a vaporized admin';
     const target = item.targetLabel ?? item.targetType ?? 'something';
     const action = item.actionKey ?? item.action;
     const details = item.details ?? {};
