@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { messagesApi } from '../../api/messages/messages.service.ts';
@@ -23,6 +23,7 @@ export const Room = () => {
     const { sendMessage, socketError, clearSocketError } = useRoomSocket(id);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const previousScroll = useRef<{ top: number; height: number } | null>(null);
 
     const {
         data: room,
@@ -34,11 +35,43 @@ export const Room = () => {
         enabled: !!id,
     });
 
-    const { data: messages, isLoading: messagesLoading } = useQuery({
+    const {
+        data: messagePages,
+        isLoading: messagesLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ['messages', id],
-        queryFn: () => messagesApi.getHistory(id!),
+        queryFn: ({ pageParam }) =>
+            messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
+        initialPageParam: null as string | null,
+        getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
+    useLayoutEffect(() => {
+        if (previousScroll.current) {
+            window.scrollTo(
+                0,
+                previousScroll.current.top +
+                    document.documentElement.scrollHeight -
+                    previousScroll.current.height,
+            );
+            previousScroll.current = null;
+        }
+    }, [messagePages?.pages.length]);
+    const loadOlder = () => {
+        previousScroll.current = {
+            top: window.scrollY,
+            height: document.documentElement.scrollHeight,
+        };
+        void fetchNextPage();
+    };
+    const messages =
+        messagePages?.pages
+            .slice()
+            .reverse()
+            .flatMap((page) => page.items) ?? [];
 
     if (roomLoading || messagesLoading)
         return <div className={styles.loading}>Loading thread...</div>;
@@ -84,10 +117,16 @@ export const Room = () => {
 
             <main className={styles.threadContainer}>
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
-                <RoomReplies
-                    messages={messages || []}
-                    roomCreatorUsername={room.creator.username}
-                />
+                {hasNextPage && (
+                    <button
+                        disabled={isFetchingNextPage}
+                        onClick={loadOlder}
+                        className={styles.backBtn}
+                    >
+                        load older (if u dare)
+                    </button>
+                )}
+                <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
             </main>
 
             <RoomReplyForm roomId={id!} authorId={user?.id} onSendMessage={sendMessage} />
@@ -103,8 +142,8 @@ export const Room = () => {
                     roomId={room.id}
                     initialData={{
                         title: room.title,
-                        topic: room.topic,
-                        description: room.description,
+                        topic: room.topic ?? '',
+                        description: room.description ?? '',
                     }}
                 />
             )}

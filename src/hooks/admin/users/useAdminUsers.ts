@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { notify } from '../../../lib/toast';
 import type { AdminUser, UpdateModifiersPayload } from '../../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -28,24 +28,24 @@ export const useAdminUsers = ({ page, limit = 25, search, enabled = true }: Admi
     const vaporizeUser = useMutation({
         mutationFn: (userId: string) => adminApi.vaporizeUser(userId),
         onSuccess: async () => {
-            toast.success('User vaporized.');
+            notify.success('User vaporized.');
             await Promise.all([invalidateUsers(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to vaporize user')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to vaporize user')),
     });
 
     const updateModifiers = useMutation({
         mutationFn: ({ userId, data }: { userId: string; data: UpdateModifiersPayload }) =>
             adminApi.updateModifier(userId, data),
         onSuccess: async (_, variables) => {
-            toast.success('User modifiers updated.');
+            notify.success('User modifiers updated.');
             await Promise.all([
                 invalidateUsers(),
                 invalidateAuditLogs(),
                 invalidateWarnings(variables.userId),
             ]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to update user')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to update user')),
     });
 
     return {

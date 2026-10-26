@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { notify } from '../../../lib/toast';
 import type { AdminRoom, AdminRoomStatus } from '../../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -27,29 +27,29 @@ export const useAdminRooms = ({ page, limit = 25, search, enabled = true }: Admi
         mutationFn: ({ roomId, reason }: { roomId: string; reason: string }) =>
             roomApi.qurantineRoom(roomId, reason),
         onSuccess: async () => {
-            toast.success('Room quarantined.');
+            notify.success('Room quarantined.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to quarantine room')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to quarantine room')),
     });
 
     const unquarantineRoom = useMutation({
         mutationFn: (roomId: string) => roomApi.unquarantineRoom(roomId),
         onSuccess: async () => {
-            toast.success('Room unquarantined.');
+            notify.success('Room unquarantined.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to unquarantine room')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to unquarantine room')),
     });
 
     const setRoomStatus = useMutation({
         mutationFn: ({ roomId, status }: { roomId: string; status: AdminRoomStatus }) =>
             roomApi.patchRoomStatus(roomId, status),
         onSuccess: async () => {
-            toast.success('Room status updated.');
+            notify.success('Room status updated.');
             await Promise.all([invalidateRooms(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to update room status')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to update room status')),
     });
 
     return {

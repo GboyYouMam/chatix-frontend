@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { PATH } from '../utils/pathList.ts';
+import styles from './ProtectedRouter.module.css';
 
 interface ProtectedRouteProps {
     requireAdmin?: boolean;
@@ -9,6 +10,11 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ requireAdmin = false }: ProtectedRouteProps) => {
     const token = useAuthStore((state) => state.token);
     const user = useAuthStore((state) => state.user);
+    const sessionStatus = useAuthStore((state) => state.sessionStatus);
+
+    if (sessionStatus !== 'ready') {
+        return <div className={styles.loading}>loading ur aura...</div>;
+    }
 
     if (!token) {
         return <Navigate to={PATH.authAndUser.login} replace />;

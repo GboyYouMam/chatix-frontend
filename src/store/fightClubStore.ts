@@ -17,11 +17,11 @@ interface FightClubState {
     challenges: FightChallenge[];
     stakeFilter: StakeFilter;
     maxStake: number;
-    minStake: number; // Замінили minWinRate на minStake
+    minStake: number; // Replaces the old minWinRate filter.
     duel: DuelState;
     setStakeFilter: (stakeFilter: StakeFilter) => void;
     setMaxStake: (maxStake: number) => void;
-    setMinStake: (minStake: number) => void; // Новий сеттер
+    setMinStake: (minStake: number) => void;
     addChallenge: (challenge: FightChallenge) => void;
     setChallenges: (challenges: FightChallenge[]) => void;
     removeChallenge: (matchId: string) => void;
@@ -41,12 +41,12 @@ const initialDuel: DuelState = {
     lastHit: 'Waiting for Project Mayhem to ring the bell.',
 };
 
-// Зачистили мокові дані від старого сміття
+// Removed stale mock data.
 export const useFightClubStore = create<FightClubState>((set) => ({
     challenges: [],
     stakeFilter: 'all',
-    maxStake: 5000, // Підігнали під UI повзунок
-    minStake: 1, // Дефолтний мінімум
+    maxStake: 5000, // UI slider maximum.
+    minStake: 1, // Default minimum.
     duel: initialDuel,
     setStakeFilter: (stakeFilter) => set({ stakeFilter }),
     setMaxStake: (maxStake) => set({ maxStake: Math.max(1, maxStake) }),

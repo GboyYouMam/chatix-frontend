@@ -1,12 +1,16 @@
 import { useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import { getAttachmentSelectionError, MAX_ATTACHMENTS } from './attachments.ts';
 
 interface RoomReplyFormProps {
     roomId: string;
     authorId: string | undefined;
-    onSendMessage: (payload: { roomId: string; text: string; attachments: File[] }) => Promise<void>;
+    onSendMessage: (payload: {
+        roomId: string;
+        text: string;
+        attachments: File[];
+    }) => Promise<void>;
 }
 
 export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyFormProps) => {
@@ -19,7 +23,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
         const files = [...attachments, ...Array.from(event.target.files ?? [])];
         const error = getAttachmentSelectionError(files);
         if (error) {
-            toast.error(error);
+            notify.error(error);
             event.target.value = '';
             return;
         }
@@ -32,7 +36,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
         if (isSending) return;
         if (!newMessage.trim() && !attachments.length) return;
         if (!authorId) {
-            toast.error('Log in before replying.');
+            notify.error('Log in before replying.');
             return;
         }
 
@@ -47,7 +51,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             setAttachments([]);
             if (fileInputRef.current) fileInputRef.current.value = '';
         } catch {
-            toast.error('Failed to send message.');
+            notify.error('Failed to send message.');
         } finally {
             setIsSending(false);
         }
@@ -58,12 +62,17 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             {attachments.length > 0 && (
                 <div className={styles.selectedFiles}>
                     {attachments.map((file, index) => (
-                        <span className={styles.selectedFile} key={`${file.name}-${file.lastModified}`}>
+                        <span
+                            className={styles.selectedFile}
+                            key={`${file.name}-${file.lastModified}`}
+                        >
                             {file.name}
                             <button
                                 type="button"
                                 aria-label={`Remove ${file.name}`}
-                                onClick={() => setAttachments((files) => files.filter((_, i) => i !== index))}
+                                onClick={() =>
+                                    setAttachments((files) => files.filter((_, i) => i !== index))
+                                }
                             >
                                 x
                             </button>

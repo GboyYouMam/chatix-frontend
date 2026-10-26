@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { roomApi } from '../../api/rooms/rooms.service.ts';
-import toast from 'react-hot-toast';
-import type { UpdateRoomDTO } from "../../api/rooms/types.ts";
+import { notify } from '../../lib/toast';
+import type { UpdateRoomDTO } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 
 export const useUpdateRoom = () => {
@@ -14,28 +14,28 @@ export const useUpdateRoom = () => {
             roomApi.updateRoom(roomId, data),
 
         onSuccess: (_, variables) => {
-            toast.success('Room updated successfully');
+            notify.success('Room updated successfully');
             queryClient.invalidateQueries({ queryKey: ['room', variables.roomId] });
         },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'nah something went wrong.');
-        }
+        onError: (error) => {
+            notify.error(error);
+        },
     });
 
     const deleteRoom = useMutation({
-        mutationFn: ({ roomId }: { roomId: string; }) => roomApi.deleteRoom(roomId),
+        mutationFn: ({ roomId }: { roomId: string }) => roomApi.deleteRoom(roomId),
         onSuccess: () => {
-            toast.success('Room ERASED by KILLSQUAD.');
+            notify.success('Room ERASED by KILLSQUAD.');
             queryClient.invalidateQueries({ queryKey: ['rooms'] });
             navigate(PATH.rooms.rooms);
         },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Failed to nuke room.');
-        }
+        onError: (error) => {
+            notify.error(error);
+        },
     });
 
     return {
         updateRoom,
         deleteRoom,
     };
-}
+};

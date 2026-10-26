@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
+import { queryClient } from '../lib/queryClient.ts';
+import { PATH } from '../utils/pathList.ts';
 
 export const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -16,7 +18,7 @@ api.interceptors.request.use(
         }
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -24,7 +26,15 @@ api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             useAuthStore.getState().logout();
+            queryClient.clear();
+            if (window.location.pathname !== PATH.authAndUser.login)
+                window.location.assign(PATH.authAndUser.login);
+        } else if (error.response?.status === 403 && error.response.data?.code === 'BANNED') {
+            useAuthStore.getState().setBan({
+                bannedUntil: error.response.data.bannedUntil ?? null,
+                banReason: error.response.data.banReason ?? null,
+            });
         }
         return Promise.reject(error);
-    }
+    },
 );

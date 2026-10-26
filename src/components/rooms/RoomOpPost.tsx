@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
-import type { RoomDetails } from "../../api/rooms/types.ts";
+import type { RoomDetails } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
-import {useMemo} from "react";
+import { useMemo } from 'react';
 
 interface RoomOpPostProps {
     room: RoomDetails;
@@ -21,9 +21,9 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
         const inviteUrl = `${window.location.origin}${PATH.rooms.href.joinRoom(room.id)}`;
         try {
             await navigator.clipboard.writeText(inviteUrl);
-            toast.success('Invite link copied. Send it to your bums.');
-        } catch (error) {
-            toast.error('Failed to copy link.');
+            notify.success('Invite link copied. Send it to your bums.');
+        } catch {
+            notify.error('Failed to copy link.');
         }
     };
 
@@ -40,9 +40,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
                 {(room.creator.isMogged || room.creator.is_mogged) && (
                     <span className={styles.moggedBadge}> [MOGGED]</span>
                 )}
-                <span className={styles.date}>
-                    { formattedDate }
-                </span>
+                <span className={styles.date}>{formattedDate}</span>
                 <span className={styles.postId}>№OP_{room.id.slice(-6)}</span>
             </div>
             <div className={styles.postBody}>

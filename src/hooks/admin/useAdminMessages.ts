@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import type { AdminMessage } from '../../api/admin/types.ts';
 import {
     EMPTY_PAGINATION,
@@ -7,7 +7,7 @@ import {
     getPaginated,
     type AdminListOptions,
 } from '../../utils/adminQueryUtils.ts';
-import {adminApi} from "../../api/admin/admin.service.ts";
+import { adminApi } from '../../api/admin/admin.service.ts';
 
 export const useAdminMessages = ({
     page,
@@ -24,16 +24,18 @@ export const useAdminMessages = ({
         enabled,
     });
 
-    const invalidateMessages = () => queryClient.invalidateQueries({ queryKey: ['admin', 'messages'] });
-    const invalidateAuditLogs = () => queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
+    const invalidateMessages = () =>
+        queryClient.invalidateQueries({ queryKey: ['admin', 'messages'] });
+    const invalidateAuditLogs = () =>
+        queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
 
     const deleteMessage = useMutation({
         mutationFn: (messageId: string) => adminApi.deleteMessage(messageId),
         onSuccess: async () => {
-            toast.success('Message deleted.');
+            notify.success('Message deleted.');
             await Promise.all([invalidateMessages(), invalidateAuditLogs()]);
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Failed to delete message')),
+        onError: (error) => notify.error(getErrorMessage(error, 'Failed to delete message')),
     });
 
     return {

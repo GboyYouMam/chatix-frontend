@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { io, type Socket } from 'socket.io-client';
+import { type Socket } from 'socket.io-client';
+import { createSocket } from '../../lib/socket.ts';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 import { useAuthStore } from '../../store/authStore.ts';
 
@@ -15,14 +16,9 @@ export const useAdminSocket = () => {
             return;
         }
 
-        const socket = io(import.meta.env.VITE_API_URL, {
-            auth: {
-                token: `Bearer ${token}`,
-            },
-        });
+        const socket = createSocket('/admin');
 
         socketRef.current = socket;
-        socket.emit('joinAdminLogs');
 
         socket.on('newAdminLog', (log: AdminAuditLog) => {
             setLogs((prevLogs) => {

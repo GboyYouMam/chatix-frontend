@@ -1,4 +1,4 @@
-import type {UserData} from "../auth/types.ts";
+import type { UserData } from '../auth/types.ts';
 
 export interface CreateRoomDTO {
     title: string;
@@ -7,7 +7,7 @@ export interface CreateRoomDTO {
     publicity?: string;
 }
 
-export interface UpdateRoomDTO extends Partial<CreateRoomDTO> {}
+export type UpdateRoomDTO = Partial<CreateRoomDTO>;
 
 export interface RoomDetails {
     id: string;
@@ -15,6 +15,7 @@ export interface RoomDetails {
     topic?: string | null;
     description?: string | null;
     publicity: 'public' | 'private';
+    hasPassword: boolean;
     createdAt: string | Date;
     creator: UserData;
 }

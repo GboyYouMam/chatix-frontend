@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { notify } from '../../lib/toast';
 import { MessageFormatter } from './MessageFormatter.tsx';
 import styles from '../../pages/Rooms/Room.module.css';
 import type { MessageData } from '../../api/messages/types.ts';
@@ -34,16 +34,16 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
             node.classList.add(styles.highlighted);
             setTimeout(() => node.classList.remove(styles.highlighted), 2000);
         } else {
-            toast.error('Message not found in this thread, we lost it xddd');
+            notify.error('Message not found in this thread, we lost it xddd');
         }
     };
 
     const handleCopyIdToReply = async (shortId: string) => {
         try {
             await navigator.clipboard.writeText(`>>${shortId} `);
-            toast.success(`Copied >>${shortId} to clipboard, ready to mog`);
+            notify.success(`Copied >>${shortId} to clipboard, ready to mog`);
         } catch {
-            toast.error('something went wrong');
+            notify.error('something went wrong');
         }
     };
 

@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { createSocket } from '../../lib/socket.ts';
 import { useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../store/authStore.ts';
-import type { MessageData } from '../../api/messages/types.ts';
+import { notify } from '../../lib/toast.ts';
+import type { MessageData, MessagePage } from '../../api/messages/types.ts';
+import type { InfiniteData } from '@tanstack/react-query';
 import { messagesApi } from '../../api/messages/messages.service.ts';
 
 type SendMessagePayload = {
@@ -28,15 +29,12 @@ const getSocketErrorMessage = (error: unknown) => {
 
 export const useRoomSocket = (roomId: string | undefined) => {
     const queryClient = useQueryClient();
-    const { user } = useAuthStore();
     const [socketError, setSocketError] = useState<string | null>(null);
-    const userId = user?.id;
-    const username = user?.username;
 
     useEffect(() => {
         if (!roomId) return;
 
-        const newSocket = io(import.meta.env.VITE_API_URL);
+        const newSocket = createSocket('/');
 
         const showSocketError = (error: unknown) => {
             setSocketError(getSocketErrorMessage(error) || 'Socket error. Try again.');
@@ -51,21 +49,47 @@ export const useRoomSocket = (roomId: string | undefined) => {
         newSocket.on('exception', showSocketError);
         newSocket.on('errorMessage', showErrorMessage);
 
-        newSocket.on('newMessage', (msg: MessageData & { authorId?: string }) => {
-            queryClient.setQueryData(['messages', roomId], (oldData: MessageData[] | undefined) => {
-                if (!oldData) return [msg];
-                if (oldData.some((m) => m.id === msg.id)) return oldData;
-
-                const fixedMsg = { ...msg };
-                if (!fixedMsg.author && fixedMsg.authorId === userId) {
-                    fixedMsg.author = {
-                        username: username ?? 'Anon',
+        newSocket.on('newMessage', (msg: MessageData) => {
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', roomId],
+                (old) => {
+                    if (
+                        !old ||
+                        old.pages.some((page) => page.items.some((item) => item.id === msg.id))
+                    )
+                        return old;
+                    return {
+                        ...old,
+                        pages: [
+                            { ...old.pages[0], items: [...old.pages[0].items, msg] },
+                            ...old.pages.slice(1),
+                        ],
                     };
-                }
-
-                return [...oldData, fixedMsg];
-            });
+                },
+            );
         });
+        newSocket.on('messageDeleted', ({ id }: { id: string }) =>
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', roomId],
+                (old) =>
+                    old && {
+                        ...old,
+                        pages: old.pages.map((page) => ({
+                            ...page,
+                            items: page.items.filter((message) => message.id !== id),
+                        })),
+                    },
+            ),
+        );
+        newSocket.on(
+            'roomQuarantined',
+            ({ roomId: affectedRoomId, quarantined }: { roomId: string; quarantined: boolean }) => {
+                if (affectedRoomId === roomId) {
+                    if (quarantined) notify.info('this room got quarantined. read-only now.');
+                    queryClient.invalidateQueries({ queryKey: ['room', roomId] });
+                }
+            },
+        );
 
         return () => {
             newSocket.off('connect_error', showSocketError);
@@ -74,23 +98,29 @@ export const useRoomSocket = (roomId: string | undefined) => {
             newSocket.off('errorMessage', showErrorMessage);
             newSocket.disconnect();
         };
-    }, [roomId, queryClient, userId, username]);
+    }, [roomId, queryClient]);
 
     const sendMessage = useCallback(
         async (payload: SendMessagePayload) => {
-            try {
-                const message = await messagesApi.sendMessage({
-                    roomId: payload.roomId,
-                    cipherText: payload.text,
-                    attachments: payload.attachments,
-                });
-                queryClient.setQueryData(['messages', payload.roomId], (messages: MessageData[] | undefined) =>
-                    messages?.some((item) => item.id === message.id) ? messages : [...(messages ?? []), message],
-                );
-            } catch (error) {
-                setSocketError(getSocketErrorMessage(error) || 'Failed to send message.');
-                throw error;
-            }
+            const message = await messagesApi.sendMessage({
+                roomId: payload.roomId,
+                cipherText: payload.text,
+                attachments: payload.attachments,
+            });
+            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                ['messages', payload.roomId],
+                (old) =>
+                    old &&
+                    (old.pages.some((page) => page.items.some((item) => item.id === message.id))
+                        ? old
+                        : {
+                              ...old,
+                              pages: [
+                                  { ...old.pages[0], items: [...old.pages[0].items, message] },
+                                  ...old.pages.slice(1),
+                              ],
+                          }),
+            );
         },
         [queryClient],
     );
