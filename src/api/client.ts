@@ -30,12 +30,10 @@ api.interceptors.response.use(
             if (window.location.pathname !== PATH.authAndUser.login)
                 window.location.assign(PATH.authAndUser.login);
         } else if (error.response?.status === 403 && error.response.data?.code === 'BANNED') {
-            useAuthStore
-                .getState()
-                .setBan({
-                    bannedUntil: error.response.data.bannedUntil ?? null,
-                    banReason: error.response.data.banReason ?? null,
-                });
+            useAuthStore.getState().setBan({
+                bannedUntil: error.response.data.bannedUntil ?? null,
+                banReason: error.response.data.banReason ?? null,
+            });
         }
         return Promise.reject(error);
     },

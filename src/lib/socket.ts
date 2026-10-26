@@ -17,12 +17,10 @@ export function createSocket(namespace: '/' | '/fight-club' | '/admin'): Socket 
             banReason?: string;
         }) => {
             if (payload.code === 'BANNED')
-                useAuthStore
-                    .getState()
-                    .setBan({
-                        bannedUntil: payload.bannedUntil ?? null,
-                        banReason: payload.banReason ?? null,
-                    });
+                useAuthStore.getState().setBan({
+                    bannedUntil: payload.bannedUntil ?? null,
+                    banReason: payload.banReason ?? null,
+                });
             else notify.error(payload.message ?? payload);
         },
     );
