@@ -11,9 +11,15 @@ interface RoomReplyFormProps {
         text: string;
         attachments: File[];
     }) => Promise<void>;
+    lockedReason?: string;
 }
 
-export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyFormProps) => {
+export const RoomReplyForm = ({
+    roomId,
+    authorId,
+    onSendMessage,
+    lockedReason,
+}: RoomReplyFormProps) => {
     const [newMessage, setNewMessage] = useState('');
     const [attachments, setAttachments] = useState<File[]>([]);
     const [isSending, setIsSending] = useState(false);
@@ -59,6 +65,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
 
     return (
         <div className={styles.replyFormContainer}>
+            {lockedReason && <div className={styles.errorBanner}>{lockedReason}</div>}
             {attachments.length > 0 && (
                 <div className={styles.selectedFiles}>
                     {attachments.map((file, index) => (
@@ -83,6 +90,7 @@ export const RoomReplyForm = ({ roomId, authorId, onSendMessage }: RoomReplyForm
             <form className={styles.replyForm} onSubmit={handleSendMessage}>
                 <textarea
                     className={styles.replyInput}
+                    disabled={Boolean(lockedReason)}
                     placeholder="Type your shit here... (click on ID of message for copying it and reply)"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}

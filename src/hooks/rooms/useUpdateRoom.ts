@@ -18,7 +18,12 @@ export const useUpdateRoom = () => {
             queryClient.invalidateQueries({ queryKey: ['room', variables.roomId] });
         },
         onError: (error) => {
-            notify.error(error);
+            if (
+                (error as { response?: { status?: number; data?: { code?: string } } }).response
+                    ?.data?.code === 'ROOM_NAME_TAKEN'
+            )
+                notify.error('this name is taken. be original, chud.');
+            else notify.error(error);
         },
     });
 

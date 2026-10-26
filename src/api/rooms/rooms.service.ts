@@ -3,6 +3,7 @@ import type { CreateRoomDTO, RoomDetails } from './types.ts';
 import type { AdminRoomStatus } from '../admin/types.ts';
 
 export const roomApi = {
+    getMyRooms: async (): Promise<RoomDetails[]> => (await api.get('/rooms/mine')).data,
     getRooms: async (publicity?: 'public' | 'private') =>
         (await api.get('/rooms', { params: { publicity } })).data,
 

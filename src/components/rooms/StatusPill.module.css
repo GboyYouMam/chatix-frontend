@@ -1,0 +1,23 @@
+.pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font:
+        12px 'Courier New',
+        monospace;
+    text-transform: lowercase;
+}
+.active {
+    color: var(--primary);
+}
+.checkout {
+    color: var(--warn);
+}
+.quarantined {
+    color: var(--muted);
+}
+.banned,
+.rejected {
+    color: var(--danger);
+}

@@ -14,6 +14,7 @@ import { PATH } from '../../utils/pathList.ts';
 import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.ts';
 import { notify } from '../../lib/toast.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
+import { MyRooms } from '../../components/rooms/MyRooms.tsx';
 
 export const Rooms = () => {
     const navigate = useNavigate();
@@ -167,6 +168,7 @@ export const Rooms = () => {
 
             <main className={styles.mainContent}>
                 <h2 className={styles.subtitle}>if u in debt or just a chud ts for you</h2>
+                {token && <MyRooms />}
 
                 <div className={styles.actionContainer}>
                     <button className={styles.addBtn} onClick={() => setIsCreateModalOpen(true)}>

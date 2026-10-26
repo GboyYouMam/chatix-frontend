@@ -17,6 +17,7 @@ import { useRoomSocket } from '../../hooks/rooms/useRoomSocket.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
 import { notify } from '../../lib/toast.ts';
 import { PATH } from '../../utils/pathList.ts';
+import { StatusPill } from '../../components/rooms/StatusPill.tsx';
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
@@ -143,6 +144,17 @@ export const Room = () => {
             </header>
 
             <main className={styles.threadContainer}>
+                {room.status && room.status !== 'active' && (
+                    <div className={styles.error}>
+                        <StatusPill status={room.status} />{' '}
+                        {room.status === 'checkout' && 'this room is under review. replies paused.'}
+                        {room.status === 'quarantined' &&
+                            (room.statusReason || 'this room is quarantined. replies paused.')}
+                        {room.status === 'banned' && 'this room is banned.'}
+                        {room.status === 'rejected' &&
+                            (room.statusReason || 'this room got rejected.')}
+                    </div>
+                )}
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
                 {hasNextPage && (
                     <button
@@ -156,7 +168,16 @@ export const Room = () => {
                 <RoomReplies messages={messages} roomCreatorUsername={room.creator.username} />
             </main>
 
-            <RoomReplyForm roomId={id!} authorId={user?.id} onSendMessage={sendMessage} />
+            <RoomReplyForm
+                roomId={id!}
+                authorId={user?.id}
+                onSendMessage={sendMessage}
+                lockedReason={
+                    room.status && room.status !== 'active'
+                        ? 'replies paused. read the room status, chud.'
+                        : undefined
+                }
+            />
             {socketError && (
                 <RoomSocketErrorScream message={socketError} onClose={clearSocketError} />
             )}
