@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
@@ -23,6 +23,7 @@ export const Room = () => {
     const { sendMessage, socketError, clearSocketError } = useRoomSocket(id);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const previousScroll = useRef<{ top: number; height: number } | null>(null);
 
     const {
         data: room,
@@ -36,11 +37,21 @@ export const Room = () => {
 
     const { data: messagePages, isLoading: messagesLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
         queryKey: ['messages', id],
-        queryFn: ({ pageParam }) => messagesApi.getHistory(id!, pageParam ? { before: pageParam } : undefined),
+        queryFn: ({ pageParam }) => messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
         initialPageParam: null as string | null,
         getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
+    useLayoutEffect(() => {
+        if (previousScroll.current) {
+            window.scrollTo(0, previousScroll.current.top + document.documentElement.scrollHeight - previousScroll.current.height);
+            previousScroll.current = null;
+        }
+    }, [messagePages?.pages.length]);
+    const loadOlder = () => {
+        previousScroll.current = { top: window.scrollY, height: document.documentElement.scrollHeight };
+        void fetchNextPage();
+    };
     const messages = messagePages?.pages.slice().reverse().flatMap((page) => page.items) ?? [];
 
     if (roomLoading || messagesLoading)
@@ -87,7 +98,7 @@ export const Room = () => {
 
             <main className={styles.threadContainer}>
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
-                {hasNextPage && <button disabled={isFetchingNextPage} onClick={() => fetchNextPage()} className={styles.backBtn}>load older (if u dare)</button>}
+                {hasNextPage && <button disabled={isFetchingNextPage} onClick={loadOlder} className={styles.backBtn}>load older (if u dare)</button>}
                 <RoomReplies messages={messages}
                     roomCreatorUsername={room.creator.username}
                 />
