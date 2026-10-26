@@ -1,9 +1,9 @@
 import type { AdminAuditLog, AdminMessage, AdminRoom, AdminUser } from '../../api/admin/types.ts';
 import type { AdminTabKey } from './adminPanelTypes.ts';
+import { formatDate as formatDateTime } from '../../utils/date.ts';
 
 export function formatDate(value?: string | Date | null) {
-    if (!value) return 'n/a';
-    return new Date(value).toLocaleString('uk-UA');
+    return formatDateTime(value) || 'n/a';
 }
 
 export function getWarnCount(user: AdminUser) {

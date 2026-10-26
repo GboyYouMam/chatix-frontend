@@ -7,6 +7,7 @@ import type { MessageData } from '../../api/messages/types.ts';
 import { PATH } from '../../utils/pathList.ts';
 import { formatAttachmentSize } from './attachments.ts';
 import { DELETED_MESSAGE } from '../../hooks/rooms/messageCache.ts';
+import { formatDate } from '../../utils/date.ts';
 
 interface RoomRepliesProps {
     messages: MessageData[];
@@ -21,9 +22,7 @@ export const RoomReplies = ({ messages, roomCreatorUsername }: RoomRepliesProps)
         return new Map(
             messages.map((message) => [
                 message.id,
-                message.createdAt
-                    ? new Date(message.createdAt).toLocaleString('uk-UA')
-                    : 'Just now',
+                message.createdAt ? formatDate(message.createdAt) : 'just now',
             ]),
         );
     }, [messages]);

@@ -68,7 +68,7 @@ export const JoinRoom = () => {
                     className={styles.backBtn}
                     style={{ marginTop: '2rem', display: 'block', width: '100%' }}
                 >
-                    {'<< ABORT AND RETURN'}
+                    {'← abort and return'}
                 </button>
             </div>
         </div>

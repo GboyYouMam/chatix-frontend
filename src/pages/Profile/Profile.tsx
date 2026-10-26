@@ -113,12 +113,6 @@ export const Profile = () => {
             notify.success(response.alreadyRespected ? 'respect already sent' : 'respect sent');
         } catch (error) {
             updateProfileCache(() => previous);
-            // Відкат у разі помилки
-            updateProfileCache((prev) => ({
-                ...prev,
-                respectCount: Math.max((prev.respectCount ?? prev.respect_count ?? 1) - 1, 0),
-                hasRespected: false,
-            }));
             notify.error(error);
         } finally {
             setIsRespectLoading(false);

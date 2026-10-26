@@ -3,11 +3,10 @@ import styles from '../../pages/Admin/AdminPanel.module.css';
 import type { AdminAuditLog } from '../../api/admin/types.ts';
 import type { AuditFeedProps } from './adminPanelTypes.ts';
 import { getLogSummary } from './adminPanelUtils.ts';
+import { formatDate } from '../../utils/date.ts';
 
 const AdminAuditLogEntry = memo(({ log }: { log: AdminAuditLog }) => {
-    const formattedCreatedAt = new Date(log.createdAt).toLocaleTimeString('en-GB', {
-        hour12: false,
-    });
+    const formattedCreatedAt = formatDate(log.createdAt);
     const summary = getLogSummary(log);
 
     return (
