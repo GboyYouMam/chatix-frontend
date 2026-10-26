@@ -1,8 +1,206 @@
-.page { min-height: 100vh; box-sizing: border-box; overflow: hidden; background: var(--bg); color: var(--text); text-align: center; padding: 8vh 20px; font-family: 'Courier New', monospace; }
-.title { color: var(--primary); font: bold clamp(3rem, 10vw, 7rem) 'Times New Roman', serif; letter-spacing: 4px; text-shadow: 0 0 24px var(--primary); margin: 1rem 0; }
-.count { font-size: clamp(1.4rem, 5vw, 3rem); margin: 3rem 0; }
-.actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-.actions button { padding: 12px 24px; color: var(--text); background: var(--surface); border: 1px solid var(--primary); cursor: pointer; font: inherit; }
-.marquee { color: var(--primary); white-space: nowrap; margin: 2rem -20px; animation: drift 24s linear infinite; }
-@keyframes drift { to { transform: translateX(-20%); } }
-@media (prefers-reduced-motion: reduce) { .marquee { animation: none; white-space: normal; } }
+.page {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: clamp(2rem, 7vh, 5rem) 1rem 5rem;
+    background:
+        radial-gradient(ellipse at 50% 15%, rgb(250 77 152 / 12%), transparent 42%),
+        var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    text-align: center;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 760px);
+    margin: 0 auto;
+}
+
+.eyebrow,
+.panelLabel {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.title {
+    margin: 0.75rem 0 0;
+    color: var(--primary);
+    font: bold clamp(2.8rem, 11vw, 6.5rem) 'Times New Roman', serif;
+    letter-spacing: clamp(0.08em, 1vw, 0.16em);
+    line-height: 0.95;
+    text-shadow: 0 0 12px rgb(250 77 152 / 80%), 0 0 36px rgb(250 77 152 / 45%);
+}
+
+.intro {
+    margin: 1.25rem 0 2rem;
+    color: var(--muted);
+}
+
+.reason {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    background: rgb(24 24 27 / 88%);
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.reason h2 {
+    margin: 0 0 0.5rem;
+    color: var(--primary);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.reason p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.countdownPanel {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: clamp(1rem, 4vw, 1.75rem);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, #111114, var(--surface));
+    box-shadow: inset 0 0 24px rgb(250 77 152 / 8%), 0 0 22px rgb(250 77 152 / 10%);
+}
+
+.countdown {
+    max-width: 100%;
+    color: var(--primary);
+    font-size: clamp(1.15rem, 6vw, 2.75rem);
+    letter-spacing: 0.035em;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 14px rgb(250 77 152 / 35%);
+}
+
+.taunt {
+    min-height: 1.5em;
+    margin: 1.5rem 0;
+    color: var(--text);
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    animation: taunt-in 450ms ease-out both;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.actions button {
+    min-height: 44px;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    font: inherit;
+    transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.actions button:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+}
+
+.appealAction {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+}
+
+.appealButton {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+.appealNotice {
+    min-height: 1em;
+    color: var(--muted);
+    font-size: 0.72rem;
+}
+
+.retryButton {
+    border-color: var(--primary) !important;
+    background: var(--primary) !important;
+    color: #09090b !important;
+    font-weight: 700 !important;
+}
+
+.marquee {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary);
+    font-size: 0.8rem;
+    line-height: 2.75rem;
+    text-transform: uppercase;
+}
+
+.marqueeTrack {
+    display: flex;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+}
+
+.marqueeTrack span {
+    flex: 0 0 auto;
+    padding-right: 2rem;
+}
+
+.scanLines {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        rgb(250 77 152 / 18%) 4px
+    );
+}
+
+@keyframes marquee {
+    to { transform: translateX(-50%); }
+}
+
+@keyframes taunt-in {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 420px) {
+    .page { padding-right: 1rem; padding-left: 1rem; }
+    .actions { gap: 0.5rem; }
+    .actions button { padding-right: 0.8rem; padding-left: 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marqueeTrack { animation: none; }
+    .taunt { animation: none; }
+    .actions button { transition: none; }
+}
