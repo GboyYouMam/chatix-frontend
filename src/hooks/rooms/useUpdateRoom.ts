@@ -4,6 +4,7 @@ import { roomApi } from '../../api/rooms/rooms.service.ts';
 import { notify } from '../../lib/toast';
 import type { UpdateRoomDTO } from '../../api/rooms/types.ts';
 import { PATH } from '../../utils/pathList.ts';
+import { queryKeys } from '../../lib/queryKeys.ts';
 
 export const useUpdateRoom = () => {
     const queryClient = useQueryClient();
@@ -15,7 +16,7 @@ export const useUpdateRoom = () => {
 
         onSuccess: (_, variables) => {
             notify.success('Room updated successfully');
-            queryClient.invalidateQueries({ queryKey: ['room', variables.roomId] });
+            queryClient.invalidateQueries({ queryKey: queryKeys.room(variables.roomId) });
         },
         onError: (error) => {
             if (
@@ -31,7 +32,7 @@ export const useUpdateRoom = () => {
         mutationFn: ({ roomId }: { roomId: string }) => roomApi.deleteRoom(roomId),
         onSuccess: () => {
             notify.success('Room ERASED by KILLSQUAD.');
-            queryClient.invalidateQueries({ queryKey: ['rooms'] });
+            queryClient.invalidateQueries({ queryKey: queryKeys.rooms() });
             navigate(PATH.rooms.rooms);
         },
         onError: (error) => {
