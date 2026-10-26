@@ -43,10 +43,14 @@
     text-decoration: none;
     text-transform: lowercase;
 }
-.navActive,
 .navLink:hover {
+    color: var(--text);
+    background: rgba(250, 250, 250, 0.04);
+}
+.navActive {
     color: var(--primary);
     background: rgba(250, 77, 152, 0.1);
+    box-shadow: inset 2px 0 0 var(--primary);
 }
 .adminContent {
     min-width: 0;
