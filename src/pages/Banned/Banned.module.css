@@ -33,7 +33,7 @@
     margin: 0.75rem 0 0;
     color: var(--primary);
     font:
-        bold clamp(2.8rem, 11vw, 6.5rem) 'Times New Roman',
+        bold clamp(2rem, 10vw, 6.5rem) 'Times New Roman',
         serif;
     letter-spacing: clamp(0.08em, 1vw, 0.16em);
     line-height: 0.95;
