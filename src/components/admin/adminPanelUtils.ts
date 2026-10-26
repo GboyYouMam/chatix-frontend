@@ -1,9 +1,4 @@
-import type {
-    AdminAuditLog,
-    AdminMessage,
-    AdminRoom,
-    AdminUser,
-} from '../../api/admin/types.ts';
+import type { AdminAuditLog, AdminMessage, AdminRoom, AdminUser } from '../../api/admin/types.ts';
 import type { AdminTabKey } from './adminPanelTypes.ts';
 
 export function formatDate(value?: string | Date | null) {
@@ -12,15 +7,15 @@ export function formatDate(value?: string | Date | null) {
 }
 
 export function getWarnCount(user: AdminUser) {
-    return user.warnsCount ?? user.warns_count ?? 0;
+    return user.activeWarningsCount ?? 0;
 }
 
 export function getAdminGlazeMode(user: AdminUser) {
-    return user.adminGlazeMode ?? user.admin_glaze_mode ?? false;
+    return user.adminGlazeMode ?? false;
 }
 
 export function getCanChangeProfile(user: AdminUser) {
-    return user.canChangeProfile ?? user.can_change_profile ?? false;
+    return user.canChangeProfile ?? false;
 }
 
 export function getEntityLabel(
@@ -51,9 +46,9 @@ export function getEntityLabel(
 }
 
 export function getLogSummary(log: AdminAuditLog) {
-    const target = [log.targetType, log.targetId].filter(Boolean).join(':');
     const actor = log.admin?.username ?? log.adminId ?? 'unknown';
-    return `${log.action} ${target ? `target=${target} ` : ''}admin=${actor}`;
+    const target = [log.targetType, log.targetId].filter(Boolean).join(':') || log.path;
+    return `${actor} → ${log.action} → ${target}`;
 }
 
 export function addDuration(amount: number, unit: 'minutes' | 'hours' | 'days') {

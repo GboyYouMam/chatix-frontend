@@ -1,9 +1,6 @@
 import { isAxiosError } from 'axios';
 import { api } from '../api/client.ts';
-import type {
-    PaginatedResponse,
-    PaginationMeta,
-} from '../api/admin/types.ts';
+import type { PaginatedResponse, PaginationMeta } from '../api/admin/types.ts';
 
 export interface AdminListOptions {
     page: number;
@@ -46,9 +43,7 @@ export function getErrorMessage(error: unknown, fallback: string) {
 export function cleanParams({ page, limit, search }: QueryParams) {
     const normalizedSearch = search?.trim() ?? '';
 
-    return normalizedSearch
-        ? { page, limit, search: normalizedSearch }
-        : { page, limit };
+    return normalizedSearch ? { page, limit, search: normalizedSearch } : { page, limit };
 }
 
 export async function getPaginated<T>(path: string, params: QueryParams) {

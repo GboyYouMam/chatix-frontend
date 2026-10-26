@@ -1,59 +1,29 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { notify } from '../../../lib/toast';
-import type { AdminUser, UpdateModifiersPayload } from '../../../api/admin/types.ts';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import type { AdminUser } from '../../../api/admin/types.ts';
+import { adminKeys } from '../adminKeys.ts';
 import {
     EMPTY_PAGINATION,
-    getErrorMessage,
     getPaginated,
     type AdminListOptions,
 } from '../../../utils/adminQueryUtils.ts';
-import { adminApi } from '../../../api/admin/admin.service.ts';
 
 export const useAdminUsers = ({ page, limit = 25, search, enabled = true }: AdminListOptions) => {
-    const queryClient = useQueryClient();
     const listParams = { page, limit, search };
-
     const usersQuery = useQuery({
-        queryKey: ['admin', 'users', listParams],
+        queryKey: adminKeys.users(listParams),
         queryFn: () => getPaginated<AdminUser>('/admin/users', listParams),
         enabled,
+        placeholderData: keepPreviousData,
+        staleTime: 10_000,
     });
-
-    const invalidateUsers = () => queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
-    const invalidateAuditLogs = () =>
-        queryClient.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
-    const invalidateWarnings = (userId?: string | null) =>
-        queryClient.invalidateQueries({ queryKey: ['admin', 'warnings', userId] });
-
-    const vaporizeUser = useMutation({
-        mutationFn: (userId: string) => adminApi.vaporizeUser(userId),
-        onSuccess: async () => {
-            notify.success('User vaporized.');
-            await Promise.all([invalidateUsers(), invalidateAuditLogs()]);
-        },
-        onError: (error) => notify.error(getErrorMessage(error, 'Failed to vaporize user')),
-    });
-
-    const updateModifiers = useMutation({
-        mutationFn: ({ userId, data }: { userId: string; data: UpdateModifiersPayload }) =>
-            adminApi.updateModifier(userId, data),
-        onSuccess: async (_, variables) => {
-            notify.success('User modifiers updated.');
-            await Promise.all([
-                invalidateUsers(),
-                invalidateAuditLogs(),
-                invalidateWarnings(variables.userId),
-            ]);
-        },
-        onError: (error) => notify.error(getErrorMessage(error, 'Failed to update user')),
-    });
+    const items = usersQuery.data?.items ?? [];
 
     return {
-        users: usersQuery.data?.items ?? [],
+        items,
+        total: usersQuery.data?.pagination.total ?? 0,
+        isInitialLoading: usersQuery.isLoading,
+        users: items,
         pagination: usersQuery.data?.pagination ?? EMPTY_PAGINATION,
-        isLoading: usersQuery.isLoading,
         isFetching: usersQuery.isFetching,
-        vaporizeUser,
-        updateModifiers,
     };
 };
