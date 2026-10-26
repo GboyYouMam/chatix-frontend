@@ -1,0 +1,21 @@
+.avatar {
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg);
+}
+.small {
+    width: 28px;
+    height: 28px;
+}
+.large {
+    width: 84px;
+    height: 84px;
+    border-radius: 8px;
+}
+.fallback {
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+}

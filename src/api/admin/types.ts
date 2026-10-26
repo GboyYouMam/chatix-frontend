@@ -7,6 +7,7 @@ export const AdminRoomStatus = {
     checkout: 'checkout',
     banned: 'banned',
     quarantined: 'quarantined',
+    rejected: 'rejected',
 } as const;
 export type AdminRoomStatus = (typeof AdminRoomStatus)[keyof typeof AdminRoomStatus];
 
@@ -68,16 +69,25 @@ export interface AdminAuditLog {
     id: string;
     adminId?: string | null;
     action: string;
+    actionKey?: string;
     method: string;
     path: string;
     targetType?: string | null;
     targetId?: string | null;
+    targetLabel?: string | null;
     statusCode: number;
     success: boolean;
     durationMs: number;
     details?: Record<string, unknown>;
     createdAt: string | Date;
     admin?: UserData;
+}
+
+export interface AdminStats {
+    roomsInReview: number;
+    activeBans: number;
+    warnsToday: number;
+    autobansThisWeek: number;
 }
 
 export interface UpdateModifiersPayload {

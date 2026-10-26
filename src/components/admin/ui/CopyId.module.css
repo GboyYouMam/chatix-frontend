@@ -1,0 +1,16 @@
+.copy {
+    min-height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.65rem;
+    background: transparent;
+    color: var(--muted);
+    font:
+        0.75rem 'Courier New',
+        monospace;
+    cursor: pointer;
+}
+.copy:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
