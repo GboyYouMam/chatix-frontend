@@ -1,5 +1,6 @@
 import type { AchievementCatalogItem, ProfileAchievement } from '../../api/achievements/types.ts';
 import { ribbonStyle, sortForRack } from './ribbons.ts';
+import { formatDate } from '../../utils/date.ts';
 import styles from './MedalRack.module.css';
 
 export function MedalRack({
@@ -30,7 +31,7 @@ export function MedalRack({
                                             background: ribbon.background,
                                             borderColor: ribbon.border,
                                         }}
-                                        title={`${medal.name}: ${medal.description} · ${medal.unlockedPercent}% of players · ${earned ? new Date(earned).toLocaleDateString() : ''}`}
+                                        title={`${medal.name}: ${medal.description} · ${medal.unlockedPercent}% of players · ${formatDate(earned)}`}
                                         aria-label={`${medal.name}, ${medal.description}`}
                                         onClick={onViewBook}
                                     >
