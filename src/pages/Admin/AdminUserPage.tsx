@@ -377,6 +377,9 @@ const AdminUserPageContent = () => {
             {tab === 'history' && (
                 <section className={styles.logsPanel}>
                     <h2 className={styles.panelTitle}>user history</h2>
+                    {historyQuery.isSuccess && historyQuery.data.items.length === 0 && (
+                        <p className={styles.placeholderText}>no crimes on record. yet.</p>
+                    )}
                     {historyQuery.data?.items.map((log) => {
                         const sentence = auditSentence(log);
                         return (
