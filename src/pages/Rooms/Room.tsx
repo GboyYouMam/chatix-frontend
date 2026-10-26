@@ -112,7 +112,7 @@ export const Room = () => {
             <header className={styles.header}>
                 <div className={styles.headerLeft}>
                     <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                        {'<< back to lobby'}
+                        {'← back to lobby'}
                     </button>
                     <h1 className={styles.boardTitle}>
                         /{room.publicity}/ — {room.title}
@@ -123,6 +123,7 @@ export const Room = () => {
                     <button
                         className={styles.editRoomBtn}
                         onClick={() => setIsEditModalOpen(true)}
+                        aria-label="edit room"
                         title="Edit Room"
                     >
                         <svg

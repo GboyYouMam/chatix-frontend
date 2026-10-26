@@ -83,9 +83,6 @@ export const AdminMessagesPage = () => {
                 <section className={styles.actionsPanel}>
                     <div className={styles.sectionHeader}>
                         <h2 className={styles.panelTitle}>Message Actions</h2>
-                        {selectedMessage && (
-                            <span className={styles.sectionNote}>{selectedMessage.id}</span>
-                        )}
                     </div>
 
                     {selectedMessage ? (

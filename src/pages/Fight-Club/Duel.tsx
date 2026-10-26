@@ -6,7 +6,7 @@ import duelBackdrop from '../../assets/fight-duel-face.png';
 import styles from './Duel.module.css';
 
 export const Duel = () => {
-    const { duel, players, matchId, stakeType, stakeAmount, goLobby } = useFightDuel();
+    const { duel, players, stakeType, stakeAmount, goLobby } = useFightDuel();
 
     return (
         <div className={styles.layout}>
@@ -19,7 +19,6 @@ export const Duel = () => {
             <header className={styles.header}>
                 <button onClick={goLobby}>back to lobby</button>
                 <div>
-                    <span>match {matchId || 'missing'}</span>
                     <strong>
                         {stakeAmount} {stakeType}
                     </strong>
