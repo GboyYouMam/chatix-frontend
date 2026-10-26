@@ -47,7 +47,7 @@ const catalog: AchievementDef[] = [
         key: 'silver',
         name: 'silver',
         description: '',
-        category: 'fight_club',
+        category: 'fight',
         tier: 'silver',
         icon: '',
         unlockedPercent: 0,
@@ -68,4 +68,13 @@ test('rack sorts tiers before unlock date and ribbon styles cover every catalog 
         assert.ok(style.stripes.length > 0, `${def.category} has a palette`);
         assert.ok(style.border);
     }
+});
+
+test('ribbon style falls back to a neutral palette for unknown categories', () => {
+    const style = ribbonStyle({
+        category: 'future_category' as AchievementDef['category'],
+        tier: 'bronze',
+    });
+    assert.ok(style.stripes.length > 0);
+    assert.ok(style.background.includes('#71717a'));
 });

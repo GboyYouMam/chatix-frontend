@@ -1,5 +1,5 @@
 export type AchievementCategory =
-    'aura' | 'debt' | 'fight_club' | 'rooms_chat' | 'social' | 'moderation' | 'secret';
+    'aura' | 'debt' | 'fight' | 'rooms' | 'social' | 'moderation' | 'secret';
 export type AchievementTier = 'bronze' | 'silver' | 'gold' | 'shame' | 'secret';
 
 export interface AchievementDef {
@@ -28,12 +28,14 @@ const tierOrder: Record<AchievementTier, number> = {
 const palettes: Record<AchievementCategory, string[]> = {
     aura: ['#fa4d98', '#f9a8d4', '#7c3aed'],
     debt: ['#a1a1aa', '#52525b', '#fa4d98'],
-    fight_club: ['#ef4444', '#7f1d1d', '#fa4d98'],
-    rooms_chat: ['#8b5cf6', '#c4b5fd', '#fa4d98'],
+    fight: ['#ef4444', '#7f1d1d', '#fa4d98'],
+    rooms: ['#8b5cf6', '#c4b5fd', '#fa4d98'],
     social: ['#ec4899', '#f9a8d4', '#7c3aed'],
     moderation: ['#71717a', '#27272a', '#ef4444'],
     secret: ['#fa4d98', '#8b5cf6', '#22d3ee'],
 };
+
+const neutralPalette = ['#71717a', '#3f3f46', '#a1a1aa'];
 
 export function sortForRack(
     unlocked: UnlockedAchievement[],
@@ -50,7 +52,8 @@ export function sortForRack(
 }
 
 export function ribbonStyle(def: Pick<AchievementDef, 'category' | 'tier'>) {
-    const stripes = palettes[def.category];
+    // Unknown categories (e.g. one added on the backend before the frontend) fall back to neutral.
+    const stripes: string[] = palettes[def.category] ?? neutralPalette;
     const gradient =
         def.tier === 'shame'
             ? 'linear-gradient(90deg, #09090b 0 33%, #7f1d1d 33% 66%, #09090b 66%)'

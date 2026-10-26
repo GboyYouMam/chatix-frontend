@@ -3,15 +3,7 @@ import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
 import { ribbonStyle } from './ribbons.ts';
 import styles from './MedalBook.module.css';
 
-const categories = [
-    'aura',
-    'debt',
-    'fight_club',
-    'rooms_chat',
-    'social',
-    'moderation',
-    'secret',
-] as const;
+const categories = ['aura', 'debt', 'fight', 'rooms', 'social', 'moderation', 'secret'] as const;
 
 export function MedalBook({
     isOpen,
