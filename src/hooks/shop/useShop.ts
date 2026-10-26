@@ -61,6 +61,7 @@ export const useShopEquip = () => {
             shopApi.equip(slot, itemKey),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: queryKeys.shopMe() });
+            void queryClient.invalidateQueries({ queryKey: ['profile'] });
         },
         onError: (error) => notify.error(error),
     });
