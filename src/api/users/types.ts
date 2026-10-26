@@ -38,6 +38,7 @@ export interface ProfileData extends User {
     warnings?: Array<AdminWarning | string>;
     warns?: Array<AdminWarning | string>;
     warningReasons?: string[];
+    widgets?: ProfileWidgets;
 }
 
 export interface RespectProfileResponse {
@@ -63,4 +64,40 @@ export interface ProfileCosmetics {
     verified?: boolean;
     stickers?: Array<string | null>;
     vineBoom?: boolean;
+}
+
+export interface RapSheetEntry {
+    reason: string;
+    at?: string | null;
+}
+
+export interface ProfileWidgetData {
+    nowPlaying: { provider: 'spotify' | 'soundcloud'; embedUrl: string } | null;
+    auraChart: Array<{ day: string; aura: number | string }>;
+    fightRecord: {
+        wins: number;
+        losses: number;
+        streak: number;
+        last: { opponent: string; won: boolean; at: string } | null;
+    };
+    topGlazers: Array<{ username: string; pfp_url?: string | null }>;
+    debt: number;
+    yapStats: {
+        messages: number;
+        topRooms: Array<{ title: string; count: number }>;
+        mostCookedTake: { excerpt: string; replies: number } | null;
+    };
+    status: { text: string; setAt: string } | null;
+    rapSheet: { warns: RapSheetEntry[]; bans: RapSheetEntry[] };
+    hitCount: number;
+}
+
+export interface ProfileWidgets {
+    layout: string[];
+    data: ProfileWidgetData;
+}
+
+export interface ProfileExtrasInput {
+    trackUrl?: string | null;
+    statusText?: string | null;
 }

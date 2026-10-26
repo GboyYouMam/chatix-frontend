@@ -3,6 +3,7 @@ import type {
     CreateProfileCommentResponse,
     ProfileComment,
     ProfileData,
+    ProfileExtrasInput,
     RespectProfileResponse,
 } from './types.ts';
 
@@ -25,4 +26,10 @@ export const usersApi = {
         body: string,
     ): Promise<CreateProfileCommentResponse> =>
         (await api.post(`/users/profile/${encodeURIComponent(username)}/comments`, { body })).data,
+
+    updateWidgets: async (layout: string[]): Promise<{ layout: string[] }> =>
+        (await api.patch('/users/me/widgets', { layout })).data,
+
+    updateProfileExtras: async (input: ProfileExtrasInput): Promise<unknown> =>
+        (await api.patch('/users/me/profile-extras', input)).data,
 };
