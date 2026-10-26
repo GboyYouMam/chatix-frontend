@@ -393,6 +393,14 @@
     mix-blend-mode: screen;
 }
 
+@media (max-width: 600px) {
+    .lobbyBackdrop {
+        right: 0;
+        max-width: 100%;
+        width: min(58vw, 720px);
+    }
+}
+
 .header {
     background: rgba(8, 8, 13, 0.76);
     border-color: rgba(255, 255, 255, 0.1);
