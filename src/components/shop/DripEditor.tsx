@@ -5,6 +5,7 @@ import { useShopCatalog, useShopEquip, useShopMe } from '../../hooks/shop/useSho
 import { PATH } from '../../utils/pathList.ts';
 import { resolveAccentColor, ACCENT_PALETTE } from './cosmeticPalette.ts';
 import { formatPrice } from './shopFormat.ts';
+import { EMPTY_DRIP_LINE } from './martQuotes.ts';
 import { isItemEquipped, STICKER_SLOTS } from './shopSlots.ts';
 import styles from './DripEditor.module.css';
 
@@ -165,9 +166,10 @@ export const DripEditor = () => {
             <p className={styles.note}>
                 every pick saves instantly. locked stuff needs aura first.{' '}
                 <Link to={PATH.shop.shop} className={styles.shopLink}>
-                    open the soap market
+                    open the mogger mart
                 </Link>
             </p>
+            {me.inventory.length === 0 && <p className={styles.note}>{EMPTY_DRIP_LINE}</p>}
 
             <ChoiceGroup
                 legend="accent"

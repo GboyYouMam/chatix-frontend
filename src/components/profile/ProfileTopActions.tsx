@@ -16,7 +16,7 @@ export const ProfileTopActions = ({ isMyProfile }: ProfileTopActionsProps) => {
             </button>
             <div className={styles.rightGroup}>
                 <button className={styles.shopBtn} onClick={() => navigate(PATH.shop.shop)}>
-                    the soap market
+                    mogger mart
                 </button>
                 {isMyProfile && (
                     <button

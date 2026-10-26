@@ -27,7 +27,7 @@ test('negative aura (debt fallout) can never afford anything', () => {
 });
 
 test('maps purchase error codes to in-voice copy and ignores unknown codes', () => {
-    assert.equal(purchaseErrorMessage('BROKE'), 'u broke. go farm.');
+    assert.equal(purchaseErrorMessage('BROKE'), 'u broke. hypergamy has left the chat.');
     assert.equal(purchaseErrorMessage('ALREADY_OWNED'), 'already yours, chud. stop hoarding.');
     assert.equal(purchaseErrorMessage('LOCKED'), 'locked. go earn the thing first.');
     assert.equal(purchaseErrorMessage('SOMETHING_ELSE'), null);

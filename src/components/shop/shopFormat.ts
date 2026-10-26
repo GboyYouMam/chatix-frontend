@@ -10,7 +10,7 @@ export const humanizeKey = (key: string): string => key.replace(/_/g, ' ').toLow
 export const MYSTERY_ODDS_TEXT = 'odds: common 70% · rare 25% · legendary 5%';
 
 const PURCHASE_ERROR_MESSAGES: Record<string, string> = {
-    BROKE: 'u broke. go farm.',
+    BROKE: 'u broke. hypergamy has left the chat.',
     ALREADY_OWNED: 'already yours, chud. stop hoarding.',
     LOCKED: 'locked. go earn the thing first.',
 };
