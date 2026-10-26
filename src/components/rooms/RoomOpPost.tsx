@@ -22,7 +22,7 @@ export const RoomOpPost = ({ room, isRoomCreator }: RoomOpPostProps) => {
         try {
             await navigator.clipboard.writeText(inviteUrl);
             notify.success('Invite link copied. Send it to your bums.');
-        } catch (error) {
+        } catch {
             notify.error('Failed to copy link.');
         }
     };

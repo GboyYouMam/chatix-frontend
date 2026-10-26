@@ -14,8 +14,8 @@ export const useRooms = () => {
             notify.success('ACCESS GRANTED.');
             navigate(PATH.rooms.href.room(variables.roomId));
         },
-        onError: (error: any) => {
-            notify.error(error.response?.data?.message || 'Access Denied.');
+        onError: (error) => {
+            notify.error(error);
         }
     });
 

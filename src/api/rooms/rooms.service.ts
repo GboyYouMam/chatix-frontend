@@ -1,12 +1,12 @@
 import { api } from '../client.ts';
-import type { CreateRoomDTO } from './types.ts';
+import type { CreateRoomDTO, RoomDetails } from './types.ts';
 import type { AdminRoomStatus } from '../admin/types.ts';
 
 export const roomApi = {
     getRooms: async (publicity?: 'public' | 'private') =>
         (await api.get('/rooms', { params: { publicity } })).data,
 
-    getRoomDetailed: async <T = any>(roomId: string): Promise<T> =>
+    getRoomDetailed: async <T = RoomDetails>(roomId: string): Promise<T> =>
         (await api.get<T>(`/rooms/${roomId}`)).data,
 
     createRoom: async (data: CreateRoomDTO) => (await api.post('/rooms', data)).data,

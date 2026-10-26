@@ -17,8 +17,8 @@ export const useUpdateRoom = () => {
             notify.success('Room updated successfully');
             queryClient.invalidateQueries({ queryKey: ['room', variables.roomId] });
         },
-        onError: (error: any) => {
-            notify.error(error.response?.data?.message || 'nah something went wrong.');
+        onError: (error) => {
+            notify.error(error);
         }
     });
 
@@ -29,8 +29,8 @@ export const useUpdateRoom = () => {
             queryClient.invalidateQueries({ queryKey: ['rooms'] });
             navigate(PATH.rooms.rooms);
         },
-        onError: (error: any) => {
-            notify.error(error.response?.data?.message || 'Failed to nuke room.');
+        onError: (error) => {
+            notify.error(error);
         }
     });
 

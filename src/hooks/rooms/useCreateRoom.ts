@@ -13,8 +13,8 @@ export const useCreateRoom = () => {
             notify.success('Room created. Go yap about it.');
             queryClient.invalidateQueries({ queryKey: ['rooms'] });
         },
-        onError: (error: any) => {
-            notify.error(error.response?.data?.message || 'nah something went wrong.');
+        onError: (error) => {
+            notify.error(error);
         }
     });
 

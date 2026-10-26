@@ -1,7 +1,8 @@
 import { api } from '../client.ts';
+import type { MessagePage } from './types.ts';
 
 export const messagesApi = {
-    getHistory: async (roomId: string) => (await api.get(`/messages/${roomId}`)).data,
+    getHistory: async (roomId: string, params?: { before?: string; limit?: number }): Promise<MessagePage> => (await api.get(`/messages/${roomId}`, { params })).data,
 
     sendMessage: async (data: { roomId: string; cipherText: string; attachments?: File[] }) => {
         const formData = new FormData();

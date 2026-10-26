@@ -27,10 +27,10 @@ export const RoomCard = ({ room }: RoomCardProps) => {
             <div className={styles.cardFooter}>
                 <a
                     className={styles.cardCta}
-                    onClick={() => navigate(PATH.rooms.href.room(room.id))}
+                    onClick={() => navigate(room.hasPassword ? PATH.rooms.href.joinRoom(room.id) : PATH.rooms.href.room(room.id))}
                     style={{ cursor: 'pointer' }}
                 >
-                    join this convo and mog them all
+                    {room.hasPassword ? 'unlock this private convo' : 'join this convo and mog them all'}
                 </a>
             </div>
         </div>

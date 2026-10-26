@@ -26,8 +26,8 @@ export const JoinRoom = () => {
             notify.success('ACCESS GRANTED.');
 
             navigate(PATH.rooms.href.room(id));
-        } catch (error: any) {
-            notify.error(error.response?.data?.message || 'Access Denied.');
+        } catch (error) {
+            notify.error(error);
         } finally {
             setIsHacking(false);
         }

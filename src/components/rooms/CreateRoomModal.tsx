@@ -54,7 +54,7 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
 
         createRoom.mutate(payload, {
             onSuccess: () => {
-                methods.reset;
+                methods.reset();
                 onSuccess();
                 onClose();
             }

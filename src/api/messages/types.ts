@@ -15,4 +15,7 @@ export interface MessageData {
     createdAt: string | Date;
     author?: UserData;
     attachments?: MessageAttachment[];
+    authorId?: string;
 }
+
+export interface MessagePage { items: MessageData[]; nextCursor: string | null }

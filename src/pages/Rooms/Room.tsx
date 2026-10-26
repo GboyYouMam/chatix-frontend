@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { messagesApi } from '../../api/messages/messages.service.ts';
@@ -34,11 +34,14 @@ export const Room = () => {
         enabled: !!id,
     });
 
-    const { data: messages, isLoading: messagesLoading } = useQuery({
+    const { data: messagePages, isLoading: messagesLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
         queryKey: ['messages', id],
-        queryFn: () => messagesApi.getHistory(id!),
+        queryFn: ({ pageParam }) => messagesApi.getHistory(id!, pageParam ? { before: pageParam } : undefined),
+        initialPageParam: null as string | null,
+        getNextPageParam: (last) => last.nextCursor ?? undefined,
         enabled: !!id,
     });
+    const messages = messagePages?.pages.slice().reverse().flatMap((page) => page.items) ?? [];
 
     if (roomLoading || messagesLoading)
         return <div className={styles.loading}>Loading thread...</div>;
@@ -84,8 +87,8 @@ export const Room = () => {
 
             <main className={styles.threadContainer}>
                 <RoomOpPost room={room} isRoomCreator={isRoomCreator} />
-                <RoomReplies
-                    messages={messages || []}
+                {hasNextPage && <button disabled={isFetchingNextPage} onClick={() => fetchNextPage()} className={styles.backBtn}>load older (if u dare)</button>}
+                <RoomReplies messages={messages}
                     roomCreatorUsername={room.creator.username}
                 />
             </main>
@@ -103,8 +106,8 @@ export const Room = () => {
                     roomId={room.id}
                     initialData={{
                         title: room.title,
-                        topic: room.topic,
-                        description: room.description,
+                        topic: room.topic ?? '',
+                        description: room.description ?? '',
                     }}
                 />
             )}
