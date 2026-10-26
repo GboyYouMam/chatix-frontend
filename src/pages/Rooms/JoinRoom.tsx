@@ -34,39 +34,27 @@ export const JoinRoom = () => {
     };
 
     return (
-        <div className={styles.layout} style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <div
-                className={styles.replyBlock}
-                style={{ width: '400px', textAlign: 'center', padding: '2rem' }}
-            >
-                <h1 className={styles.boardTitle} style={{ marginBottom: '1rem' }}>
-                    RESTRICTED AREA
-                </h1>
-                <p style={{ color: '#888', marginBottom: '2rem' }}>
-                    This room is private, like and ISLAND of someone extremely RICH.
-                </p>
+        <div className={styles.layout}>
+            <div className={styles.joinCard}>
+                <h1 className={styles.boardTitle}>restricted area</h1>
+                <p>this room is private, like an island owned by someone extremely rich.</p>
 
-                <form
-                    onSubmit={handleJoin}
-                    style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                >
+                <form onSubmit={handleJoin} className={styles.joinForm}>
                     <input
                         type="password"
-                        className={styles.replyInput}
-                        placeholder="Enter password..."
+                        className={`${styles.replyInput} ${styles.joinInput}`}
+                        placeholder="enter password..."
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        style={{ height: '45px', textAlign: 'center', letterSpacing: '3px' }}
                     />
                     <button type="submit" className={styles.submitBtn} disabled={isHacking}>
-                        {isHacking ? 'BYPASSING...' : 'INITIALIZE CONNECTION'}
+                        {isHacking ? 'bypassing...' : 'initialize connection'}
                     </button>
                 </form>
 
                 <button
                     onClick={() => navigate(PATH.root.home)}
-                    className={styles.backBtn}
-                    style={{ marginTop: '2rem', display: 'block', width: '100%' }}
+                    className={`${styles.backBtn} ${styles.joinBack}`}
                 >
                     {'← abort and return'}
                 </button>

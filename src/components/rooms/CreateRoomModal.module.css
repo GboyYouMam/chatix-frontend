@@ -13,6 +13,7 @@
 }
 
 .modal {
+    box-sizing: border-box;
     background: var(--surface);
     border: 1px solid var(--primary);
     border-radius: 12px;
@@ -24,9 +25,39 @@
     animation: popIn 0.2s ease-out;
 }
 
+@media (max-width: 600px) {
+    .overlay {
+        box-sizing: border-box;
+        padding: 0.75rem;
+    }
+    .modal {
+        width: 100%;
+        max-height: calc(100dvh - 1.5rem);
+        overflow-y: auto;
+        padding: 1.25rem;
+    }
+    .closeBtn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+    .radioGroup {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .submitBtn {
+        min-height: 48px;
+    }
+}
+
 @keyframes popIn {
-    from { transform: scale(0.95); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .closeBtn {
