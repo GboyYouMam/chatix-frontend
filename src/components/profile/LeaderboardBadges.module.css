@@ -1,0 +1,21 @@
+.badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    vertical-align: middle;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1;
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    background: rgb(250 77 152 / 15%);
+    cursor: help;
+}
