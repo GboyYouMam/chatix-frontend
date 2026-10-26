@@ -6,6 +6,7 @@ import { useSessionBootstrap } from './hooks/useSessionBootstrap.ts';
 import { BanGate } from './components/BanGate.tsx';
 import { Banned } from './pages/Banned/Banned.tsx';
 import { useUserSocket } from './hooks/useUserSocket.ts';
+import { AdminLayout } from './components/admin/AdminLayout.tsx';
 
 const router = createBrowserRouter([
     {
@@ -80,36 +81,41 @@ const router = createBrowserRouter([
                 element: <ProtectedRoute requireAdmin />,
                 children: [
                     {
-                        path: PATH.admin.adminDashboard,
-                        lazy: async () => {
-                            const { AdminDashboard } =
-                                await import('./pages/Admin/AdminDashboard.tsx');
-                            return { Component: AdminDashboard };
-                        },
-                    },
-                    {
-                        path: PATH.admin.adminUserPanel,
-                        lazy: async () => {
-                            const { AdminUserPage } =
-                                await import('./pages/Admin/AdminUserPage.tsx');
-                            return { Component: AdminUserPage };
-                        },
-                    },
-                    {
-                        path: PATH.admin.adminRoomPanel,
-                        lazy: async () => {
-                            const { AdminRoomPage } =
-                                await import('./pages/Admin/AdminRoomPage.tsx');
-                            return { Component: AdminRoomPage };
-                        },
-                    },
-                    {
-                        path: PATH.admin.adminMessagePanel,
-                        lazy: async () => {
-                            const { AdminMessagesPage } =
-                                await import('./pages/Admin/AdminMessagesPage.tsx');
-                            return { Component: AdminMessagesPage };
-                        },
+                        element: <AdminLayout />,
+                        children: [
+                            {
+                                path: PATH.admin.adminDashboard,
+                                lazy: async () => {
+                                    const { AdminDashboard } =
+                                        await import('./pages/Admin/AdminDashboard.tsx');
+                                    return { Component: AdminDashboard };
+                                },
+                            },
+                            {
+                                path: PATH.admin.adminUserPanel,
+                                lazy: async () => {
+                                    const { AdminUserPage } =
+                                        await import('./pages/Admin/AdminUserPage.tsx');
+                                    return { Component: AdminUserPage };
+                                },
+                            },
+                            {
+                                path: PATH.admin.adminRoomPanel,
+                                lazy: async () => {
+                                    const { AdminRoomPage } =
+                                        await import('./pages/Admin/AdminRoomPage.tsx');
+                                    return { Component: AdminRoomPage };
+                                },
+                            },
+                            {
+                                path: PATH.admin.adminMessagePanel,
+                                lazy: async () => {
+                                    const { AdminMessagesPage } =
+                                        await import('./pages/Admin/AdminMessagesPage.tsx');
+                                    return { Component: AdminMessagesPage };
+                                },
+                            },
+                        ],
                     },
                 ],
             },

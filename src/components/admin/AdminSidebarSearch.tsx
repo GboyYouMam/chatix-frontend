@@ -22,7 +22,7 @@ export const AdminSidebarSearch = memo(({ activeTab, onApplySearch }: AdminSideb
         <div className={styles.searchPanel}>
             <input
                 className={styles.searchInput}
-                placeholder={`Search ${activeTab}`}
+                placeholder={`search ${activeTab}`}
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
                 onKeyDown={(event) => {
@@ -30,7 +30,7 @@ export const AdminSidebarSearch = memo(({ activeTab, onApplySearch }: AdminSideb
                 }}
             />
             <button className={styles.searchButton} type="button" onClick={submitSearch}>
-                Search
+                search
             </button>
         </div>
     );
