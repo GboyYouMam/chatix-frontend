@@ -1,0 +1,52 @@
+.meter {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    vertical-align: middle;
+}
+
+.segment {
+    display: inline-block;
+    width: 14px;
+    height: 6px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+}
+
+.on {
+    border-color: var(--seg, var(--muted));
+    background: var(--seg, var(--muted));
+}
+
+.clean {
+    --seg: var(--muted);
+}
+
+.warm {
+    --seg: var(--warn);
+}
+
+.hot {
+    --seg: var(--primary);
+}
+
+.cooked {
+    --seg: var(--danger);
+}
+
+.cooked .on {
+    animation: meterPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes meterPulse {
+    to {
+        opacity: 0.45;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cooked .on {
+        animation: none;
+    }
+}

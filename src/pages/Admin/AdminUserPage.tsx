@@ -17,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../../api/client.ts';
 import type { AdminAuditLog, AdminMessage, PaginatedResponse } from '../../api/admin/types.ts';
 import { Tabs } from '../../components/admin/ui/Tabs.tsx';
+import { WarnMeter } from '../../components/admin/ui/WarnMeter.tsx';
 import { auditSentence } from '../../components/admin/auditSentence.ts';
 import { CopyId } from '../../components/admin/ui/CopyId.tsx';
 import { useQueryClient } from '@tanstack/react-query';
@@ -239,6 +240,7 @@ const AdminUserPageContent = () => {
                         >
                             {getWarnBadge(getWarnCount(user)).label}
                         </span>
+                        <WarnMeter count={getWarnCount(user)} />
                     </div>
                     {user.isAutoBanned && user.banReason && (
                         <p className={styles.banNotice}>
