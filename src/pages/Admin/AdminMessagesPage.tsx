@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminEntityList } from '../../components/admin/AdminEntityList.tsx';
 import { AdminListPagination } from '../../components/admin/AdminListPagination.tsx';
@@ -22,6 +22,15 @@ export const AdminMessagesPage = () => {
     });
     const deleteMessageMutate = deleteMessage.mutate;
     const selectedMessage = messages.find((message) => message.id === selectedMessageId) ?? null;
+
+    useEffect(() => {
+        if (!selectedMessage) return;
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setSelectedMessageId(null);
+        };
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [selectedMessage]);
 
     const applySearch = useCallback((nextSearch: string) => {
         setPage(1);
@@ -81,9 +90,29 @@ export const AdminMessagesPage = () => {
                     <AdminListPagination pagination={pagination} onPageChange={changePage} />
                 </section>
 
-                <section className={styles.actionsPanel}>
+                {selectedMessage && (
+                    <button
+                        aria-label="close message actions"
+                        className={styles.sheetBackdrop}
+                        onClick={() => setSelectedMessageId(null)}
+                        type="button"
+                    />
+                )}
+                <section
+                    aria-label="message actions"
+                    className={`${styles.actionsPanel} ${selectedMessage ? styles.mobileSheetOpen : ''}`}
+                    role={selectedMessage ? 'dialog' : undefined}
+                    aria-modal={selectedMessage ? true : undefined}
+                >
                     <div className={styles.sectionHeader}>
                         <h2 className={styles.panelTitle}>Message Actions</h2>
+                        <button
+                            className={styles.sheetClose}
+                            onClick={() => setSelectedMessageId(null)}
+                            type="button"
+                        >
+                            close
+                        </button>
                     </div>
 
                     {selectedMessage ? (

@@ -178,7 +178,7 @@ export const AdminDashboard = () => {
                     <span className={styles.sectionNote}>{queue.data?.length ?? 0} loaded</span>
                 </div>
                 {queue.data?.map((room) => (
-                    <div className={styles.listItem} key={room.id}>
+                    <div className={styles.reviewCard} key={room.id}>
                         <span className={styles.itemLabel}>
                             <strong>{room.title}</strong> ·{' '}
                             {room.creator?.username ?? 'unknown creator'}
