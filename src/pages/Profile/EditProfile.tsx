@@ -24,6 +24,11 @@ export const EditProfile = () => {
     const [rightPreview, setRightPreview] = useState<string | null>(user?.right_banner_url || null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [vibePlaceholder] = useState(() =>
+        Math.random() < 1 / 40
+            ? "first rule of this profile: we don't talk about the basement"
+            : 'e.g. chill af / unbothered',
+    );
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const upperInputRef = useRef<HTMLInputElement>(null);
@@ -189,7 +194,7 @@ export const EditProfile = () => {
                             type="text"
                             value={vibe}
                             onChange={(e) => setVibe(e.target.value)}
-                            placeholder="e.g. chill af / unbothered"
+                            placeholder={vibePlaceholder}
                             maxLength={50}
                         />
                         <span>{vibe.length}/50</span>

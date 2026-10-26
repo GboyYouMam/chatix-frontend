@@ -27,6 +27,9 @@ export const Rooms = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isGlitching, setIsGlitching] = useState(false);
+    const [searchPlaceholder] = useState(() =>
+        Math.random() < 1 / 40 ? 'ask nobody about rule #1' : 'find your place',
+    );
     const tripleClick = useRef(createTripleClickDetector());
 
     const triggerEasterEgg = () => {
@@ -192,7 +195,7 @@ export const Rooms = () => {
                         <input
                             type="text"
                             className={styles.searchInput}
-                            placeholder="find your place"
+                            placeholder={searchPlaceholder}
                             value={searchQuery}
                             onChange={(e) => {
                                 const query = e.target.value;
