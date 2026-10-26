@@ -5,7 +5,8 @@ export const messagesApi = {
     getMessages: async (
         roomId: string,
         params?: { before?: string; limit?: number },
-    ): Promise<MessagePage> => (await api.get(`/messages/${roomId}`, { params })).data,
+    ): Promise<MessagePage> =>
+        (await api.get(`/messages/${encodeURIComponent(roomId)}`, { params })).data,
 
     sendMessage: async (data: { roomId: string; cipherText: string; attachments?: File[] }) => {
         const formData = new FormData();
