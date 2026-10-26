@@ -296,6 +296,43 @@
     }
 }
 
+@media (max-width: 600px) {
+    .header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+    .headerControls {
+        justify-content: flex-start;
+        width: 100%;
+    }
+    .hero {
+        min-height: 0;
+        padding: 2rem 1rem;
+    }
+    .hero h2 {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+    .content {
+        padding: 1rem;
+    }
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .card {
+        min-width: 0;
+    }
+    .modalOverlay {
+        align-items: end;
+        padding: 0.5rem;
+    }
+    .modal {
+        max-height: calc(100dvh - 1rem);
+        overflow-y: auto;
+    }
+}
+
 /* Fight Club polish */
 .layout {
     position: relative;
@@ -304,9 +341,12 @@
     background:
         radial-gradient(circle at 80% 10%, rgba(250, 77, 152, 0.12), transparent 26rem),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        #08080d;
-    background-size: auto, 42px 42px, 42px 42px, auto;
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px), #08080d;
+    background-size:
+        auto,
+        42px 42px,
+        42px 42px,
+        auto;
 }
 
 .layout::before {
@@ -327,7 +367,9 @@
     z-index: 1;
 }
 
-.layout::before { display: none; }
+.layout::before {
+    display: none;
+}
 
 .layout > .backgroundImage {
     position: absolute;
@@ -376,7 +418,11 @@
     font: inherit;
     font-weight: 800;
     cursor: pointer;
-    transition: transform 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease;
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        background 160ms ease;
 }
 
 .roomsBtn:hover {
@@ -390,7 +436,11 @@
 .cardCta,
 .segmentBtn,
 .iconBtn {
-    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
 .primaryBtn:hover,
@@ -421,7 +471,9 @@
     height: 10rem;
     border: 1px solid rgba(250, 77, 152, 0.2);
     border-radius: 50%;
-    box-shadow: 0 0 0 1rem rgba(250, 77, 152, 0.025), 0 0 0 2rem rgba(250, 77, 152, 0.02);
+    box-shadow:
+        0 0 0 1rem rgba(250, 77, 152, 0.025),
+        0 0 0 2rem rgba(250, 77, 152, 0.02);
     content: '';
     pointer-events: none;
 }
@@ -442,7 +494,9 @@
 .modal,
 .empty {
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.04);
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.2),
+        inset 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .panel {
@@ -472,15 +526,25 @@
 
 .card:hover {
     border-color: rgba(250, 77, 152, 0.45);
-    box-shadow: 0 20px 60px rgba(250, 77, 152, 0.12), inset 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 20px 60px rgba(250, 77, 152, 0.12),
+        inset 0 1px rgba(255, 255, 255, 0.08);
     transform: translateY(-5px);
 }
 
-.card:hover::before { opacity: 1; }
+.card:hover::before {
+    opacity: 1;
+}
 
-.card:nth-child(2) { animation-delay: 50ms; }
-.card:nth-child(3) { animation-delay: 100ms; }
-.card:nth-child(4) { animation-delay: 150ms; }
+.card:nth-child(2) {
+    animation-delay: 50ms;
+}
+.card:nth-child(3) {
+    animation-delay: 100ms;
+}
+.card:nth-child(4) {
+    animation-delay: 150ms;
+}
 
 .card h3 {
     overflow-wrap: anywhere;
@@ -515,18 +579,34 @@
 }
 
 @keyframes cardIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes modalIn {
-    from { opacity: 0; transform: translateY(14px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @media (max-width: 820px) {
@@ -535,17 +615,26 @@
         padding-top: 3rem;
     }
 
-    .hero::after { right: -3rem; bottom: -2rem; }
-    .panel { position: static; }
+    .hero::after {
+        right: -3rem;
+        bottom: -2rem;
+    }
+    .panel {
+        position: static;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .card,
     .modal,
-    .modalOverlay { animation: none; }
+    .modalOverlay {
+        animation: none;
+    }
 
     .card:hover,
     .primaryBtn:hover,
     .cardCta:hover,
-    .roomsBtn:hover { transform: none; }
+    .roomsBtn:hover {
+        transform: none;
+    }
 }
