@@ -35,15 +35,7 @@ export const useAuth = () => {
                 banReason?: string;
             }>,
         ) => {
-            if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
-                useAuthStore
-                    .getState()
-                    .setBan({
-                        bannedUntil: error.response.data.bannedUntil ?? null,
-                        banReason: error.response.data.banReason ?? null,
-                    });
-                return;
-            }
+            if (error.response?.data.code === 'BANNED') return;
             const msg = error.response?.data?.message || 'Invalid credentials, chud';
             notify.error(msg);
         },
@@ -71,15 +63,7 @@ export const useAuth = () => {
                 banReason?: string;
             }>,
         ) => {
-            if (error.response?.status === 403 && error.response.data.code === 'BANNED') {
-                useAuthStore
-                    .getState()
-                    .setBan({
-                        bannedUntil: error.response.data.bannedUntil ?? null,
-                        banReason: error.response.data.banReason ?? null,
-                    });
-                return;
-            }
+            if (error.response?.data.code === 'BANNED') return;
             const message = error.response?.data?.message;
             const msg = Array.isArray(message) ? message[0] : message || 'Registration failed';
             notify.error(msg);
