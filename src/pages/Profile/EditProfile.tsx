@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileData } from '../../api/users/types.ts';
 import { DripEditor } from '../../components/shop/DripEditor.tsx';
+import { WidgetEditor } from '../../components/widgets/WidgetEditor.tsx';
 
 export const EditProfile = () => {
     const navigate = useNavigate();
@@ -286,6 +287,8 @@ export const EditProfile = () => {
                         {isLoading ? 'uploading to matrix...' : 'updateprofilemaxxing'}
                     </button>
                 </form>
+
+                {profile && <WidgetEditor key={profile.username} profile={profile} />}
             </div>
         </div>
     );

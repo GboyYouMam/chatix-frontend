@@ -13,9 +13,16 @@ interface ProfileCardProps {
     profileData: ProfileData;
     medalCatalog: AchievementCatalogItem[];
     onViewMedalBook: () => void;
+    // Off when the medal_rack widget is in the grid, so the rack is not shown twice.
+    showMedalRack?: boolean;
 }
 
-export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: ProfileCardProps) => {
+export const ProfileCard = ({
+    profileData,
+    medalCatalog,
+    onViewMedalBook,
+    showMedalRack = true,
+}: ProfileCardProps) => {
     const respectCount = profileData.respectCount ?? profileData.respect_count ?? 0;
     const isClown = profileData.is_clown ?? profileData.isClown;
     const adminGlazeMode = profileData.admin_glaze_mode ?? profileData.adminGlazeMode;
@@ -55,11 +62,13 @@ export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: Prof
                 </div>
                 <p className={styles.vibe}>{profileData.vibe || 'no vibe detected'}</p>
                 {cosmetics?.vineBoom && <VineBoomButton />}
-                <MedalRack
-                    unlocked={profileData.achievements ?? []}
-                    catalog={medalCatalog}
-                    onViewBook={onViewMedalBook}
-                />
+                {showMedalRack && (
+                    <MedalRack
+                        unlocked={profileData.achievements ?? []}
+                        catalog={medalCatalog}
+                        onViewBook={onViewMedalBook}
+                    />
+                )}
             </div>
 
             <div className={styles.statsCol}>

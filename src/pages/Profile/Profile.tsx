@@ -18,6 +18,7 @@ import { ProfileCard } from '../../components/profile/ProfileCard.tsx';
 import { ProfileModerationBar } from '../../components/profile/ProfileModerationBar.tsx';
 import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
 import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
+import { WidgetGrid } from '../../components/widgets/WidgetGrid.tsx';
 import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -149,6 +150,16 @@ export const Profile = () => {
     }
 
     const comments = profileData.comments ?? [];
+    const widgetLayout = profileData.widgets?.layout ?? [];
+    const guestbookInGrid = widgetLayout.includes('guestbook');
+    const commentsSection = (
+        <ProfileCommentsSection
+            key={profileData.username}
+            profileUsername={profileData.username}
+            initialComments={comments}
+            canInteractWithProfile={canInteractWithProfile}
+        />
+    );
     const cosmetics = profileData.cosmetics;
     // A null accent means the free default hot_pink, so the variable is always set.
     const accentStyle = {
@@ -193,15 +204,17 @@ export const Profile = () => {
                         profileData={profileData}
                         medalCatalog={medalCatalog}
                         onViewMedalBook={() => setMedalBookOpen(true)}
+                        showMedalRack={!widgetLayout.includes('medal_rack')}
+                    />
+                    <WidgetGrid
+                        profile={profileData}
+                        medalCatalog={medalCatalog}
+                        onViewMedalBook={() => setMedalBookOpen(true)}
+                        guestbook={commentsSection}
                     />
                     <ProfileModerationBar profileData={profileData} />
                     <ProfileDescription description={profileData.description} />
-                    <ProfileCommentsSection
-                        key={profileData.username}
-                        profileUsername={profileData.username}
-                        initialComments={comments}
-                        canInteractWithProfile={canInteractWithProfile}
-                    />
+                    {!guestbookInGrid && commentsSection}
                 </main>
 
                 <ProfileSidebar

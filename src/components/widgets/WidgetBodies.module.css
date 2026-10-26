@@ -1,0 +1,395 @@
+.muted {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.body {
+    margin: 0;
+    color: var(--text);
+}
+
+.label {
+    margin: 0.4rem 0 0;
+    color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+    text-transform: lowercase;
+}
+
+.mono,
+.bigMono {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.bigMono {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+/* now playing */
+.player {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.embed {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--bg);
+}
+
+.caption {
+    margin: 0;
+    color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+}
+
+/* aura chart: stock ticker */
+.ticker {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    background-color: #050507;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.tickerLine {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 0.92rem;
+}
+
+.bull {
+    color: var(--primary);
+}
+
+.bear {
+    color: var(--danger);
+}
+
+.spark {
+    display: block;
+    width: 100%;
+    height: 90px;
+    color: var(--primary);
+}
+
+.bear + .spark {
+    color: var(--danger);
+}
+
+/* fight record */
+.fight {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.lossNumber {
+    color: var(--danger);
+}
+
+/* top glazers */
+.glazers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.glazer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 40px;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.glazer:hover {
+    color: var(--primary);
+}
+
+.avatar,
+.avatarEmpty {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--profile-accent, var(--border));
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.avatarEmpty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    background-color: var(--bg);
+}
+
+/* debt meter */
+.debt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.cushion {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.bar {
+    height: 18px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barFill {
+    display: block;
+    height: 100%;
+    background-image: repeating-linear-gradient(-45deg, var(--danger) 0 8px, #b8233f 8px 16px);
+    transition: width 0.4s ease;
+}
+
+/* yap stats */
+.yap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.rooms {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    color: var(--text);
+    font-size: 0.92rem;
+}
+
+.rooms li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    border-bottom: 1px dotted var(--border);
+    padding-bottom: 0.2rem;
+}
+
+.take {
+    margin: 0;
+    padding: 0.5rem 0.8rem;
+    border-left: 3px solid var(--primary);
+    background-color: var(--bg);
+    color: var(--text);
+    font-style: italic;
+    overflow-wrap: anywhere;
+}
+
+/* status line */
+.status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.statusText {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.25rem;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+/* rap sheet: mugshot card */
+.mugshot {
+    position: relative;
+    padding: 0.9rem;
+    background-color: #111114;
+    border: 2px dashed var(--danger);
+    border-radius: 4px;
+    transform: rotate(-0.6deg);
+}
+
+.mugHeader {
+    margin: 0 0 0.6rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: var(--danger);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.convictions {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    overflow-wrap: anywhere;
+}
+
+.kind {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: var(--warn);
+}
+
+.stamp {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* hit counter: 2003 odometer */
+.hitBox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.odometer {
+    display: flex;
+    gap: 3px;
+    padding: 4px;
+    background-color: #000;
+    border: 2px inset #555;
+}
+
+.digit {
+    min-width: 1.4rem;
+    text-align: center;
+    padding: 0.2rem 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #39ff88;
+    background-color: #0b0b0d;
+    border: 1px solid #1f2a22;
+}
+
+/* sticker board */
+.stickerBoard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.stickerCell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
+    background-color: var(--bg);
+    border: 1px dashed var(--profile-accent, var(--border));
+    border-radius: 50%;
+    transform: rotate(-4deg);
+}
+
+.stickerCell:nth-child(2) {
+    transform: rotate(3deg);
+}
+
+.stickerCell:nth-child(3) {
+    transform: rotate(-1deg);
+}
+
+/* wanted poster: sepia */
+.poster {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 260px;
+    box-sizing: border-box;
+    padding: 0.9rem 0.8rem 1rem;
+    background-color: #d9c49a;
+    background-image: radial-gradient(
+        circle at 30% 20%,
+        rgba(255, 255, 255, 0.25),
+        transparent 60%
+    );
+    border: 3px double #4a3520;
+    color: #3b2a1a;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.wanted {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: #4a1c12;
+}
+
+.mugBox {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #c9b07f;
+    border: 2px solid #4a3520;
+}
+
+.mug {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(0.6) contrast(1.05);
+}
+
+.posterName {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.reward {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+}
+
+/* guestbook: old-web wall */
+.guestbook {
+    padding: 0.8rem;
+    border: 3px ridge #8b7cf6;
+    background-color: var(--bg);
+    font-family: 'Times New Roman', Times, serif;
+}
