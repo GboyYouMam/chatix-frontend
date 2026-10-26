@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
     ribbonStyle,
     sortForRack,
+    visibleRibbons,
     type AchievementDef,
 } from '../src/components/achievements/ribbons.ts';
 
@@ -77,4 +78,19 @@ test('ribbon style falls back to a neutral palette for unknown categories', () =
     });
     assert.ok(style.stripes.length > 0);
     assert.ok(style.background.includes('#71717a'));
+});
+
+test('visible ribbons cap the rack and reserve the last cell for the +N chip', () => {
+    assert.deepEqual(visibleRibbons([1, 2, 3], 16), { shown: [1, 2, 3], hidden: 0 });
+    const exact = Array.from({ length: 16 }, (_, i) => i);
+    assert.deepEqual(visibleRibbons(exact, 16), { shown: exact, hidden: 0 });
+    const many = Array.from({ length: 35 }, (_, i) => i);
+    const desktop = visibleRibbons(many, 16);
+    assert.equal(desktop.shown.length, 15);
+    assert.equal(desktop.hidden, 20);
+    assert.deepEqual(desktop.shown, many.slice(0, 15));
+    const compact = visibleRibbons(many, 12);
+    assert.equal(compact.shown.length, 11);
+    assert.equal(compact.hidden, 24);
+    assert.equal(compact.shown.length + compact.hidden, many.length);
 });
