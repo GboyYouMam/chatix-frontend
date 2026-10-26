@@ -18,6 +18,9 @@ export interface ProfileComment {
 }
 
 export interface ProfileData extends User {
+    achievements?: Array<{ key: string; unlockedAt: string }>;
+    featuredAchievements?: string[];
+    fightTitle?: string | null;
     activeWarnings?: { reason: string; createdAt: string }[];
     created_at: string;
     admin_glaze_mode?: boolean;

@@ -17,6 +17,7 @@ import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../../lib/queryKeys.ts';
+import { achievementsApi } from '../../api/achievements/achievements.service.ts';
 
 type EffectMode = 'aura' | 'debt' | null;
 
@@ -25,6 +26,12 @@ export const Profile = () => {
     const { username } = useParams<{ username: string }>();
     const { user: currentUser } = useAuthStore();
     const queryClient = useQueryClient();
+    const { data: medalCatalog = [] } = useQuery({
+        queryKey: ['achievementCatalog'],
+        queryFn: achievementsApi.getCatalog,
+        staleTime: Infinity,
+        retry: false,
+    });
 
     const { data: profileData, isLoading } = useQuery({
         queryKey: queryKeys.profile(username),
@@ -161,7 +168,11 @@ export const Profile = () => {
                         />
                     </div>
 
-                    <ProfileCard profileData={profileData} />
+                    <ProfileCard
+                        profileData={profileData}
+                        medalCatalog={medalCatalog}
+                        onViewMedalBook={() => {}}
+                    />
                     <ProfileModerationBar profileData={profileData} />
                     <ProfileDescription description={profileData.description} />
                     <ProfileCommentsSection

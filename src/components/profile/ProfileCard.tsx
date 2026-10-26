@@ -1,12 +1,16 @@
 import styles from './ProfileCard.module.css';
 import { formatDate } from '../../utils/date.ts';
 import type { ProfileData } from '../../api/users/types.ts';
+import { MedalRack } from '../achievements/MedalRack.tsx';
+import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
 
 interface ProfileCardProps {
     profileData: ProfileData;
+    medalCatalog: AchievementCatalogItem[];
+    onViewMedalBook: () => void;
 }
 
-export const ProfileCard = ({ profileData }: ProfileCardProps) => {
+export const ProfileCard = ({ profileData, medalCatalog, onViewMedalBook }: ProfileCardProps) => {
     const respectCount = profileData.respectCount ?? profileData.respect_count ?? 0;
     const isClown = profileData.is_clown ?? profileData.isClown;
     const adminGlazeMode = profileData.admin_glaze_mode ?? profileData.adminGlazeMode;
@@ -29,6 +33,11 @@ export const ProfileCard = ({ profileData }: ProfileCardProps) => {
                     )}
                 </div>
                 <p className={styles.vibe}>{profileData.vibe || 'no vibe detected'}</p>
+                <MedalRack
+                    unlocked={profileData.achievements ?? []}
+                    catalog={medalCatalog}
+                    onViewBook={onViewMedalBook}
+                />
             </div>
 
             <div className={styles.statsCol}>

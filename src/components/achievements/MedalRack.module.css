@@ -1,0 +1,48 @@
+.rack {
+    margin-top: 0.85rem;
+}
+.rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: max-content;
+    max-width: 100%;
+}
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+}
+.ribbon {
+    width: 34px;
+    height: 25px;
+    border: 2px solid;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    text-shadow: 0 1px 3px #000;
+}
+.ribbon:focus-visible,
+.bookLink:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+.empty {
+    color: var(--muted);
+    font:
+        0.78rem 'Courier New',
+        monospace;
+    margin: 0 0 0.5rem;
+}
+.bookLink {
+    background: none;
+    border: 0;
+    color: var(--primary);
+    cursor: pointer;
+    font:
+        0.75rem 'Courier New',
+        monospace;
+    margin-top: 0.45rem;
+    padding: 4px 0;
+    text-decoration: underline;
+}
