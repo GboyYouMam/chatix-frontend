@@ -77,6 +77,13 @@ const router = createBrowserRouter([
                             return { Component: EditProfile };
                         },
                     },
+                    {
+                        path: PATH.shop.shop,
+                        lazy: async () => {
+                            const { Shop } = await import('./pages/Shop/Shop.tsx');
+                            return { Component: Shop };
+                        },
+                    },
                 ],
             },
             {

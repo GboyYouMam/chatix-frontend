@@ -75,3 +75,15 @@ export function ribbonStyle(def: Pick<AchievementDef, 'category' | 'tier'>) {
         background: gradient,
     };
 }
+
+export const RACK_MAX_DESKTOP = 16;
+export const RACK_MAX_COMPACT = 12;
+export const RACK_COMPACT_QUERY = '(max-width: 600px)';
+
+// The rack shows at most `max` cells. When medals overflow, the last cell becomes the "+N" chip,
+// so the rack never grows past its two rows.
+export function visibleRibbons<T>(sorted: T[], max: number): { shown: T[]; hidden: number } {
+    if (sorted.length <= max) return { shown: sorted, hidden: 0 };
+    const keep = Math.max(0, max - 1);
+    return { shown: sorted.slice(0, keep), hidden: sorted.length - keep };
+}
