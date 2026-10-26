@@ -111,6 +111,7 @@ export const Room = () => {
 
     const isRoomCreator = user?.id === room.creator.id || user?.username === room.creator.username;
     const themeKey = roomThemeOf(room.theme);
+    const isCorpo = themeKey === 'corpo';
 
     return (
         <div
@@ -184,6 +185,7 @@ export const Room = () => {
                     messages={messages}
                     roomCreatorUsername={room.creator.username}
                     roomId={room.id}
+                    corpo={isCorpo}
                 />
             </main>
 
@@ -191,6 +193,7 @@ export const Room = () => {
                 roomId={id!}
                 authorId={user?.id}
                 onSendMessage={sendMessage}
+                corpo={isCorpo}
                 lockedReason={
                     room.status && room.status !== 'active'
                         ? 'replies paused. read the room status, chud.'
