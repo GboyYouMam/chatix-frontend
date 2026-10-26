@@ -1,5 +1,5 @@
-import type { User } from "../auth/types.ts";
-import type { AdminWarning } from "../admin/types.ts";
+import type { User } from '../auth/types.ts';
+import type { AdminWarning } from '../admin/types.ts';
 
 export interface ProfileCommentAuthor {
     id: string;
@@ -18,6 +18,7 @@ export interface ProfileComment {
 }
 
 export interface ProfileData extends User {
+    activeWarnings?: { reason: string; createdAt: string }[];
     created_at: string;
     admin_glaze_mode?: boolean;
     is_clown?: boolean;

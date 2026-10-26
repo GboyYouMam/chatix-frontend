@@ -13,6 +13,7 @@ import { ProfileCard } from '../../components/profile/ProfileCard.tsx';
 import { ProfileModerationBar } from '../../components/profile/ProfileModerationBar.tsx';
 import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
 import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
+import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -148,6 +149,7 @@ export const Profile = () => {
                 />
 
                 <main className={styles.mainCol}>
+                    <WarningTicker warnings={profileData.activeWarnings ?? []} />
                     <div className={styles.mainBanner}>
                         <img
                             src={profileData.upper_banner_url || profileUpBanner}
