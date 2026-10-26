@@ -18,9 +18,15 @@ interface RoomRepliesProps {
     roomId: string;
     messages: MessageData[];
     roomCreatorUsername: string;
+    corpo?: boolean;
 }
 
-export const RoomReplies = ({ messages, roomCreatorUsername, roomId }: RoomRepliesProps) => {
+export const RoomReplies = ({
+    messages,
+    roomCreatorUsername,
+    roomId,
+    corpo = false,
+}: RoomRepliesProps) => {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
 
@@ -55,7 +61,13 @@ export const RoomReplies = ({ messages, roomCreatorUsername, roomId }: RoomRepli
     };
 
     if (messages.length === 0) {
-        return <div className={styles.emptyThread}>No replies yet. Be the first to mog.</div>;
+        return (
+            <div className={styles.emptyThread}>
+                {corpo
+                    ? 'no updates at this time. please advise.'
+                    : 'No replies yet. Be the first to mog.'}
+            </div>
+        );
     }
 
     return (

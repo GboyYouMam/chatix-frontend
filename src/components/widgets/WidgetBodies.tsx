@@ -29,7 +29,7 @@ export const NowPlayingWidget = ({ nowPlaying }: { nowPlaying: WidgetData['nowPl
                 width="100%"
                 height={embedHeight(nowPlaying.provider)}
             />
-            <p className={styles.caption}>currently rotting to · {nowPlaying.provider}</p>
+            <p className={styles.caption}>via {nowPlaying.provider}</p>
         </div>
     );
 };

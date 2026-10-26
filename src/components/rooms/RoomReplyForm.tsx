@@ -12,6 +12,7 @@ interface RoomReplyFormProps {
         attachments: File[];
     }) => Promise<void>;
     lockedReason?: string;
+    corpo?: boolean;
 }
 
 export const RoomReplyForm = ({
@@ -19,6 +20,7 @@ export const RoomReplyForm = ({
     authorId,
     onSendMessage,
     lockedReason,
+    corpo = false,
 }: RoomReplyFormProps) => {
     const [newMessage, setNewMessage] = useState('');
     const [attachments, setAttachments] = useState<File[]>([]);
@@ -91,7 +93,11 @@ export const RoomReplyForm = ({
                 <textarea
                     className={styles.replyInput}
                     disabled={Boolean(lockedReason)}
-                    placeholder="Type your shit here... (click on ID of message for copying it and reply)"
+                    placeholder={
+                        corpo
+                            ? "let's circle back on this..."
+                            : 'Type your shit here... (click on ID of message for copying it and reply)'
+                    }
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => {
@@ -120,7 +126,7 @@ export const RoomReplyForm = ({
                     </svg>
                 </button>
                 <button type="submit" className={styles.submitBtn} disabled={isSending}>
-                    {isSending ? 'SENDING...' : 'REPLY'}
+                    {isSending ? 'SENDING...' : corpo ? 'send (per my last email)' : 'REPLY'}
                 </button>
             </form>
         </div>

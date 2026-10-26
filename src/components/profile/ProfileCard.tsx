@@ -6,6 +6,7 @@ import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
 import { NyanCat } from '../cosmetics/NyanCat.tsx';
 import { VerifiedCheck } from '../cosmetics/VerifiedCheck.tsx';
 import { VineBoomButton } from '../cosmetics/VineBoomButton.tsx';
+import { LeaderboardBadges } from './LeaderboardBadges.tsx';
 import { pickProfileTitle } from '../cosmetics/profileCosmetics.ts';
 import { useShopCatalog } from '../../hooks/shop/useShop.ts';
 
@@ -72,6 +73,7 @@ export const ProfileCard = ({
                                 certified clown
                             </span>
                         )}
+                        <LeaderboardBadges username={profileData.username} />
                     </div>
                     {shopTitle && <p className={styles.shopTitle}>{shopTitle}</p>}
                 </div>

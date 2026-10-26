@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import type { ShopCatalogItem } from '../../api/shop/types.ts';
 import { formatPrice, humanizeKey, MYSTERY_ODDS_TEXT } from './shopFormat.ts';
+import bgStyles from '../cosmetics/ProfileBackground.module.css';
 import { previewFor } from './shopPreview.ts';
 import styles from './ShopItemCard.module.css';
 
@@ -19,6 +20,15 @@ const Preview = ({ item }: { item: ShopCatalogItem }) => {
             <span
                 className={styles.swatch}
                 style={{ background: preview.color }}
+                aria-hidden="true"
+            />
+        );
+    }
+    if (preview.kind === 'pattern') {
+        return (
+            <span
+                className={clsx(bgStyles.layer, bgStyles[preview.pattern])}
+                style={{ position: 'absolute', zIndex: 0 }}
                 aria-hidden="true"
             />
         );
