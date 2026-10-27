@@ -130,27 +130,30 @@ export const Room = () => {
                 </div>
 
                 {isRoomCreator && (
-                    <button
-                        className={styles.editRoomBtn}
-                        onClick={() => setIsEditModalOpen(true)}
-                        aria-label="edit room"
-                        title="Edit Room"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#fa4d98"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-pen-icon lucide-pen"
+                    <div className={styles.headerTools}>
+                        <RoomPerkActions roomId={room.id} />
+                        <button
+                            className={styles.editRoomBtn}
+                            onClick={() => setIsEditModalOpen(true)}
+                            aria-label="edit room"
+                            title="Edit Room"
                         >
-                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                        </svg>
-                    </button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#fa4d98"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="lucide lucide-pen-icon lucide-pen"
+                            >
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                            </svg>
+                        </button>
+                    </div>
                 )}
             </header>
 
@@ -159,7 +162,6 @@ export const Room = () => {
                     <p className={styles.sponsorLine}>sponsored by @{room.sponsoredBy.username}</p>
                 )}
                 <SpotlightBanner spotlight={room.spotlight} />
-                {isRoomCreator && <RoomPerkActions roomId={room.id} />}
                 {room.status && room.status !== 'active' && (
                     <div className={styles.error}>
                         <StatusPill status={room.status} />{' '}
