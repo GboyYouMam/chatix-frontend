@@ -226,3 +226,43 @@
         padding: 0 0.75rem;
     }
 }
+
+/* Decorative art: its own column to the left of the grid, shown only on wide screens. */
+.page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+}
+
+.decor {
+    display: none;
+}
+
+@media (min-width: 1400px) {
+    .page {
+        grid-template-columns: 320px minmax(0, 1200px);
+        justify-content: center;
+        column-gap: 24px;
+    }
+
+    .decor {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        position: sticky;
+        bottom: 0;
+        align-self: end;
+        height: 100vh;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .decorImage {
+        width: 300px;
+        height: auto;
+        max-height: 100vh;
+        object-fit: contain;
+        filter: drop-shadow(0 0 22px rgb(250 77 152 / 45%));
+        user-select: none;
+    }
+}
