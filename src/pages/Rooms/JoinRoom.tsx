@@ -34,7 +34,7 @@ export const JoinRoom = () => {
     };
 
     return (
-        <div className={styles.layout}>
+        <div className={`${styles.layout} ${styles.joinPage}`}>
             <div className={styles.joinCard}>
                 <h1 className={styles.boardTitle}>restricted area</h1>
                 <p>this room is private, like an island owned by someone extremely rich.</p>
