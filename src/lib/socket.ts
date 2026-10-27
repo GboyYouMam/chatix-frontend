@@ -11,6 +11,8 @@ type SocketErrorPayload = {
 
 const handleSocketError = (payload: SocketErrorPayload | undefined) => {
     if (!payload) return;
+    // The room page turns this into the 18+ confirm screen instead of a toast.
+    if (payload.code === 'AGE_GATE') return;
     if (payload.code === 'BANNED') {
         useAuthStore.getState().setBan({
             bannedUntil: payload.bannedUntil ?? null,

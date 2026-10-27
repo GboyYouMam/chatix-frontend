@@ -10,4 +10,6 @@ export const notify = {
     },
     info: (message: string, id = message) =>
         toast(message, { id, style: { borderLeft: '4px solid var(--muted)' } }),
+    warn: (message: string, id = message) =>
+        toast(message, { id, style: { borderLeft: '4px solid var(--warn)' } }),
 };
