@@ -55,6 +55,13 @@ export interface RespectProfileResponse {
     alreadyRespected?: boolean;
 }
 
+export interface ProfileCommentsPage {
+    items: ProfileComment[];
+    page: number;
+    limit: number;
+    total: number;
+}
+
 export interface CreateProfileCommentResponse {
     message?: string;
     comment_id: string;

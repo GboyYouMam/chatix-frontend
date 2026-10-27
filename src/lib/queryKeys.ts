@@ -8,4 +8,6 @@ export const queryKeys = {
     shopCatalog: () => ['shop', 'catalog'] as const,
     shopMe: () => ['shop', 'me'] as const,
     leaderboard: (week: string) => ['economy', 'leaderboard', week] as const,
+    profileComments: (username: string, page: number) =>
+        ['profileComments', username, page] as const,
 };

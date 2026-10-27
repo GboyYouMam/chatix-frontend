@@ -152,14 +152,12 @@ export const Profile = () => {
         );
     }
 
-    const comments = profileData.comments ?? [];
     const widgetLayout = profileData.widgets?.layout ?? [];
     const guestbookInGrid = widgetLayout.includes('guestbook');
     const commentsSection = (
         <ProfileCommentsSection
             key={profileData.username}
             profileUsername={profileData.username}
-            initialComments={comments}
             canInteractWithProfile={canInteractWithProfile}
         />
     );
