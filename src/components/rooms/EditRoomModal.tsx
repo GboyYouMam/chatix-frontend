@@ -8,12 +8,16 @@ import { Modal } from '../ui/Modal.tsx';
 import { AdminConfirmDialog } from '../admin/AdminConfirmDialog.tsx';
 import { ThemePicker } from './ThemePicker.tsx';
 import { ROOM_THEME_KEYS, roomThemeOf } from '../../themes/roomThemes.ts';
+import { ROOM_CATEGORIES, type RoomCategory } from './roomCategories.ts';
+import { NsfwSwitch, RoomCategoryPicker } from './RoomFields.tsx';
 
 const updateRoomSchema = z.object({
     title: z.string().min(3, 'Title is def what u NEED TO CREATE A FUCIN ROOM').max(255, 'son'),
     topic: z.string().max(255).optional(),
     description: z.string().optional(),
     theme: z.enum(ROOM_THEME_KEYS),
+    category: z.enum(ROOM_CATEGORIES).nullable(),
+    isNsfw: z.boolean(),
 });
 
 type UpdateRoomValues = z.infer<typeof updateRoomSchema>;
@@ -28,6 +32,8 @@ interface updateRoomModalProps {
         topic?: string;
         description?: string;
         theme?: string | null;
+        category?: RoomCategory | null;
+        isNsfw?: boolean;
     };
 }
 
@@ -54,6 +60,8 @@ export const UpdateRoomModal = ({
             topic: initialData?.topic || '',
             description: initialData?.description || '',
             theme: roomThemeOf(initialData?.theme),
+            category: initialData?.category ?? null,
+            isNsfw: initialData?.isNsfw ?? false,
         },
     });
 
@@ -124,6 +132,22 @@ export const UpdateRoomModal = ({
                         control={control}
                         render={({ field }) => (
                             <ThemePicker value={field.value} onChange={field.onChange} />
+                        )}
+                    />
+
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <RoomCategoryPicker value={field.value} onChange={field.onChange} />
+                        )}
+                    />
+
+                    <Controller
+                        name="isNsfw"
+                        control={control}
+                        render={({ field }) => (
+                            <NsfwSwitch checked={field.value} onChange={field.onChange} />
                         )}
                     />
 

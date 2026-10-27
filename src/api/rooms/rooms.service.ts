@@ -10,7 +10,8 @@ export const roomApi = {
     getRoomDetailed: async <T = RoomDetails>(roomId: string): Promise<T> =>
         (await api.get<T>(`/rooms/${encodeURIComponent(roomId)}`)).data,
 
-    createRoom: async (data: CreateRoomDTO) => (await api.post('/rooms', data)).data,
+    createRoom: async (data: CreateRoomDTO): Promise<RoomDetails> =>
+        (await api.post<RoomDetails>('/rooms', data)).data,
 
     updateRoom: async (roomId: string, data: Partial<CreateRoomDTO>) =>
         (await api.patch(`/rooms/${encodeURIComponent(roomId)}`, data)).data,

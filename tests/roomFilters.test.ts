@@ -18,31 +18,39 @@ const room = (overrides: Partial<RoomDetails> & { id: string }): RoomDetails =>
 
 const rooms = [
     room({ id: 'a', title: 'Elden Ring grind', category: 'gaming' }),
-    room({ id: 'b', title: 'weed talk', topic: 'gaming and grass', category: 'gaming', isNsfw: true }),
+    room({
+        id: 'b',
+        title: 'weed talk',
+        topic: 'gaming and grass',
+        category: 'gaming',
+        isNsfw: true,
+    }),
     room({ id: 'c', title: 'rust vs go', topic: 'GAMING ENGINES?', category: 'tech' }),
     room({ id: 'd', title: 'uncategorised yap', category: null }),
 ];
 const ids = (list: RoomDetails[]) => list.map((r) => r.id);
 
 test('18+ rooms are hidden by default', () => {
-    assert.deepEqual(
-        ids(filterRooms(rooms, { query: '', category: null, showNsfw: false })),
-        ['a', 'c', 'd'],
-    );
+    assert.deepEqual(ids(filterRooms(rooms, { query: '', category: null, showNsfw: false })), [
+        'a',
+        'c',
+        'd',
+    ]);
 });
 
 test('showNsfw brings 18+ rooms back', () => {
-    assert.deepEqual(
-        ids(filterRooms(rooms, { query: '', category: null, showNsfw: true })),
-        ['a', 'b', 'c', 'd'],
-    );
+    assert.deepEqual(ids(filterRooms(rooms, { query: '', category: null, showNsfw: true })), [
+        'a',
+        'b',
+        'c',
+        'd',
+    ]);
 });
 
 test('category narrows the list and drops uncategorised rooms', () => {
-    assert.deepEqual(
-        ids(filterRooms(rooms, { query: '', category: 'gaming', showNsfw: false })),
-        ['a'],
-    );
+    assert.deepEqual(ids(filterRooms(rooms, { query: '', category: 'gaming', showNsfw: false })), [
+        'a',
+    ]);
 });
 
 test('category and text search combine, matching title or topic', () => {
@@ -61,8 +69,9 @@ test('category and text search combine, matching title or topic', () => {
 });
 
 test('no category returns every non-18+ room, including uncategorised ones', () => {
-    assert.deepEqual(
-        ids(filterRooms(rooms, { query: '   ', category: null, showNsfw: false })),
-        ['a', 'c', 'd'],
-    );
+    assert.deepEqual(ids(filterRooms(rooms, { query: '   ', category: null, showNsfw: false })), [
+        'a',
+        'c',
+        'd',
+    ]);
 });

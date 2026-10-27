@@ -43,7 +43,10 @@ test('parses structured API errors', () => {
 
 test('detects the 18+ age gate only from its own code', () => {
     const gate = {
-        response: { status: 403, data: { message: "age gate: confirm you're 18+ first", code: 'AGE_GATE' } },
+        response: {
+            status: 403,
+            data: { message: "age gate: confirm you're 18+ first", code: 'AGE_GATE' },
+        },
     };
     assert.equal(isAgeGateError(gate), true);
     assert.equal(isAgeGateError({ response: { status: 403, data: { code: 'BANNED' } } }), false);
