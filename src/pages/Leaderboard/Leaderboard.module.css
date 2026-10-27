@@ -178,3 +178,39 @@
         transition: none;
     }
 }
+
+.decor {
+    display: none;
+}
+
+@media (min-width: 1400px) {
+    .decor {
+        display: flex;
+        align-items: flex-end;
+        position: fixed;
+        bottom: 0;
+        height: 100vh;
+        width: 300px;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .decorLeft {
+        right: calc(50% + 360px + 24px);
+        justify-content: flex-end;
+    }
+
+    .decorRight {
+        left: calc(50% + 360px + 24px);
+        justify-content: flex-start;
+    }
+
+    .decorImage {
+        width: 300px;
+        height: auto;
+        max-height: 100vh;
+        object-fit: contain;
+        filter: drop-shadow(0 0 22px rgb(250 77 152 / 45%));
+        user-select: none;
+    }
+}
