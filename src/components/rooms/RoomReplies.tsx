@@ -12,6 +12,7 @@ import { FeaturedMedals } from '../achievements/FeaturedMedals.tsx';
 import { resolveAccentColor } from '../shop/cosmeticPalette.ts';
 import { glyphFor } from '../cosmetics/profileCosmetics.ts';
 import { useAuthStore } from '../../store/authStore.ts';
+import { RENAME_CURSE_TAG } from './roomPerks.ts';
 import { SpotlightButton } from './PerkActions.tsx';
 
 interface RoomRepliesProps {
@@ -121,7 +122,7 @@ export const RoomReplies = ({
                                     </span>
                                 )}
                                 {msg.author?.username || 'Anon'}
-                                {msg.author?.renameCursed && ' (he/him/it/mogged)'}
+                                {msg.author?.renameCursed && ` ${RENAME_CURSE_TAG}`}
                                 <FeaturedMedals keys={msg.author?.featuredAchievements} />
 
                                 {msg.author?.username === roomCreatorUsername && (

@@ -4,7 +4,7 @@ import { useShopMe } from '../../hooks/shop/useShop.ts';
 import { useShopUse } from '../../hooks/shop/useShopUse.ts';
 import { AdminConfirmDialog } from '../admin/AdminConfirmDialog.tsx';
 import { PATH } from '../../utils/pathList.ts';
-import { ownedCount } from './roomPerks.ts';
+import { ownedCount, RENAME_CURSE_TAG } from './roomPerks.ts';
 import type { ShopUseItemKey } from '../../api/shop/types.ts';
 import styles from '../../pages/Rooms/Room.module.css';
 
@@ -112,7 +112,7 @@ export const ProfileTrollActions = ({
         <PerkButton
             itemKey="rename_curse"
             label="rename curse"
-            body={`@${targetName} shows as "(he/him/it/mogged)" for 1h.`}
+            body={`@${targetName} shows as "${RENAME_CURSE_TAG}" for 1h.`}
             variables={{ targetUserId }}
             targetName={targetName}
             hideWhenEmpty
