@@ -47,9 +47,10 @@
     min-height: 0;
 }
 
+/* stretched to the box on purpose: cropping cut off the text baked into banners */
 .bannerImage {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: fill;
     display: block;
 }
