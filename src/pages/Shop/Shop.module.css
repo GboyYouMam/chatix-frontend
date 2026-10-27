@@ -257,6 +257,17 @@
         overflow: hidden;
     }
 
+    .layout {
+        overflow-x: visible;
+    }
+
+    /* the art column pushes the content right; pull the header back to the page centre */
+    .topBar,
+    .hero,
+    .tabs {
+        transform: translateX(calc(-1 * (320px + 24px) / 2));
+    }
+
     .decorImage {
         width: 300px;
         height: auto;
