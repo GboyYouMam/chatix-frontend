@@ -11,7 +11,7 @@ export const useCreateRoom = () => {
     const createRoom = useMutation({
         mutationFn: (data: CreateRoomDTO) => roomApi.createRoom(data),
         onSuccess: () => {
-            notify.success('room sent to the mods. u have to wait son 😭');
+            notify.success("room sent to the mods. u have to wait son :'(");
             queryClient.invalidateQueries({ queryKey: queryKeys.rooms() });
             queryClient.invalidateQueries({ queryKey: queryKeys.myRooms() });
         },

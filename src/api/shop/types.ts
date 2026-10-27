@@ -25,9 +25,7 @@ export interface ShopEquipped {
     nameColor: string | null;
     nameIcon: string | null;
     quoteStyle: string | null;
-    nyanCat: boolean;
     verified: boolean;
-    stickers: [string | null, string | null, string | null];
 }
 
 export interface ShopMe {
@@ -44,17 +42,7 @@ export interface ShopPurchaseResponse {
 }
 
 export type ShopEquipSlot =
-    | 'accent'
-    | 'background'
-    | 'title'
-    | 'nameColor'
-    | 'nameIcon'
-    | 'quoteStyle'
-    | 'nyanCat'
-    | 'verified'
-    | 'sticker1'
-    | 'sticker2'
-    | 'sticker3';
+    'accent' | 'background' | 'title' | 'nameColor' | 'nameIcon' | 'quoteStyle' | 'verified';
 
 export type ShopUseItemKey =
     | 'clown_stamp'

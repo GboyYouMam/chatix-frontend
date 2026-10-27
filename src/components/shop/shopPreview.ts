@@ -8,26 +8,21 @@ export type ShopPreview =
     | { kind: 'pattern'; pattern: BackgroundPattern }
     | { kind: 'text'; text: string; variant: 'serif' | 'mono' | 'quote' | 'button' };
 
+// Text glyphs only: classic emoticons and typographic symbols, no emoji.
 const GLYPHS: Record<string, string> = {
-    sticker_soap: '🧼',
-    sticker_skull: '💀',
-    sticker_killsquad: '🎯',
-    sticker_clown: '🤡',
-    sticker_crown: '👑',
-    nameicon_skull: '💀',
-    nameicon_soap: '🧼',
-    nameicon_crown: '👑',
-    nameicon_clown: '🤡',
-    nyan_cat: '🐱',
-    verified_chud: '✔',
-    mystery_soap: '🧼',
-    clown_stamp: '🤡',
-    rename_curse: '🪄',
-    aura_tax: '🧾',
-    spotlight: '🔦',
-    room_boost: '🚀',
-    fight_insurance: '🛡',
-    debt_forgiveness: '🧴',
+    nameicon_skull: 'x_x',
+    nameicon_soap: 'o',
+    nameicon_crown: '♛',
+    nameicon_clown: ':o)',
+    verified_chud: '√',
+    mystery_soap: 'o',
+    clown_stamp: ':o)',
+    rename_curse: '✦',
+    aura_tax: '$',
+    spotlight: '★',
+    room_boost: '^',
+    fight_insurance: '✝',
+    debt_forgiveness: '†',
 };
 
 export const previewFor = (item: Pick<ShopCatalogItem, 'key'>): ShopPreview => {

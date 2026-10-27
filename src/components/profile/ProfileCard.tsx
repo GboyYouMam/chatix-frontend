@@ -3,7 +3,6 @@ import { formatDate } from '../../utils/date.ts';
 import type { ProfileData } from '../../api/users/types.ts';
 import { MedalRack } from '../achievements/MedalRack.tsx';
 import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
-import { NyanCat } from '../cosmetics/NyanCat.tsx';
 import { VerifiedCheck } from '../cosmetics/VerifiedCheck.tsx';
 import { VineBoomButton } from '../cosmetics/VineBoomButton.tsx';
 import { LeaderboardBadges } from './LeaderboardBadges.tsx';
@@ -55,7 +54,6 @@ export const ProfileCard = ({
 
             <div className={styles.userInfo}>
                 <div className={styles.nameRow}>
-                    {cosmetics?.nyanCat && <NyanCat />}
                     {profileData.forcedTitle && (
                         <span className={styles.forcedTitle}>[{profileData.forcedTitle}]</span>
                     )}

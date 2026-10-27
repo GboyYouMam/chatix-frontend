@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import type { ProfileWidgetData, RapSheetEntry } from '../../api/users/types.ts';
-import { glyphFor } from '../cosmetics/profileCosmetics.ts';
 import { formatAmount } from '../shop/shopFormat.ts';
 import { PATH } from '../../utils/pathList.ts';
 import {
@@ -263,22 +262,6 @@ export const HitCounterWidget = ({ count }: { count: number }) => {
         </div>
     );
 };
-
-export const StickerBoardWidget = ({ stickers }: { stickers: Array<string | null> }) => (
-    <div className={styles.stickerBoard}>
-        {[0, 1, 2].map((slot) => {
-            const value = stickers[slot];
-            return (
-                <span className={styles.stickerCell} key={slot}>
-                    {value ? glyphFor(value) : '·'}
-                </span>
-            );
-        })}
-        {!stickers.some(Boolean) && (
-            <p className={styles.muted}>no stickers slapped. the wall is sad.</p>
-        )}
-    </div>
-);
 
 export const WantedPosterWidget = ({
     username,

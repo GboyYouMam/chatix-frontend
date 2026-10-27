@@ -14,12 +14,11 @@ import { PATH } from '../../utils/pathList.ts';
 import { createTripleClickDetector, isSecretQuery } from '../../utils/easterEgg.ts';
 import { notify } from '../../lib/toast.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
-import { MyRooms } from '../../components/rooms/MyRooms.tsx';
 import { achievementsApi } from '../../api/achievements/achievements.service.ts';
+import { ProfileMenu } from '../../components/profile/ProfileMenu.tsx';
 
 export const Rooms = () => {
     const navigate = useNavigate();
-    const user = useAuthStore((state) => state.user);
     const token = useAuthStore((state) => state.token);
     const queryClient = useQueryClient();
     const { searchRoomByName } = useRooms();
@@ -66,14 +65,6 @@ export const Rooms = () => {
                 room.topic?.toLowerCase().includes(lowerCaseQuery),
         );
     }, [rooms, searchQuery]);
-
-    const handleGoToMyProfile = () => {
-        if (user && user.username) {
-            navigate(PATH.authAndUser.href.profile(user.username));
-        } else {
-            navigate(PATH.authAndUser.login);
-        }
-    };
 
     const handleBackendSearch = () => {
         if (!searchQuery.trim()) return;
@@ -149,39 +140,7 @@ export const Rooms = () => {
                 <h1 className={styles.logo}>CHATIX</h1>
 
                 <div className={styles.headerRight}>
-                    <button
-                        type="button"
-                        className={styles.shopLink}
-                        onClick={() => navigate(PATH.shop.shop)}
-                    >
-                        laryok shop
-                    </button>
-                    <button
-                        type="button"
-                        className={styles.shopLink}
-                        onClick={() => navigate(PATH.economy.leaderboard)}
-                    >
-                        leaderboard
-                    </button>
-                    <button
-                        className={styles.profileBtn}
-                        aria-label="Profile"
-                        onClick={handleGoToMyProfile}
-                    >
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </button>
+                    <ProfileMenu />
                 </div>
             </header>
 
@@ -189,7 +148,6 @@ export const Rooms = () => {
 
             <main className={styles.mainContent}>
                 <h2 className={styles.subtitle}>if u in debt or just a chud ts for you</h2>
-                {token && <MyRooms />}
 
                 <div className={styles.actionContainer}>
                     <button className={styles.addBtn} onClick={() => setIsCreateModalOpen(true)}>

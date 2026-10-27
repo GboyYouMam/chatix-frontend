@@ -42,5 +42,5 @@ test('maps equip error codes to in-voice copy', () => {
 });
 
 test('humanizes item keys for display without raw ids', () => {
-    assert.equal(humanizeKey('sticker_killsquad'), 'sticker killsquad');
+    assert.equal(humanizeKey('hit_counter'), 'hit counter');
 });

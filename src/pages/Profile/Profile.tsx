@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
 import { ProfileBackground } from '../../components/cosmetics/ProfileBackground.tsx';
-import { StickerRow } from '../../components/cosmetics/StickerRow.tsx';
 import { backgroundPatternOf } from '../../components/cosmetics/profileCosmetics.ts';
 import { resolveAccentColor } from '../../components/shop/cosmeticPalette.ts';
 import { useState } from 'react';
@@ -20,6 +19,8 @@ import { ProfileTrollActions } from '../../components/rooms/PerkActions.tsx';
 import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
 import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
 import { WidgetGrid } from '../../components/widgets/WidgetGrid.tsx';
+import { ProfileTabs, type ProfileTab } from '../../components/profile/ProfileTabs.tsx';
+import { MyRooms } from '../../components/rooms/MyRooms.tsx';
 import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -50,6 +51,7 @@ export const Profile = () => {
 
     const [activeEffect, setActiveEffect] = useState<EffectMode>(null);
     const [medalBookOpen, setMedalBookOpen] = useState(false);
+    const [profileTab, setProfileTab] = useState<ProfileTab>('widgets');
     const [isRespectLoading, setIsRespectLoading] = useState(false);
 
     const isMyProfile = currentUser?.username === username;
@@ -150,15 +152,21 @@ export const Profile = () => {
         );
     }
 
-    const comments = profileData.comments ?? [];
     const widgetLayout = profileData.widgets?.layout ?? [];
     const guestbookInGrid = widgetLayout.includes('guestbook');
     const commentsSection = (
         <ProfileCommentsSection
             key={profileData.username}
             profileUsername={profileData.username}
-            initialComments={comments}
             canInteractWithProfile={canInteractWithProfile}
+        />
+    );
+    const widgetGrid = (
+        <WidgetGrid
+            profile={profileData}
+            medalCatalog={medalCatalog}
+            onViewMedalBook={() => setMedalBookOpen(true)}
+            guestbook={commentsSection}
         />
     );
     const cosmetics = profileData.cosmetics;
@@ -198,7 +206,6 @@ export const Profile = () => {
                             alt="Profile Up Banner"
                             className={styles.bannerImage}
                         />
-                        <StickerRow stickers={cosmetics?.stickers} />
                     </div>
 
                     <ProfileCard
@@ -207,12 +214,20 @@ export const Profile = () => {
                         onViewMedalBook={() => setMedalBookOpen(true)}
                         showMedalRack={!widgetLayout.includes('medal_rack')}
                     />
-                    <WidgetGrid
-                        profile={profileData}
-                        medalCatalog={medalCatalog}
-                        onViewMedalBook={() => setMedalBookOpen(true)}
-                        guestbook={commentsSection}
-                    />
+                    {isMyProfile ? (
+                        <>
+                            <ProfileTabs value={profileTab} onChange={setProfileTab} />
+                            <div
+                                role="tabpanel"
+                                id="profile-tabpanel"
+                                aria-labelledby={`profile-tab-${profileTab}`}
+                            >
+                                {profileTab === 'rooms' ? <MyRooms /> : widgetGrid}
+                            </div>
+                        </>
+                    ) : (
+                        widgetGrid
+                    )}
                     <ProfileModerationBar profileData={profileData} />
                     {canInteractWithProfile && (
                         <ProfileTrollActions

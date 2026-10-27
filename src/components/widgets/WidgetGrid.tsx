@@ -12,7 +12,6 @@ import {
     NowPlayingWidget,
     RapSheetWidget,
     StatusLineWidget,
-    StickerBoardWidget,
     TopGlazersWidget,
     WantedPosterWidget,
     YapStatsWidget,
@@ -72,8 +71,6 @@ export const WidgetGrid = ({
                 return <RapSheetWidget sheet={data.rapSheet} username={profile.username} />;
             case 'hit_counter':
                 return <HitCounterWidget count={data.hitCount} />;
-            case 'sticker_board':
-                return <StickerBoardWidget stickers={profile.cosmetics?.stickers ?? []} />;
             case 'wanted_poster':
                 return (
                     <WantedPosterWidget

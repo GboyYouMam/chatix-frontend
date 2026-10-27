@@ -4,10 +4,10 @@ import {
     RACK_COMPACT_QUERY,
     RACK_MAX_COMPACT,
     RACK_MAX_DESKTOP,
-    ribbonStyle,
     sortForRack,
     visibleRibbons,
 } from './ribbons.ts';
+import { MedalIcon } from './MedalIcon.tsx';
 import { formatDate } from '../../utils/date.ts';
 import styles from './MedalRack.module.css';
 
@@ -42,22 +42,17 @@ export function MedalRack({
             {medals.length ? (
                 <div className={styles.rows}>
                     {shown.map((medal) => {
-                        const ribbon = ribbonStyle(medal);
                         const earned = dates.get(medal.key);
                         return (
                             <button
                                 type="button"
                                 className={styles.ribbon}
                                 key={medal.key}
-                                style={{
-                                    background: ribbon.background,
-                                    borderColor: ribbon.border,
-                                }}
                                 title={`${medal.name}: ${medal.description} · ${medal.unlockedPercent}% of players · ${formatDate(earned)}`}
                                 aria-label={`${medal.name}, ${medal.description}`}
                                 onClick={onViewBook}
                             >
-                                <span aria-hidden="true">{medal.icon || '✦'}</span>
+                                <MedalIcon def={medal} width={18} height={30} />
                             </button>
                         );
                     })}

@@ -16,6 +16,7 @@ import {
 import { isItemEquipped } from '../../components/shop/shopSlots.ts';
 import { useShopCatalog, useShopMe, useShopPurchase } from '../../hooks/shop/useShop.ts';
 import { useAuthStore } from '../../store/authStore.ts';
+import laryokShopGirls from '../../assets/laryokShopGirls.png';
 import styles from './Shop.module.css';
 
 const CATEGORY_TABS: Array<{ value: ShopCategory; label: string }> = [
@@ -104,81 +105,86 @@ export const Shop = () => {
     };
 
     return (
-        <div className={styles.layout}>
-            <header className={styles.topBar}>
-                <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>
-                    &lt;- back
-                </button>
-                <div className={styles.balance} aria-label="your aura">
-                    <span className={styles.balanceLabel}>your aura</span>
-                    <span className={styles.balanceValue}>{formatAmount(aura)}</span>
-                </div>
-            </header>
-
-            <section className={styles.hero}>
-                <p className={styles.eyebrow}>est. hypergamy era</p>
-                <h1 className={styles.title}>LARYOK SHOP</h1>
-                <RotatingTagline className={styles.tagline} />
-            </section>
-
-            <nav className={styles.tabs} role="tablist" aria-label="shop categories">
-                {CATEGORY_TABS.map((tab) => (
-                    <button
-                        key={tab.value}
-                        type="button"
-                        role="tab"
-                        aria-selected={category === tab.value}
-                        className={clsx(styles.tab, category === tab.value && styles.activeTab)}
-                        onClick={() => setCategory(tab.value)}
-                    >
-                        {tab.label}
+        <div className={styles.page}>
+            <div className={styles.decor} aria-hidden="true">
+                <img src={laryokShopGirls} alt="" className={styles.decorImage} />
+            </div>
+            <div className={styles.layout}>
+                <header className={styles.topBar}>
+                    <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>
+                        &lt;- back
                     </button>
-                ))}
-            </nav>
-
-            <section className={styles.grid} aria-label="items">
-                {renderGrid()}
-            </section>
-
-            <Modal
-                isOpen={pendingItem !== null}
-                onClose={() => setPendingItem(null)}
-                label="confirm purchase"
-            >
-                {pendingItem && (
-                    <div className={styles.confirm}>
-                        <h2 className={styles.confirmTitle}>buy {pendingItem.name}?</h2>
-                        <p className={styles.confirmPrice}>{formatPrice(pendingItem.price)}</p>
-                        <p className={styles.confirmNote}>
-                            {pendingAffordable
-                                ? 'no refunds. no mercy. no take-backs.'
-                                : `u broke. go farm. you need ${formatAmount(pendingItem.price - aura)} more.`}
-                        </p>
-                        <p className={styles.confirmFootnote}>{footnote}</p>
-                        <div className={styles.confirmActions}>
-                            <button
-                                type="button"
-                                className={styles.cancelBtn}
-                                onClick={() => setPendingItem(null)}
-                            >
-                                nvm
-                            </button>
-                            <button
-                                type="button"
-                                className={styles.confirmBtn}
-                                disabled={!pendingAffordable || purchase.isPending}
-                                onClick={handleConfirm}
-                            >
-                                {purchase.isPending ? 'buying...' : 'take my aura'}
-                            </button>
-                        </div>
+                    <div className={styles.balance} aria-label="your aura">
+                        <span className={styles.balanceLabel}>your aura</span>
+                        <span className={styles.balanceValue}>{formatAmount(aura)}</span>
                     </div>
-                )}
-            </Modal>
+                </header>
 
-            {revealName && (
-                <MysterySoapReveal name={revealName} onClose={() => setRevealName(null)} />
-            )}
+                <section className={styles.hero}>
+                    <p className={styles.eyebrow}>est. hypergamy era</p>
+                    <h1 className={styles.title}>LARYOK SHOP</h1>
+                    <RotatingTagline className={styles.tagline} />
+                </section>
+
+                <nav className={styles.tabs} role="tablist" aria-label="shop categories">
+                    {CATEGORY_TABS.map((tab) => (
+                        <button
+                            key={tab.value}
+                            type="button"
+                            role="tab"
+                            aria-selected={category === tab.value}
+                            className={clsx(styles.tab, category === tab.value && styles.activeTab)}
+                            onClick={() => setCategory(tab.value)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </nav>
+
+                <section className={styles.grid} aria-label="items">
+                    {renderGrid()}
+                </section>
+
+                <Modal
+                    isOpen={pendingItem !== null}
+                    onClose={() => setPendingItem(null)}
+                    label="confirm purchase"
+                >
+                    {pendingItem && (
+                        <div className={styles.confirm}>
+                            <h2 className={styles.confirmTitle}>buy {pendingItem.name}?</h2>
+                            <p className={styles.confirmPrice}>{formatPrice(pendingItem.price)}</p>
+                            <p className={styles.confirmNote}>
+                                {pendingAffordable
+                                    ? 'no refunds. no mercy. no take-backs.'
+                                    : `u broke. go farm. you need ${formatAmount(pendingItem.price - aura)} more.`}
+                            </p>
+                            <p className={styles.confirmFootnote}>{footnote}</p>
+                            <div className={styles.confirmActions}>
+                                <button
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={() => setPendingItem(null)}
+                                >
+                                    nvm
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles.confirmBtn}
+                                    disabled={!pendingAffordable || purchase.isPending}
+                                    onClick={handleConfirm}
+                                >
+                                    {purchase.isPending ? 'buying...' : 'take my aura'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </Modal>
+
+                {revealName && (
+                    <MysterySoapReveal name={revealName} onClose={() => setRevealName(null)} />
+                )}
+            </div>
         </div>
     );
 };

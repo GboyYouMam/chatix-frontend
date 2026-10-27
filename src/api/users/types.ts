@@ -55,6 +55,13 @@ export interface RespectProfileResponse {
     alreadyRespected?: boolean;
 }
 
+export interface ProfileCommentsPage {
+    items: ProfileComment[];
+    page: number;
+    limit: number;
+    total: number;
+}
+
 export interface CreateProfileCommentResponse {
     message?: string;
     comment_id: string;
@@ -67,9 +74,7 @@ export interface ProfileCosmetics {
     nameColor?: string | null;
     nameIcon?: string | null;
     quoteStyle?: string | null;
-    nyanCat?: boolean;
     verified?: boolean;
-    stickers?: Array<string | null>;
     vineBoom?: boolean;
 }
 

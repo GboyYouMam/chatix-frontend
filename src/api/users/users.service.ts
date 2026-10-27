@@ -1,7 +1,7 @@
 import { api } from '../client.ts';
 import type {
     CreateProfileCommentResponse,
-    ProfileComment,
+    ProfileCommentsPage,
     ProfileData,
     ProfileExtrasInput,
     RespectProfileResponse,
@@ -18,8 +18,16 @@ export const usersApi = {
     respectProfile: async (username: string): Promise<RespectProfileResponse> =>
         (await api.post(`/users/profile/${encodeURIComponent(username)}/respect`)).data,
 
-    getProfileComments: async (username: string): Promise<ProfileComment[]> =>
-        (await api.get(`/users/profile/${encodeURIComponent(username)}/comments`)).data,
+    getProfileComments: async (
+        username: string,
+        page: number,
+        limit: number,
+    ): Promise<ProfileCommentsPage> =>
+        (
+            await api.get(`/users/profile/${encodeURIComponent(username)}/comments`, {
+                params: { page, limit },
+            })
+        ).data,
 
     createProfileComment: async (
         username: string,

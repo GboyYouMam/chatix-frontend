@@ -1,0 +1,69 @@
+.pager {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px 4px;
+    max-width: 100%;
+}
+
+.edge,
+.number,
+.current {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0 0.4rem;
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.number:hover,
+.edge:not([aria-disabled='true']):hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.edge[aria-disabled='true'] {
+    color: var(--muted);
+    opacity: 0.5;
+    cursor: default;
+}
+
+.current {
+    color: var(--primary);
+    font-weight: bold;
+    cursor: default;
+}
+
+.gap {
+    min-width: 24px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.edge:focus-visible,
+.number:focus-visible,
+.current:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.summary {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-align: center;
+}

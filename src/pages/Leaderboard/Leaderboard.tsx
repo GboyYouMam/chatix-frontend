@@ -8,6 +8,8 @@ import { queryKeys } from '../../lib/queryKeys.ts';
 import { formatAmount } from '../../components/shop/shopFormat.ts';
 import { glyphFor } from '../../components/cosmetics/profileCosmetics.ts';
 import { PATH } from '../../utils/pathList.ts';
+import leaderboardPony from '../../assets/leaderboardPony.png';
+import leaderboardSaint from '../../assets/leaderboardSaint.png';
 import styles from './Leaderboard.module.css';
 
 type BoardKey = 'mostAura' | 'mostDebt' | 'mostMogged';
@@ -141,6 +143,12 @@ export const Leaderboard = () => {
 
     return (
         <div className={styles.page}>
+            <div className={clsx(styles.decor, styles.decorLeft)} aria-hidden="true">
+                <img src={leaderboardPony} alt="" className={styles.decorImage} />
+            </div>
+            <div className={clsx(styles.decor, styles.decorRight)} aria-hidden="true">
+                <img src={leaderboardSaint} alt="" className={styles.decorImage} />
+            </div>
             <header className={styles.header}>
                 <Link to={PATH.rooms.rooms} className={styles.back}>
                     ← back to lobby

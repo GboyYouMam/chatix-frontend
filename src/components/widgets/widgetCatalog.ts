@@ -10,7 +10,6 @@ export const WIDGET_KEYS = [
     'status_line',
     'rap_sheet',
     'hit_counter',
-    'sticker_board',
     'wanted_poster',
 ] as const;
 
@@ -31,7 +30,6 @@ export const WIDGET_META: Record<WidgetKey, { title: string; subtitle: string }>
     status_line: { title: 'status', subtitle: "what i'm doing rn" },
     rap_sheet: { title: 'rap sheet', subtitle: 'convictions. no appeals.' },
     hit_counter: { title: 'visitors', subtitle: 'since the 2003 era' },
-    sticker_board: { title: 'stickers', subtitle: 'slapped on the wall' },
     wanted_poster: { title: 'wanted', subtitle: 'reward for capture' },
 };
 
@@ -46,15 +44,11 @@ export const isForcedWidget = (
 };
 
 // Widgets that need a shop item in the inventory (spec §6).
-export const WIDGET_UNLOCK_ITEM: Partial<Record<WidgetKey, 'hit_counter' | 'sticker_board'>> = {
+export const WIDGET_UNLOCK_ITEM: Partial<Record<WidgetKey, 'hit_counter'>> = {
     hit_counter: 'hit_counter',
-    sticker_board: 'sticker_board',
 };
 
 export const isWidgetLocked = (key: WidgetKey, inventoryKeys: ReadonlySet<string>): boolean => {
-    if (key === 'sticker_board') {
-        return ![...inventoryKeys].some((itemKey) => itemKey.startsWith('sticker_'));
-    }
     const unlock = WIDGET_UNLOCK_ITEM[key];
     return Boolean(unlock) && !inventoryKeys.has(unlock!);
 };

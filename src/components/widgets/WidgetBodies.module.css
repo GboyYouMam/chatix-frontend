@@ -295,35 +295,6 @@
     border: 1px solid #1f2a22;
 }
 
-/* sticker board */
-.stickerBoard {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    align-items: center;
-}
-
-.stickerCell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    font-size: 2rem;
-    background-color: var(--bg);
-    border: 1px dashed var(--profile-accent, var(--border));
-    border-radius: 50%;
-    transform: rotate(-4deg);
-}
-
-.stickerCell:nth-child(2) {
-    transform: rotate(3deg);
-}
-
-.stickerCell:nth-child(3) {
-    transform: rotate(-1deg);
-}
-
 /* wanted poster: sepia */
 .poster {
     margin: 0 auto;

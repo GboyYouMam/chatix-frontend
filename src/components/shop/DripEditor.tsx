@@ -6,7 +6,7 @@ import { PATH } from '../../utils/pathList.ts';
 import { resolveAccentColor, ACCENT_PALETTE } from './cosmeticPalette.ts';
 import { formatPrice } from './shopFormat.ts';
 import { EMPTY_DRIP_LINE } from './martQuotes.ts';
-import { isItemEquipped, STICKER_SLOTS } from './shopSlots.ts';
+import { isItemEquipped } from './shopSlots.ts';
 import styles from './DripEditor.module.css';
 
 interface Choice {
@@ -144,13 +144,6 @@ export const DripEditor = () => {
         label: 'boring quotes',
         selected: !me.equipped.quoteStyle,
     });
-    const nyanChoices = buildChoices(
-        byPrefix('nyan_cat'),
-        me,
-        ownedKeys,
-        { label: 'off', selected: !me.equipped.nyanCat },
-        () => me.equipped.nyanCat,
-    );
     const verifiedChoices = buildChoices(
         byPrefix('verified_chud'),
         me,
@@ -158,7 +151,6 @@ export const DripEditor = () => {
         { label: 'off', selected: !me.equipped.verified },
         () => me.equipped.verified,
     );
-    const stickerItems = byPrefix('sticker_');
 
     return (
         <section className={styles.drip}>
@@ -214,36 +206,12 @@ export const DripEditor = () => {
                 onPick={onPick}
             />
             <ChoiceGroup
-                legend="nyan cat"
-                slot="nyanCat"
-                choices={nyanChoices}
-                busy={busy}
-                onPick={onPick}
-            />
-            <ChoiceGroup
                 legend="verified chud"
                 slot="verified"
                 choices={verifiedChoices}
                 busy={busy}
                 onPick={onPick}
             />
-
-            {STICKER_SLOTS.map((slot, index) => (
-                <ChoiceGroup
-                    key={slot}
-                    legend={`sticker slot ${index + 1}`}
-                    slot={slot}
-                    busy={busy}
-                    onPick={onPick}
-                    choices={buildChoices(
-                        stickerItems,
-                        me,
-                        ownedKeys,
-                        { label: 'empty', selected: !me.equipped.stickers[index] },
-                        (item) => me.equipped.stickers[index] === item.key,
-                    )}
-                />
-            ))}
         </section>
     );
 };

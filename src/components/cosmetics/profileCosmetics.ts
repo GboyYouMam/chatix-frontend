@@ -34,9 +34,9 @@ export const pickProfileTitle = ({
     return fightTitle || cosmeticTitleName || null;
 };
 
-// Sticker and name icon values can arrive as item keys or as ready-made glyphs.
+// Name icon values can arrive as item keys or as ready-made glyphs.
 export const glyphFor = (value: string): string => {
-    if (value.startsWith('sticker_') || value.startsWith('nameicon_')) {
+    if (value.startsWith('nameicon_')) {
         const preview = previewFor({ key: value });
         return preview.kind === 'glyph' ? preview.glyph : '◆';
     }

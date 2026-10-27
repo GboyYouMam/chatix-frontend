@@ -14,7 +14,7 @@ import { PATH } from '../../utils/pathList.ts';
 import styles from './Banned.module.css';
 import { authService } from '../../api/auth/auth.service.ts';
 
-const marqueeText = BAN_TAUNTS.join('  ✦  ');
+const marqueeText = BAN_TAUNTS.join('  //  ');
 
 export function Banned() {
     const ban = useAuthStore((state) => state.ban);

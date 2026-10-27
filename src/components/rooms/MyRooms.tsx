@@ -7,25 +7,27 @@ import { StatusPill } from './StatusPill.tsx';
 import styles from './MyRooms.module.css';
 
 export const MyRooms = () => {
-    const { data = [] } = useQuery({
+    const { data, isPending, isError } = useQuery({
         queryKey: queryKeys.myRooms(),
         queryFn: roomApi.getMyRooms,
     });
-    const rooms = data.filter((room) => room.status && room.status !== 'active');
-    if (!rooms.length) return null;
+
+    if (isPending) return <p className={styles.note}>loading ur rooms...</p>;
+    if (isError) return <p className={styles.note}>couldnt load ur rooms. the mods hid them.</p>;
+    if (!data?.length)
+        return <p className={styles.note}>u have no rooms. touch grass, make one.</p>;
 
     return (
-        <section className={styles.section} aria-label="my rooms">
-            <h2>my rooms</h2>
-            <div className={styles.list}>
-                {rooms.map((room) => (
-                    <article key={room.id} className={styles.room}>
-                        <Link to={PATH.rooms.href.room(room.id)}>{room.title}</Link>
-                        <StatusPill status={room.status!} />
-                        {room.statusReason && <p>{room.statusReason}</p>}
-                    </article>
-                ))}
-            </div>
-        </section>
+        <ul className={styles.list} aria-label="my rooms">
+            {data.map((room) => (
+                <li key={room.id} className={styles.room}>
+                    <Link to={PATH.rooms.href.room(room.id)} className={styles.title}>
+                        {room.title}
+                    </Link>
+                    {room.status && <StatusPill status={room.status} />}
+                    {room.statusReason && <p className={styles.reason}>{room.statusReason}</p>}
+                </li>
+            ))}
+        </ul>
     );
 };
