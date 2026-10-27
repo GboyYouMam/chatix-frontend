@@ -46,7 +46,7 @@ export const previewFor = (item: Pick<ShopCatalogItem, 'key'>): ShopPreview => {
     }
     if (key.startsWith('quote_')) return { kind: 'text', text: '>>420 mogged', variant: 'quote' };
     if (key === 'hit_counter') return { kind: 'text', text: '000420', variant: 'mono' };
-    if (key === 'vine_boom') return { kind: 'text', text: 'BOOM', variant: 'button' };
+    if (key === 'vine_boom') return { kind: 'text', text: '5 BIG BOOMS', variant: 'button' };
     if (key.startsWith('bg_')) {
         return { kind: 'pattern', pattern: key.slice('bg_'.length) as BackgroundPattern };
     }
