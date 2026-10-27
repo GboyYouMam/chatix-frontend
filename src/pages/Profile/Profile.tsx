@@ -19,6 +19,8 @@ import { ProfileTrollActions } from '../../components/rooms/PerkActions.tsx';
 import { ProfileDescription } from '../../components/profile/ProfileDescription.tsx';
 import { ProfileCommentsSection } from '../../components/profile/ProfileCommentsSection.tsx';
 import { WidgetGrid } from '../../components/widgets/WidgetGrid.tsx';
+import { ProfileTabs, type ProfileTab } from '../../components/profile/ProfileTabs.tsx';
+import { MyRooms } from '../../components/rooms/MyRooms.tsx';
 import { WarningTicker } from '../../components/profile/WarningTicker.tsx';
 import { PATH } from '../../utils/pathList.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -49,6 +51,7 @@ export const Profile = () => {
 
     const [activeEffect, setActiveEffect] = useState<EffectMode>(null);
     const [medalBookOpen, setMedalBookOpen] = useState(false);
+    const [profileTab, setProfileTab] = useState<ProfileTab>('widgets');
     const [isRespectLoading, setIsRespectLoading] = useState(false);
 
     const isMyProfile = currentUser?.username === username;
@@ -160,6 +163,14 @@ export const Profile = () => {
             canInteractWithProfile={canInteractWithProfile}
         />
     );
+    const widgetGrid = (
+        <WidgetGrid
+            profile={profileData}
+            medalCatalog={medalCatalog}
+            onViewMedalBook={() => setMedalBookOpen(true)}
+            guestbook={commentsSection}
+        />
+    );
     const cosmetics = profileData.cosmetics;
     // A null accent means the free default hot_pink, so the variable is always set.
     const accentStyle = {
@@ -205,12 +216,20 @@ export const Profile = () => {
                         onViewMedalBook={() => setMedalBookOpen(true)}
                         showMedalRack={!widgetLayout.includes('medal_rack')}
                     />
-                    <WidgetGrid
-                        profile={profileData}
-                        medalCatalog={medalCatalog}
-                        onViewMedalBook={() => setMedalBookOpen(true)}
-                        guestbook={commentsSection}
-                    />
+                    {isMyProfile ? (
+                        <>
+                            <ProfileTabs value={profileTab} onChange={setProfileTab} />
+                            <div
+                                role="tabpanel"
+                                id="profile-tabpanel"
+                                aria-labelledby={`profile-tab-${profileTab}`}
+                            >
+                                {profileTab === 'rooms' ? <MyRooms /> : widgetGrid}
+                            </div>
+                        </>
+                    ) : (
+                        widgetGrid
+                    )}
                     <ProfileModerationBar profileData={profileData} />
                     {canInteractWithProfile && (
                         <ProfileTrollActions

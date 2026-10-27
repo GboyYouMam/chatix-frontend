@@ -1,32 +1,36 @@
-.section {
-    margin: 0 0 24px;
-    padding: 16px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-}
-.section h2 {
-    margin: 0 0 12px;
-    color: var(--primary);
-    font:
-        20px 'Times New Roman',
-        serif;
-    letter-spacing: 2px;
-}
 .list {
     display: grid;
     gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 .room {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
 }
-.room a {
+.title {
     color: var(--text);
+    overflow-wrap: anywhere;
+    min-width: 0;
 }
-.room p {
+.title:hover {
+    color: var(--primary);
+}
+.reason {
     flex-basis: 100%;
     margin: 0;
     color: var(--muted);
+}
+.note {
+    margin: 0;
+    color: var(--muted);
+    font:
+        0.85rem 'Courier New',
+        monospace;
 }
