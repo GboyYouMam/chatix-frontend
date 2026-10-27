@@ -98,3 +98,9 @@
 .shopLink {
     color: var(--primary);
 }
+
+@media (min-width: 700px) {
+    .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}

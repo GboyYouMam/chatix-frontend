@@ -18,8 +18,7 @@
     border: 1px solid var(--primary);
     border-radius: 12px;
     padding: 2rem;
-    width: 90%;
-    max-width: 500px;
+    width: min(620px, calc(100vw - 2rem));
     position: relative;
     box-shadow: 0 0 20px rgba(250, 77, 152, 0.2);
     animation: popIn 0.2s ease-out;
