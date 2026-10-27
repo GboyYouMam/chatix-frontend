@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# chatix-frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The web client of **Chatix**, a multi-user, imageboard-style chat with an edge, trolling attitude. The whole UI is in English, has a dark `#09090b` + hot pink `#fa4d98` look, and works on phones.
 
-Currently, two official plugins are available:
+The API lives in a separate repo: [chatix-backend](https://github.com/GboyYouMam/chatix-backend).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+| Layer | Choice |
+| --- | --- |
+| Language | TypeScript |
+| UI | React 19, CSS Modules |
+| Build | Vite 8 |
+| Routing | React Router 7 |
+| Server state | TanStack Query 5 (one `queryKeys` factory) |
+| Client state | Zustand 5 (session, synced across tabs) |
+| Forms | react-hook-form + zod |
+| Realtime | socket.io-client 4 |
+| HTTP | axios with auth and 401 interceptors |
+| Tests | `node --test` for pure helpers |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## What's inside
 
-## Expanding the ESLint configuration
+- **Lobby and rooms.**
+  - Public and private rooms; the owner's perk toolbar (aura tax, room boost) sits in the room header.
+  - Seven room themes, and every accent inside a room follows its theme.
+  - Live replies, attachments and quote previews.
+- **Profiles.**
+  - A profile card, side banners, and the user's own rooms as a "my rooms" tab.
+  - 13 widgets, including a Spotify/SoundCloud player, an aura sparkline, a paginated guestbook and a wanted poster.
+  - Achievements as small SVG US-military-style medals.
+- **Fight club.** A hidden lobby and a QTE duel; on touch devices an on-screen key pad appears.
+- **Laryok shop.** Cosmetics, troll items and themes, with live previews.
+- **Leaderboard.** Weekly boards for most aura, most in debt and most mogged.
+- **Admin panel.** A dashboard, user dossiers, room moderation and an audit trail; updates arrive live over the `/admin` socket namespace.
+- **Ban screen.** A banned user gets a full-screen joke screen and nothing else.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Layout
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+  api/         typed API clients per domain
+  pages/       route screens (Rooms, Profile, Shop, Fight-Club, Admin, ...)
+  components/  feature components and the shared ui/ primitives (Modal, ...)
+  hooks/       react-query hooks per domain
+  store/       zustand session store
+  themes/      room theme tokens
+  lib/         query keys, socket factory, notifications
+tests/         node --test suites for pure helpers
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Requirements: Node.js 24+, and the backend running on `:3000`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env    # VITE_API_URL=http://localhost:3000
+npm ci
+npm run dev             # http://localhost:5173
 ```
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Vite dev server with HMR |
+| `npm run build` | type-check and production build into `dist/` |
+| `npm run preview` | serve the production build locally |
+| `npm test` | unit tests for pure helpers |
+| `npm run lint` | ESLint |
