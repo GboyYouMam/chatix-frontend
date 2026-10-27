@@ -106,20 +106,19 @@ export const Shop = () => {
 
     return (
         <div className={styles.page}>
+            <header className={styles.topBar}>
+                <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>
+                    &lt;- back
+                </button>
+                <div className={styles.balance} aria-label="your aura">
+                    <span className={styles.balanceLabel}>your aura</span>
+                    <span className={styles.balanceValue}>{formatAmount(aura)}</span>
+                </div>
+            </header>
             <div className={styles.decor} aria-hidden="true">
                 <img src={laryokShopGirls} alt="" className={styles.decorImage} />
             </div>
             <div className={styles.layout}>
-                <header className={styles.topBar}>
-                    <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>
-                        &lt;- back
-                    </button>
-                    <div className={styles.balance} aria-label="your aura">
-                        <span className={styles.balanceLabel}>your aura</span>
-                        <span className={styles.balanceValue}>{formatAmount(aura)}</span>
-                    </div>
-                </header>
-
                 <section className={styles.hero}>
                     <p className={styles.eyebrow}>est. hypergamy era</p>
                     <h1 className={styles.title}>LARYOK SHOP</h1>

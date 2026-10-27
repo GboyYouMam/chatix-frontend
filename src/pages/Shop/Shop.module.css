@@ -11,11 +11,13 @@
 }
 
 .topBar {
+    grid-column: 1 / -1;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 1rem 1rem 0;
+    margin-bottom: 0.5rem;
 }
 
 .backBtn {
@@ -239,13 +241,17 @@
 }
 
 @media (min-width: 1400px) {
+    .topBar {
+        padding: 1rem 1.5rem 0;
+    }
+
     .page {
-        grid-template-columns: 320px minmax(0, 1200px);
-        justify-content: center;
+        grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1200px) minmax(0, 1fr);
         column-gap: 24px;
     }
 
     .decor {
+        grid-column: 2;
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -258,11 +264,11 @@
     }
 
     .layout {
+        grid-column: 3;
         overflow-x: visible;
     }
 
     /* the art column pushes the content right; pull the header back to the page centre */
-    .topBar,
     .hero,
     .tabs {
         transform: translateX(calc(-1 * (320px + 24px) / 2));
