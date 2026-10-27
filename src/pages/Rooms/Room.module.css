@@ -1,4 +1,7 @@
 .layout {
+    /* inside a room every global-pink element follows the room theme accent */
+    --primary: var(--room-accent, #fa4d98);
+    --warn: var(--room-warn, #ffb547);
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -48,10 +51,11 @@
 }
 
 .headerTools .actionBtn:hover:not(:disabled) {
-    background: rgba(250, 77, 152, 0.12);
+    background: color-mix(in srgb, var(--room-accent, #fa4d98) 12%, transparent);
 }
 
 .editRoomBtn {
+    color: var(--room-accent, #fa4d98);
     background: none;
     border: none;
     cursor: pointer;
@@ -64,8 +68,8 @@
 }
 
 .editRoomBtn:hover {
-    background: rgba(250, 77, 152, 0.1);
-    filter: drop-shadow(0 0 5px rgba(250, 77, 152, 0.8));
+    background: color-mix(in srgb, var(--room-accent, #fa4d98) 10%, transparent);
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--room-accent, #fa4d98) 80%, transparent));
     transform: scale(1.1);
 }
 
@@ -141,7 +145,7 @@
 }
 
 .postId:hover {
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
 }
 
 .postBody {
@@ -191,11 +195,11 @@
     max-width: min(520px, calc(100vw - 2rem));
     padding: 1rem;
     border: 2px solid #ff2a2a;
-    border-left: 8px solid #fa4d98;
+    border-left: 8px solid var(--room-accent, #fa4d98);
     border-radius: 4px;
     background: #19080d;
     color: #fff;
-    box-shadow: 0 0 24px rgba(250, 77, 152, 0.45);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--room-accent, #fa4d98) 45%, transparent);
     animation: socketScreamShake 0.16s linear 4;
 }
 
@@ -215,9 +219,9 @@
 
 .socketScreamClose {
     flex: 0 0 auto;
-    border: 1px solid #fa4d98;
+    border: 1px solid var(--room-accent, #fa4d98);
     background: transparent;
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
     padding: 0.45rem 0.75rem;
     font-family: inherit;
     font-weight: 800;
@@ -225,8 +229,8 @@
 }
 
 .socketScreamClose:hover {
-    background: #fa4d98;
-    color: #000;
+    background: var(--room-accent, #fa4d98);
+    color: var(--room-on-accent, #000);
 }
 
 .replyForm {
@@ -258,7 +262,7 @@
     margin-left: 0.5rem;
     border: 0;
     background: transparent;
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
     cursor: pointer;
 }
 
@@ -277,7 +281,7 @@
 
 .replyInput:focus {
     outline: none;
-    border-color: #fa4d98;
+    border-color: var(--room-accent, #fa4d98);
 }
 
 .fileInput {
@@ -291,7 +295,7 @@
     border: 1px solid #333;
     border-radius: 4px;
     background: transparent;
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
     cursor: pointer;
     transition:
         transform 0.2s,
@@ -299,7 +303,7 @@
 }
 
 .attachBtn:hover {
-    border-color: #fa4d98;
+    border-color: var(--room-accent, #fa4d98);
     transform: scale(1.08);
 }
 
@@ -314,8 +318,8 @@
 }
 
 .submitBtn {
-    background: #fa4d98;
-    color: #000;
+    background: var(--room-accent, #fa4d98);
+    color: var(--room-on-accent, #000);
     border: none;
     padding: 0 2rem;
     font-weight: bold;
@@ -358,7 +362,7 @@
     display: inline-block;
     padding: 1rem;
     border: 1px dashed #555;
-    color: #fa4d98;
+    color: var(--room-accent, #fa4d98);
 }
 
 .attachmentDescription {
@@ -411,8 +415,8 @@
 }
 
 .quoteLink:hover {
-    color: #fff;
-    background: #fa4d98;
+    color: var(--room-on-accent, #fff);
+    background: var(--room-accent, #fa4d98);
 }
 
 .quotePopup {
@@ -422,7 +426,7 @@
     display: none;
     width: 300px;
     background: #1a1a1a;
-    border: 1px solid #fa4d98;
+    border: 1px solid var(--room-accent, #fa4d98);
     padding: 0.8rem;
     border-radius: 4px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
@@ -451,7 +455,7 @@
 
 @keyframes flash {
     0% {
-        background-color: rgba(250, 77, 152, 0.4);
+        background-color: color-mix(in srgb, var(--room-accent, #fa4d98) 40%, transparent);
     }
     100% {
         background-color: transparent;
@@ -670,6 +674,10 @@
 }
 .layout[data-room-theme='corpo'] .header {
     box-shadow: 0 1px 0 var(--room-border);
+}
+/* the tape lives on the header edge only; behind the thread it kills readability */
+.layout[data-room-theme='crime_scene'] {
+    background-image: none;
 }
 .layout[data-room-theme='crime_scene'] .header {
     border-bottom: 10px solid transparent;
