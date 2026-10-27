@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react';
 import profileUpBanner from '../../assets/profileUpBanner.png';
 import styles from './Profile.module.css';
 import { ProfileBackground } from '../../components/cosmetics/ProfileBackground.tsx';
-import { StickerRow } from '../../components/cosmetics/StickerRow.tsx';
 import { backgroundPatternOf } from '../../components/cosmetics/profileCosmetics.ts';
 import { resolveAccentColor } from '../../components/shop/cosmeticPalette.ts';
 import { useState } from 'react';
@@ -198,7 +197,6 @@ export const Profile = () => {
                             alt="Profile Up Banner"
                             className={styles.bannerImage}
                         />
-                        <StickerRow stickers={cosmetics?.stickers} />
                     </div>
 
                     <ProfileCard

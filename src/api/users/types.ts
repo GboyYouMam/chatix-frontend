@@ -67,9 +67,7 @@ export interface ProfileCosmetics {
     nameColor?: string | null;
     nameIcon?: string | null;
     quoteStyle?: string | null;
-    nyanCat?: boolean;
     verified?: boolean;
-    stickers?: Array<string | null>;
     vineBoom?: boolean;
 }
 

@@ -9,16 +9,10 @@ export type ShopPreview =
     | { kind: 'text'; text: string; variant: 'serif' | 'mono' | 'quote' | 'button' };
 
 const GLYPHS: Record<string, string> = {
-    sticker_soap: '🧼',
-    sticker_skull: '💀',
-    sticker_killsquad: '🎯',
-    sticker_clown: '🤡',
-    sticker_crown: '👑',
     nameicon_skull: '💀',
     nameicon_soap: '🧼',
     nameicon_crown: '👑',
     nameicon_clown: '🤡',
-    nyan_cat: '🐱',
     verified_chud: '✔',
     mystery_soap: '🧼',
     clown_stamp: '🤡',
