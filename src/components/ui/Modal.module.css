@@ -5,7 +5,16 @@
     color: var(--text);
     max-width: min(94vw, 620px);
     max-height: 92dvh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* still scrolls, just without the native bar that clashes with the dark ui */
+    scrollbar-width: none;
+}
+.dialog::-webkit-scrollbar {
+    display: none;
+}
+.dialog:focus-visible {
+    outline: none;
 }
 .dialog::backdrop {
     background: rgb(0 0 0 / 78%);
