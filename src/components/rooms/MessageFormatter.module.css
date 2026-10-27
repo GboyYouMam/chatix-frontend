@@ -12,8 +12,8 @@
 }
 
 .quoteLink:hover {
-    color: #fff;
-    background: #fa4d98;
+    color: var(--room-on-accent, #fff);
+    background: var(--room-accent, #fa4d98);
 }
 
 .quoteNeon {
@@ -43,7 +43,7 @@
     left: 0;
     width: 300px;
     background: #1a1a1a;
-    border: 1px solid #fa4d98;
+    border: 1px solid var(--room-accent, #fa4d98);
     padding: 0.8rem;
     border-radius: 4px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
