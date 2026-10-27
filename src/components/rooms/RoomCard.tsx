@@ -21,8 +21,8 @@ export const RoomCard = ({ room }: RoomCardProps) => {
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
+                {boosted && <span className={styles.cardPromoted}>promoted</span>}
                 <span className={styles.cardDate}>created at: {formatDate(room.createdAt)}</span>
-                {boosted && <span className={perkStyles.promotedPill}>promoted</span>}
             </div>
 
             <h3 className={styles.cardTitle}>{room.title}</h3>
