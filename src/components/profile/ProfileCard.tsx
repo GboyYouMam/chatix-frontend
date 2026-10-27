@@ -7,6 +7,7 @@ import { VerifiedCheck } from '../cosmetics/VerifiedCheck.tsx';
 import { VineBoomButton } from '../cosmetics/VineBoomButton.tsx';
 import { LeaderboardBadges } from './LeaderboardBadges.tsx';
 import { pickProfileTitle } from '../cosmetics/profileCosmetics.ts';
+import { RENAME_CURSE_TAG } from '../rooms/roomPerks.ts';
 import { useShopCatalog } from '../../hooks/shop/useShop.ts';
 
 interface ProfileCardProps {
@@ -60,7 +61,7 @@ export const ProfileCard = ({
                     <div className={styles.nameLine}>
                         <h2 className={styles.username}>
                             {profileData.username}
-                            {nameCursed && ' (he/him/it/mogged)'}
+                            {nameCursed && ` ${RENAME_CURSE_TAG}`}
                         </h2>
                         {cosmetics?.verified && <VerifiedCheck />}
                         {clownStamp && (

@@ -2,6 +2,9 @@ import type { ShopUseItemKey } from '../../api/shop/types.ts';
 
 // Pure perk helpers: timers, countdown text and in-voice copy for item use.
 
+// Tag the rename curse glues onto the victim's name for 1h.
+export const RENAME_CURSE_TAG = '(certified npc)';
+
 export const isActiveUntil = (until: string | Date | null | undefined, now: number): boolean => {
     if (!until) return false;
     const time = new Date(until).getTime();
@@ -22,7 +25,7 @@ export const successCopyFor = (itemKey: ShopUseItemKey, target?: string): string
     const who = target ? `@${target}` : 'u';
     const copy: Record<ShopUseItemKey, string> = {
         clown_stamp: `${who} is now certified clown. 24h. no appeal.`,
-        rename_curse: `${who} now goes by (he/him/it/mogged). 1h. enjoy.`,
+        rename_curse: `${who} now goes by ${RENAME_CURSE_TAG}. 1h. enjoy.`,
         aura_tax: 'aura tax paid. this room is sponsored by u. bow.',
         spotlight: 'spotlight on. ur message is on top for 10 min. no pressure.',
         room_boost: 'room boosted. promoted for 1h. touch grass later.',
