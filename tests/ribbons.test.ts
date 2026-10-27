@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-    ribbonStyle,
     sortForRack,
     visibleRibbons,
     type AchievementDef,
 } from '../src/components/achievements/ribbons.ts';
+import { ribbonStripes } from '../src/components/achievements/medalStyle.ts';
 
 const catalog: AchievementDef[] = [
     {
@@ -55,7 +55,7 @@ const catalog: AchievementDef[] = [
     },
 ];
 
-test('rack sorts tiers before unlock date and ribbon styles cover every catalog category', () => {
+test('rack sorts tiers before unlock date and every catalog category has stripes', () => {
     const ordered = sortForRack(
         catalog.map(({ key }) => ({ key, unlockedAt: '2026-01-01' })),
         catalog,
@@ -65,19 +65,8 @@ test('rack sorts tiers before unlock date and ribbon styles cover every catalog 
         ['gold', 'silver', 'bronze', 'secret', 'shame'],
     );
     for (const def of catalog) {
-        const style = ribbonStyle(def);
-        assert.ok(style.stripes.length > 0, `${def.category} has a palette`);
-        assert.ok(style.border);
+        assert.ok(ribbonStripes(def).length > 0, `${def.category} has a palette`);
     }
-});
-
-test('ribbon style falls back to a neutral palette for unknown categories', () => {
-    const style = ribbonStyle({
-        category: 'future_category' as AchievementDef['category'],
-        tier: 'bronze',
-    });
-    assert.ok(style.stripes.length > 0);
-    assert.ok(style.background.includes('#71717a'));
 });
 
 test('visible ribbons cap the rack and reserve the last cell for the +N chip', () => {

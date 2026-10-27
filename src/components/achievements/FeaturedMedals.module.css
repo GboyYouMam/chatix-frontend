@@ -5,7 +5,10 @@
     vertical-align: middle;
 }
 .featured span {
-    color: var(--primary);
-    font-size: 0.8rem;
-    text-shadow: 0 0 5px rgb(250 77 152 / 45%);
+    display: inline-grid;
+    line-height: 0;
+    filter: drop-shadow(0 0 3px rgb(250 77 152 / 45%));
+}
+.featured svg {
+    display: block;
 }

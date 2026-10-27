@@ -58,15 +58,15 @@
     margin: 0.25rem 0 0;
 }
 .icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 64px;
     display: grid;
     place-items: center;
     flex: none;
-    border: 2px solid var(--border);
-    border-radius: 50%;
-    color: white;
-    text-shadow: 0 1px 3px #000;
+}
+.icon svg {
+    display: block;
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 55%));
 }
 .locked {
     opacity: 0.45;

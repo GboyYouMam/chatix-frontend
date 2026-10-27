@@ -1,45 +1,47 @@
 .rack {
     margin-top: 0.85rem;
 }
-/* Ribbons are 28x10 with a 2px gap: 8 per row = 8 * 28 + 7 * 2 = 238px.
-   Compact (<= 600px) fits 6 per row = 6 * 28 + 5 * 2 = 178px. Keep in sync with RACK_MAX_* in ribbons.ts. */
+/* Medals are 18x30 with a 4px gap: 8 per row = 8 * 18 + 7 * 4 = 172px.
+   Compact (<= 600px) fits 6 per row = 6 * 18 + 5 * 4 = 128px. Keep in sync with RACK_MAX_* in ribbons.ts. */
 .rows {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2px;
-    width: 238px;
+    gap: 4px;
+    width: 172px;
     max-width: 100%;
 }
 .ribbon,
 .more {
     box-sizing: border-box;
     flex: none;
-    width: 28px;
-    height: 10px;
+    width: 18px;
+    height: 30px;
     margin: 0;
     padding: 0;
     display: grid;
     place-items: center;
     overflow: hidden;
-    border: 1px solid;
-    border-radius: 1px;
-    color: white;
+    border: 0;
+    background: none;
+    color: var(--primary);
     cursor: pointer;
     line-height: 1;
-    text-shadow: 0 1px 2px #000;
 }
-.ribbon span {
-    font-size: 6px;
+.ribbon svg {
+    display: block;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 60%));
+    transition: transform 0.15s ease;
+}
+.ribbon:hover svg {
+    transform: translateY(-1px);
 }
 .more {
+    border: 1px solid var(--primary);
     background: var(--surface);
-    border-color: var(--primary);
-    color: var(--primary);
     font:
         bold 7px 'Courier New',
         monospace;
-    text-shadow: none;
 }
 .ribbon:focus-visible,
 .more:focus-visible,
@@ -68,6 +70,6 @@
 }
 @media (max-width: 600px) {
     .rows {
-        width: 178px;
+        width: 128px;
     }
 }

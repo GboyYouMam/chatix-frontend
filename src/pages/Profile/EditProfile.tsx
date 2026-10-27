@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { usersApi } from '../../api/users/users.service.ts';
 import type { ProfileData } from '../../api/users/types.ts';
 import { DripEditor } from '../../components/shop/DripEditor.tsx';
+import { MedalIcon } from '../../components/achievements/MedalIcon.tsx';
 import { WidgetEditor } from '../../components/widgets/WidgetEditor.tsx';
 
 export const EditProfile = () => {
@@ -276,7 +277,13 @@ export const EditProfile = () => {
                                             }
                                             onChange={() => void toggleFeatured(medal.key)}
                                         />
-                                        {medal.icon || '✦'} {medal.name}
+                                        <MedalIcon
+                                            def={medal}
+                                            earned={unlocked}
+                                            width={10}
+                                            height={16}
+                                        />{' '}
+                                        {medal.name}
                                     </label>
                                 );
                             })}

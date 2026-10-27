@@ -1,6 +1,6 @@
 import { Modal } from '../ui/Modal.tsx';
 import type { AchievementCatalogItem } from '../../api/achievements/types.ts';
-import { ribbonStyle } from './ribbons.ts';
+import { MedalIcon } from './MedalIcon.tsx';
 import styles from './MedalBook.module.css';
 
 const categories = ['aura', 'debt', 'fight', 'rooms', 'social', 'moderation', 'secret'] as const;
@@ -36,25 +36,18 @@ export function MedalBook({
                                 {medals.map((medal) => {
                                     const earned = unlocked.has(medal.key);
                                     const secret = !earned && medal.tier === 'secret';
-                                    const ribbon = ribbonStyle(medal);
                                     return (
                                         <article
                                             className={`${styles.medal} ${earned ? '' : styles.locked}`}
                                             key={medal.key}
                                         >
-                                            <span
-                                                className={styles.icon}
-                                                style={
-                                                    earned
-                                                        ? {
-                                                              background: ribbon.background,
-                                                              borderColor: ribbon.border,
-                                                          }
-                                                        : undefined
-                                                }
-                                                aria-hidden="true"
-                                            >
-                                                {earned ? medal.icon || '✦' : '✦'}
+                                            <span className={styles.icon}>
+                                                <MedalIcon
+                                                    def={medal}
+                                                    earned={earned}
+                                                    width={40}
+                                                    height={64}
+                                                />
                                             </span>
                                             <div>
                                                 <strong>
