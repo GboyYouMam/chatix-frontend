@@ -181,6 +181,11 @@
     object-fit: cover;
 }
 
+/* side previews match the profile: stretched, never cropped */
+.sideBannerSize .previewImage {
+    object-fit: fill;
+}
+
 .placeholderText {
     color: var(--muted);
     font-size: 0.8rem;
