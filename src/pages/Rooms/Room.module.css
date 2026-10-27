@@ -678,8 +678,8 @@
     letter-spacing: 0.06em;
 }
 
-/* new room perks: promoted / sponsored / spotlight / system lines */
-.promotedPill,
+/* new room perks: sponsored / spotlight / system lines */
+
 .sponsorPill {
     display: inline-block;
     padding: 2px 8px;
