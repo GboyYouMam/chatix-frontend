@@ -113,8 +113,15 @@ export const Rooms = () => {
     const renderGridContent = () => {
         if (isError) {
             return (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
-                    the lobby is on fire. <button onClick={() => void refetch()}>retry</button>
+                <div className={styles.lobbyError}>
+                    <span>the lobby is on fire.</span>
+                    <button
+                        type="button"
+                        className={styles.retryBtn}
+                        onClick={() => void refetch()}
+                    >
+                        retry
+                    </button>
                 </div>
             );
         }
