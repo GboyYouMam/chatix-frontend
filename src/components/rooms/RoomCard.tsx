@@ -21,7 +21,13 @@ export const RoomCard = ({ room }: RoomCardProps) => {
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
-                {boosted && <span className={styles.cardPromoted}>promoted</span>}
+                <div className={styles.cardTags}>
+                    {boosted && <span className={styles.cardPromoted}>promoted</span>}
+                    {room.category && (
+                        <span className={styles.cardCategory}>/{room.category}/</span>
+                    )}
+                    {room.isNsfw && <span className={styles.cardNsfw}>18+</span>}
+                </div>
                 <span className={styles.cardDate}>created at: {formatDate(room.createdAt)}</span>
             </div>
 

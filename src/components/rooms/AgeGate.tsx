@@ -53,6 +53,8 @@ interface AgeGateModalProps {
 
 export const AgeGateModal = ({ isOpen, onClose, onConfirmed }: AgeGateModalProps) => (
     <Modal isOpen={isOpen} onClose={onClose} label="adults only">
-        <AgeGateCard onConfirmed={onConfirmed} onBack={onClose} />
+        <div className={styles.modalShell}>
+            <AgeGateCard onConfirmed={onConfirmed} onBack={onClose} />
+        </div>
     </Modal>
 );

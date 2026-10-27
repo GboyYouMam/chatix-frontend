@@ -14,6 +14,16 @@
     box-shadow: 0 0 24px rgba(250, 77, 152, 0.2);
 }
 
+/* inside the lobby dialog the card fills a fixed-width shell */
+.modalShell {
+    width: min(560px, 92vw);
+}
+
+.modalShell .card {
+    width: 100%;
+    margin: 0;
+}
+
 .stamp {
     padding: 0.1em 0.3em;
     border: 4px solid var(--warn);
