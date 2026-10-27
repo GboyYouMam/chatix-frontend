@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parseApiError } from '../src/api/errors.ts';
+import { isAgeGateError, parseApiError } from '../src/api/errors.ts';
 
 test('parses structured API errors', () => {
     assert.deepEqual(
@@ -39,4 +39,13 @@ test('parses structured API errors', () => {
         parseApiError({ response: { status: 500, data: {} } }).message,
         '[object Object]',
     );
+});
+
+test('detects the 18+ age gate only from its own code', () => {
+    const gate = {
+        response: { status: 403, data: { message: "age gate: confirm you're 18+ first", code: 'AGE_GATE' } },
+    };
+    assert.equal(isAgeGateError(gate), true);
+    assert.equal(isAgeGateError({ response: { status: 403, data: { code: 'BANNED' } } }), false);
+    assert.equal(isAgeGateError(new Error('network down')), false);
 });
