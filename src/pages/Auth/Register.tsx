@@ -75,8 +75,8 @@ export const Register = () => {
                                 {...register('password', {
                                     required: 'password is missing dum a$$',
                                     pattern: {
-                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                                        message: 'needs upper, lower, number, and special char',
+                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s])\S{8,72}$/,
+                                        message: '8-72 chars, no spaces: upper, lower, number and a symbol',
                                     },
                                 })}
                                 type="password"
