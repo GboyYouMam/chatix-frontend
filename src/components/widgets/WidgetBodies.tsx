@@ -283,7 +283,7 @@ export const WantedPosterWidget = ({
         </div>
         <p className={styles.posterName}>{username}</p>
         <p className={styles.reward}>
-            reward: {formatAmount(Math.max(0, Number(debt)))} aura of debt
+            reward: {formatAmount(Math.max(0, Number(debt)))} aura or debt
         </p>
     </figure>
 );
