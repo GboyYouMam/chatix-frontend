@@ -9,6 +9,38 @@
     --warn: #ffb547;
 }
 
+html {
+    color-scheme: dark;
+}
+
+/* thin pink-on-black scrollbars everywhere instead of the light native ones */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(250 77 152 / 45%) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(250 77 152 / 45%);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
 body {
     background-color: var(--bg);
     color: var(--text);
