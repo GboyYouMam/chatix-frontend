@@ -91,3 +91,12 @@
         min-height: 40px;
     }
 }
+
+/* desktop has room for every chip: wrap instead of hiding the 18+ toggle off-screen */
+@media (min-width: 701px) {
+    .row {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow: visible;
+    }
+}

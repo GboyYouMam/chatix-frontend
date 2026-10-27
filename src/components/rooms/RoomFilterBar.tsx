@@ -9,7 +9,7 @@ interface RoomFilterBarProps {
     onToggleNsfw: () => void;
 }
 
-// One scrolling row: `all`, one chip per category, then the 18+ toggle.
+// `all`, one chip per category, then the 18+ toggle. Scrolls on mobile, wraps on desktop.
 export const RoomFilterBar = ({
     category,
     onCategoryChange,
@@ -48,7 +48,7 @@ export const RoomFilterBar = ({
                 aria-pressed={showNsfw}
                 onClick={onToggleNsfw}
             >
-                {showNsfw ? 'hiding 18+' : 'show 18+'}
+                {showNsfw ? 'hide 18+' : 'show 18+'}
             </button>
         </div>
     </nav>
