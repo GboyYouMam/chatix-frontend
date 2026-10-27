@@ -226,3 +226,13 @@
         padding: 1.5rem;
     }
 }
+
+.passwordField {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputWithHint {
+    padding-right: 3rem;
+}

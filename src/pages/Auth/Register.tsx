@@ -8,10 +8,15 @@ import secondImageAuth from '../../assets/secondImageAuth.png';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PATH } from '../../utils/pathList.ts';
+import { PasswordHint } from '../../components/auth/PasswordHint.tsx';
+import { isStrongPassword } from '../../components/auth/passwordRules.ts';
 
 const registerSchema = z.object({
     username: z.string().min(3).max(25).nonempty('username is missing lmao'),
-    password: z.string().min(8).max(255).nonempty('password is missing dum a$$'),
+    password: z
+        .string()
+        .nonempty('password is missing dum a$$')
+        .refine(isStrongPassword, 'too weak. hover the (i), chud'),
 });
 
 type RegisterValues = z.infer<typeof registerSchema>;
@@ -22,11 +27,13 @@ export const Register = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<RegisterValues>({
         resolver: zodResolver(registerSchema),
         defaultValues: { username: '', password: '' },
     });
+    const password = watch('password');
 
     const onSubmit = (data: RegisterValues) => {
         signup(data);
@@ -71,19 +78,20 @@ export const Register = () => {
                         </div>
 
                         <div className={styles.inputWrapper}>
-                            <input
-                                {...register('password', {
-                                    required: 'password is missing dum a$$',
-                                    pattern: {
-                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s])\S{8,72}$/,
-                                        message: '8-72 chars, no spaces: upper, lower, number and a symbol',
-                                    },
-                                })}
-                                type="password"
-                                className={clsx(styles.input, errors.password && styles.inputError)}
-                                placeholder="secure your soul (password)"
-                                disabled={isRegistering}
-                            />
+                            <div className={styles.passwordField}>
+                                <input
+                                    {...register('password')}
+                                    type="password"
+                                    className={clsx(
+                                        styles.input,
+                                        styles.inputWithHint,
+                                        errors.password && styles.inputError,
+                                    )}
+                                    placeholder="secure your soul (password)"
+                                    disabled={isRegistering}
+                                />
+                                <PasswordHint password={password} />
+                            </div>
                             {errors.password && (
                                 <span className={styles.errorText}>
                                     {errors.password.message as string}
