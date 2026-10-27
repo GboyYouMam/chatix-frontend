@@ -32,3 +32,10 @@ export function parseApiError(err: unknown): ApiError {
         banReason: typeof data.banReason === 'string' ? data.banReason : null,
     };
 }
+
+export const AGE_GATE_CODE = 'AGE_GATE';
+
+// True when a request or socket error means the user has not confirmed they are 18+.
+export function isAgeGateError(err: unknown): boolean {
+    return parseApiError(err).code === AGE_GATE_CODE;
+}

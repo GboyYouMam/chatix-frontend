@@ -1,5 +1,6 @@
 import type { UserData } from '../auth/types.ts';
 import type { MessageData } from '../messages/types.ts';
+import type { RoomCategory } from '../../components/rooms/roomCategories.ts';
 
 export interface CreateRoomDTO {
     title: string;
@@ -7,6 +8,8 @@ export interface CreateRoomDTO {
     description?: string;
     publicity?: string;
     theme?: string;
+    category?: RoomCategory | null;
+    isNsfw?: boolean;
 }
 
 export type UpdateRoomDTO = Partial<CreateRoomDTO>;
@@ -33,4 +36,6 @@ export interface RoomDetails {
     sponsoredBy?: { username: string } | null;
     boostedUntil?: string | Date | null;
     spotlight?: RoomSpotlight | null;
+    category: RoomCategory | null;
+    isNsfw: boolean;
 }

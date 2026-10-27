@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../store/authStore';
 import { roomApi } from '../../api/rooms/rooms.service';
 import { messagesApi } from '../../api/messages/messages.service.ts';
@@ -22,15 +22,52 @@ import { StatusPill } from '../../components/rooms/StatusPill.tsx';
 import { SpotlightBanner } from '../../components/rooms/SpotlightBanner.tsx';
 import { RoomPerkActions } from '../../components/rooms/PerkActions.tsx';
 import { roomThemeOf, roomThemeStyle } from '../../themes/roomThemes.ts';
+import { AgeGateCard } from '../../components/rooms/AgeGate.tsx';
+import { isAgeGateError } from '../../api/errors.ts';
+import type { RoomDetails } from '../../api/rooms/types.ts';
+
+// Shown in place of the thread when the room is 18+ and the user has not confirmed their age.
+const AgeGateView = ({
+    room,
+    onBack,
+    onConfirmed,
+}: {
+    room: RoomDetails | undefined;
+    onBack: () => void;
+    onConfirmed: () => void;
+}) => (
+    <div className={styles.layout}>
+        <header className={styles.header}>
+            <div className={styles.headerLeft}>
+                <button className={styles.backBtn} onClick={onBack}>
+                    {'← back to lobby'}
+                </button>
+                {room && (
+                    <h1 className={styles.boardTitle}>
+                        /{room.publicity}/ — {room.title}
+                    </h1>
+                )}
+            </div>
+        </header>
+        <main className={styles.threadContainer}>
+            <AgeGateCard onConfirmed={onConfirmed} onBack={onBack} />
+        </main>
+    </div>
+);
 
 export const Room = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { user } = useAuthStore();
-
-    const { sendMessage, socketError, clearSocketError } = useRoomSocket(id);
+    const ageConfirmed = user?.ageConfirmed === true;
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    // room id whose socket or send answered AGE_GATE; the query errors cover the rest.
+    // Scoped to the id so a reused Room instance does not carry the gate into another room.
+    const [ageGatedRoomId, setAgeGatedRoomId] = useState<string | undefined>(undefined);
+    const socketAgeGate = !!id && ageGatedRoomId === id;
+    const markAgeGate = useCallback(() => setAgeGatedRoomId(id), [id]);
     const previousScroll = useRef<{ top: number; height: number } | null>(null);
 
     const {
@@ -42,6 +79,15 @@ export const Room = () => {
         queryKey: queryKeys.room(id),
         queryFn: () => roomApi.getRoomDetailed(id!),
         enabled: !!id,
+    });
+
+    // no socket and no messages request while the 18+ gate is up
+    const roomAgeGate = !!room && room.isNsfw && !ageConfirmed;
+    const blockedByAge = roomAgeGate || socketAgeGate || isAgeGateError(roomError);
+
+    const { sendMessage, socketError, clearSocketError } = useRoomSocket(id, {
+        enabled: !!id && !blockedByAge,
+        onAgeGate: markAgeGate,
     });
 
     const {
@@ -58,11 +104,23 @@ export const Room = () => {
             messagesApi.getMessages(id!, pageParam ? { before: pageParam } : undefined),
         initialPageParam: null as string | null,
         getNextPageParam: (last) => last.nextCursor ?? undefined,
-        enabled: !!id,
+        enabled: !!id && !blockedByAge,
     });
+
+    const gated = blockedByAge || isAgeGateError(messagesError);
+
+    const handleAgeConfirmed = () => {
+        // the auth store already flips ageConfirmed; drop the stale AGE_GATE errors so the
+        // queries refetch as a confirmed user, without a page reload
+        setAgeGatedRoomId(undefined);
+        queryClient.resetQueries({ queryKey: queryKeys.room(id) });
+        queryClient.resetQueries({ queryKey: queryKeys.messages(id) });
+    };
+
     useEffect(() => {
         if (
             messagesError &&
+            !isAgeGateError(messagesError) &&
             (messagesError as { response?: { status?: number } })?.response?.status === 403
         ) {
             notify.info('private. know the password or leave.');
@@ -93,13 +151,21 @@ export const Room = () => {
             .reverse()
             .flatMap((page) => page.items) ?? [];
 
+    if (gated)
+        return (
+            <AgeGateView
+                room={room}
+                onBack={() => navigate(PATH.rooms.rooms)}
+                onConfirmed={handleAgeConfirmed}
+            />
+        );
     if (roomError)
         return (
             <div className={styles.error}>
                 the room is cooked. <button onClick={() => void refetchRoom()}>retry</button>
             </div>
         );
-    if (messagesError)
+    if (messagesError && !isAgeGateError(messagesError))
         return (
             <div className={styles.error}>
                 the thread is on fire. <button onClick={() => void refetchMessages()}>retry</button>
@@ -217,6 +283,8 @@ export const Room = () => {
                         topic: room.topic ?? '',
                         theme: room.theme,
                         description: room.description ?? '',
+                        category: room.category,
+                        isNsfw: room.isNsfw,
                     }}
                 />
             )}

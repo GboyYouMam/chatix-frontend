@@ -10,8 +10,14 @@ export const useCreateRoom = () => {
 
     const createRoom = useMutation({
         mutationFn: (data: CreateRoomDTO) => roomApi.createRoom(data),
-        onSuccess: () => {
-            notify.success("room sent to the mods. u have to wait son :'(");
+        onSuccess: (room, variables) => {
+            if (room.status === 'checkout')
+                notify.warn(
+                    `our filter got spooked: ${room.statusReason ?? 'no reason given'}. a human will check it.`,
+                );
+            else notify.success('room is live. go mog.');
+            if (room.isNsfw && !variables.isNsfw)
+                notify.info("marked 18+ automatically. don't act surprised.", 'auto-18');
             queryClient.invalidateQueries({ queryKey: queryKeys.rooms() });
             queryClient.invalidateQueries({ queryKey: queryKeys.myRooms() });
         },

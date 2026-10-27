@@ -1,0 +1,102 @@
+.bar {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 800px;
+    min-width: 0;
+    margin: 0 auto 3rem;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.row::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    flex: 0 0 auto;
+    min-height: 36px;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.chip:hover {
+    color: var(--text);
+    border-color: var(--muted);
+}
+
+.chip:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.active,
+.active:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg);
+    font-weight: bold;
+}
+
+.divider {
+    flex: 0 0 1px;
+    align-self: stretch;
+    margin: 4px 0.25rem;
+    background: var(--border);
+}
+
+.nsfw {
+    border-color: var(--warn);
+    color: var(--warn);
+    font-weight: bold;
+}
+
+.nsfw:hover {
+    color: var(--warn);
+    border-color: var(--warn);
+    box-shadow: 0 0 10px rgba(255, 181, 71, 0.35);
+}
+
+.nsfwOn,
+.nsfwOn:hover {
+    background: var(--warn);
+    border-color: var(--warn);
+    color: var(--bg);
+}
+
+@media (max-width: 600px) {
+    .bar {
+        margin-bottom: 2rem;
+    }
+    .chip {
+        min-height: 40px;
+    }
+}
+
+/* desktop has room for every chip: wrap instead of hiding the 18+ toggle off-screen */
+@media (min-width: 701px) {
+    .row {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow: visible;
+    }
+}

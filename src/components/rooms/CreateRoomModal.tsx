@@ -7,6 +7,8 @@ import { useCreateRoom } from '../../hooks/rooms/useCreateRoom.ts';
 import { Modal } from '../ui/Modal.tsx';
 import { ThemePicker } from './ThemePicker.tsx';
 import { DEFAULT_ROOM_THEME, ROOM_THEME_KEYS } from '../../themes/roomThemes.ts';
+import { ROOM_CATEGORIES } from './roomCategories.ts';
+import { NsfwSwitch, RoomCategoryPicker } from './RoomFields.tsx';
 
 const createRoomScheme = z
     .object({
@@ -16,6 +18,8 @@ const createRoomScheme = z
         password: z.string().optional(),
         publicity: z.enum(['public', 'private']),
         theme: z.enum(ROOM_THEME_KEYS),
+        category: z.enum(ROOM_CATEGORIES).nullable(),
+        isNsfw: z.boolean(),
     })
     .superRefine((data, ctx) => {
         if (data.publicity === 'private' && (!data.password || data.password.length < 6)) {
@@ -46,6 +50,8 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
             description: '',
             publicity: 'public',
             theme: DEFAULT_ROOM_THEME,
+            category: null,
+            isNsfw: false,
         },
     });
 
@@ -132,6 +138,22 @@ export const CreateRoomModal = ({ isOpen, onClose, onSuccess }: CreateRoomModalP
                             control={methods.control}
                             render={({ field }) => (
                                 <ThemePicker value={field.value} onChange={field.onChange} />
+                            )}
+                        />
+
+                        <Controller
+                            name="category"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <RoomCategoryPicker value={field.value} onChange={field.onChange} />
+                            )}
+                        />
+
+                        <Controller
+                            name="isNsfw"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <NsfwSwitch checked={field.value} onChange={field.onChange} />
                             )}
                         />
 

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { notify } from '../../lib/toast';
 import styles from '../../pages/Rooms/Room.module.css';
 import { getAttachmentSelectionError, MAX_ATTACHMENTS } from './attachments.ts';
+import { isAgeGateError } from '../../api/errors.ts';
 
 interface RoomReplyFormProps {
     roomId: string;
@@ -59,7 +60,8 @@ export const RoomReplyForm = ({
             setAttachments([]);
             if (fileInputRef.current) fileInputRef.current.value = '';
         } catch (error) {
-            notify.error(error);
+            // the room page swaps in the 18+ confirm screen for this one, no toast needed
+            if (!isAgeGateError(error)) notify.error(error);
         } finally {
             setIsSending(false);
         }

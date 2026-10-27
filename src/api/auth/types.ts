@@ -10,6 +10,7 @@ export interface User {
     isClown: boolean;
     adminGlazeMode: boolean;
     canChangeProfile: boolean;
+    ageConfirmed: boolean;
     bannedUntil?: string;
     yapCooldown?: string;
     upper_banner_url?: string | null;

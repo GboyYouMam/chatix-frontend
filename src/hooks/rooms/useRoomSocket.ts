@@ -7,6 +7,7 @@ import type { InfiniteData } from '@tanstack/react-query';
 import { messagesApi } from '../../api/messages/messages.service.ts';
 import { appendMessageToPages, markMessageDeleted } from './messageCache.ts';
 import { queryKeys } from '../../lib/queryKeys.ts';
+import { AGE_GATE_CODE, isAgeGateError } from '../../api/errors.ts';
 
 type SendMessagePayload = {
     roomId: string;
@@ -29,16 +30,37 @@ const getSocketErrorMessage = (error: unknown) => {
     return undefined;
 };
 
-export const useRoomSocket = (roomId: string | undefined) => {
+// Socket errors carry the code either on the payload or on connect_error's `data`.
+const isAgeGateSocketError = (error: unknown) => {
+    if (!error || typeof error !== 'object') return false;
+    const direct = (error as { code?: unknown }).code;
+    const nested = (error as { data?: { code?: unknown } }).data?.code;
+    return direct === AGE_GATE_CODE || nested === AGE_GATE_CODE;
+};
+
+interface RoomSocketOptions {
+    // false keeps the socket closed (e.g. the 18+ gate is up)
+    enabled?: boolean;
+    onAgeGate?: () => void;
+}
+
+export const useRoomSocket = (
+    roomId: string | undefined,
+    { enabled = true, onAgeGate }: RoomSocketOptions = {},
+) => {
     const queryClient = useQueryClient();
     const [socketError, setSocketError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!roomId) return;
+        if (!roomId || !enabled) return;
 
         const newSocket = createSocket('/');
 
         const showSocketError = (error: unknown) => {
+            if (isAgeGateSocketError(error)) {
+                onAgeGate?.();
+                return;
+            }
             setSocketError(getSocketErrorMessage(error) || 'Socket error. Try again.');
         };
 
@@ -99,21 +121,26 @@ export const useRoomSocket = (roomId: string | undefined) => {
             newSocket.off('errorMessage', showErrorMessage);
             newSocket.disconnect();
         };
-    }, [roomId, queryClient]);
+    }, [roomId, enabled, queryClient, onAgeGate]);
 
     const sendMessage = useCallback(
         async (payload: SendMessagePayload) => {
-            const message = await messagesApi.sendMessage({
-                roomId: payload.roomId,
-                cipherText: payload.text,
-                attachments: payload.attachments,
-            });
-            queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
-                queryKeys.messages(payload.roomId),
-                (old) => appendMessageToPages(old, message),
-            );
+            try {
+                const message = await messagesApi.sendMessage({
+                    roomId: payload.roomId,
+                    cipherText: payload.text,
+                    attachments: payload.attachments,
+                });
+                queryClient.setQueryData<InfiniteData<MessagePage, string | null>>(
+                    queryKeys.messages(payload.roomId),
+                    (old) => appendMessageToPages(old, message),
+                );
+            } catch (error) {
+                if (isAgeGateError(error)) onAgeGate?.();
+                throw error;
+            }
         },
-        [queryClient],
+        [queryClient, onAgeGate],
     );
 
     const clearSocketError = useCallback(() => setSocketError(null), []);

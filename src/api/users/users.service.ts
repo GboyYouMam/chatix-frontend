@@ -38,6 +38,9 @@ export const usersApi = {
     updateWidgets: async (layout: string[]): Promise<{ layout: string[] }> =>
         (await api.patch('/users/me/widgets', { layout })).data,
 
+    confirmAge: async (): Promise<{ ageConfirmed: true }> =>
+        (await api.post('/users/me/age-confirmation')).data,
+
     updateProfileExtras: async (input: ProfileExtrasInput): Promise<unknown> =>
         (await api.patch('/users/me/profile-extras', input)).data,
 };
