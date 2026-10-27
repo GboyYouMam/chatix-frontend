@@ -23,6 +23,34 @@
     align-items: center;
 }
 
+/* room owner tools: consumable perks + edit, right side of the header */
+.headerTools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.headerTools .actionRow {
+    margin: 0;
+}
+
+.headerTools .actionBtn {
+    min-height: 34px;
+    padding: 0.25rem 0.7rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    border-radius: 999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.headerTools .actionBtn:hover:not(:disabled) {
+    background: rgba(250, 77, 152, 0.12);
+}
+
 .editRoomBtn {
     background: none;
     border: none;
@@ -512,8 +540,13 @@
 @media (max-width: 600px) {
     .header {
         align-items: flex-start;
+        flex-wrap: wrap;
         gap: 0.5rem;
         padding: 0.75rem;
+    }
+    .headerTools {
+        width: 100%;
+        justify-content: flex-start;
     }
     .headerLeft {
         min-width: 0;
