@@ -617,11 +617,23 @@
     }
 }
 
+.joinPage {
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    height: auto;
+    padding: 1rem 0;
+    box-sizing: border-box;
+}
 .joinCard {
     box-sizing: border-box;
-    width: min(400px, calc(100% - 2rem));
-    padding: 2rem;
+    width: min(420px, calc(100% - 2rem));
+    padding: 2.5rem 2rem 2rem;
     text-align: center;
+    background: var(--room-surface, #111);
+    border: 1px solid var(--room-accent, #fa4d98);
+    border-radius: 8px;
+    box-shadow: 0 0 30px color-mix(in srgb, var(--room-accent, #fa4d98) 15%, transparent);
 }
 .joinCard h1 {
     margin-bottom: 1rem;
@@ -636,9 +648,16 @@
     gap: 1rem;
 }
 .joinInput {
-    height: 45px;
+    flex: none;
+    box-sizing: border-box;
+    height: 48px;
     text-align: center;
     letter-spacing: 3px;
+}
+.joinForm .submitBtn {
+    min-height: 48px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 .joinBack {
     display: block;

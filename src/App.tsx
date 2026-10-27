@@ -10,11 +10,13 @@ import { AdminLayout } from './components/admin/AdminLayout.tsx';
 import { useEffect } from 'react';
 import { startSessionSync } from './lib/sessionSync.ts';
 import { useDailyStimulus } from './hooks/economy/useDailyStimulus.ts';
+import { RouteError } from './pages/RouteError/RouteError.tsx';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <BanGate />,
+        errorElement: <RouteError />,
         children: [
             { path: PATH.root.home, element: <Navigate to={PATH.rooms.rooms} replace /> },
             {
