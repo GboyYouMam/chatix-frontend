@@ -12,9 +12,9 @@ const BADGES: Array<{
     icon: string;
     label: string;
 }> = [
-    { list: 'mostAura', icon: '👑', label: 'top aura this week' },
-    { list: 'mostDebt', icon: '💀', label: 'top debtor this week' },
-    { list: 'mostMogged', icon: '🤡', label: 'most mogged this week' },
+    { list: 'mostAura', icon: '♛', label: 'top aura this week' },
+    { list: 'mostDebt', icon: 'x_x', label: 'top debtor this week' },
+    { list: 'mostMogged', icon: ':o)', label: 'most mogged this week' },
 ];
 
 const isTopN = (entries: LeaderboardEntry[] | undefined, username: string) =>

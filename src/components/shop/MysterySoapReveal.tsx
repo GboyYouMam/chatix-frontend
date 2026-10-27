@@ -14,7 +14,7 @@ export const MysterySoapReveal = ({ name, onClose }: MysterySoapRevealProps) => 
     >
         <div className={styles.stage}>
             <div className={styles.bubble} aria-hidden="true">
-                🧼
+                o
             </div>
             <p className={styles.kicker}>u pulled</p>
             <h2 className={styles.result}>{name}</h2>
